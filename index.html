@@ -68,19 +68,52 @@
             width: 210mm;
             min-height: 297mm;
             background: white;
-            box-shadow: 0 0 15px rgba(0,0,0,0.1); /* Screen only shadow */
+            box-shadow: 0 0 15px rgba(0,0,0,0.1);
             position: relative;
             flex-shrink: 0;
-            border: 1px solid #e2e8f0; /* Screen only border */
+            border: 1px solid #e2e8f0;
             transform-origin: top center;
             margin-bottom: 2rem;
+            box-sizing: border-box; /* Important for padding */
         }
 
-        /* Screen-only Scaling for Mobile */
+        /* Image Styling in Preview */
+        .q-img {
+            max-height: 150px;
+            width: auto;
+            max-width: 100%;
+            display: block;
+            margin: 4px auto;
+            border: 1px solid #e2e8f0;
+            border-radius: 4px;
+            padding: 2px;
+        }
+        
+        .opt-img {
+            max-height: 80px;
+            width: auto;
+            max-width: 100%;
+            display: block;
+            margin-top: 4px;
+            border: 1px solid #e2e8f0;
+            border-radius: 2px;
+        }
+
+        .exp-img {
+            max-height: 120px;
+            width: auto;
+            max-width: 100%;
+            display: block;
+            margin: 4px 0;
+            border: 1px solid #cbd5e1;
+            border-radius: 2px;
+        }
+
+        /* Screen-only Scaling */
         @media screen and (max-width: 768px) {
             .a4-page {
                 transform: scale(0.45);
-                margin-bottom: -160mm; /* Compensate for empty space due to scaling */
+                margin-bottom: -160mm;
             }
         }
         @media screen and (max-width: 480px) {
@@ -117,7 +150,6 @@
                 size: A4;
                 margin: 0;
             }
-            
             body, html {
                 height: auto !important;
                 overflow: visible !important;
@@ -125,94 +157,33 @@
                 margin: 0 !important;
                 padding: 0 !important;
             }
-            
-            /* Hide UI Elements */
-            body > header, 
-            nav, 
-            #left-panel,
-            .no-print {
-                display: none !important;
-            }
-
-            /* Main Layout Reset */
-            main {
-                display: block !important;
-                height: auto !important;
-                overflow: visible !important;
-            }
-
-            /* Preview Container Reset */
+            body > header, nav, #left-panel, .no-print { display: none !important; }
+            main { display: block !important; height: auto !important; overflow: visible !important; }
             #preview-panel-container {
-                display: block !important;
-                position: static !important;
-                width: 100% !important;
-                height: auto !important;
-                margin: 0 !important;
-                padding: 0 !important;
-                background: white !important;
-                overflow: visible !important;
+                display: block !important; position: static !important; width: 100% !important;
+                height: auto !important; margin: 0 !important; padding: 0 !important;
+                background: white !important; overflow: visible !important;
             }
-
-            .preview-scroll-wrapper {
-                display: block !important;
-                padding: 0 !important;
-                width: 100% !important;
-                overflow: visible !important;
-            }
-
-            .print-container {
-                display: block !important;
-                box-shadow: none !important;
-                margin: 0 !important;
-            }
-
-            /* A4 Page Print Reset */
+            .preview-scroll-wrapper { display: block !important; padding: 0 !important; width: 100% !important; overflow: visible !important; }
+            .print-container { display: block !important; box-shadow: none !important; margin: 0 !important; }
             .a4-page {
-                margin: 0 auto !important;
-                box-shadow: none !important;
-                border: none !important;
-                transform: none !important;
-                width: 210mm !important;
-                min-height: 297mm !important;
-                padding: 0 !important;
-                page-break-after: always;
-                background: transparent !important;
+                margin: 0 auto !important; box-shadow: none !important; border: none !important;
+                transform: none !important; width: 210mm !important; min-height: 297mm !important;
+                /* Removed !important from padding to allow inline styles to work */
+                page-break-after: always; background: transparent !important;
             }
-            
-            .columns-container {
-                column-fill: auto;
-            }
-            
-            .break-inside-avoid {
-                break-inside: avoid;
-                page-break-inside: avoid;
-            }
+            .columns-container { column-fill: auto; }
+            .break-inside-avoid { break-inside: avoid; page-break-inside: avoid; }
         }
 
-        /* Custom Scrollbar */
-        ::-webkit-scrollbar {
-            width: 6px;
-            height: 6px;
-        }
-        ::-webkit-scrollbar-track {
-            background: #f1f5f9;
-        }
-        ::-webkit-scrollbar-thumb {
-            background: #cbd5e1;
-            border-radius: 4px;
-        }
+        /* Scrollbar */
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: #f1f5f9; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
 
-        /* Nav Styles */
-        .nav-item.active {
-            color: #4f46e5;
-        }
-        .nav-item.active .nav-icon {
-            background-color: #e0e7ff;
-            color: #4f46e5;
-        }
-        .nav-item {
-            color: #64748b;
-        }
+        .nav-item.active { color: #4f46e5; }
+        .nav-item.active .nav-icon { background-color: #e0e7ff; color: #4f46e5; }
+        .nav-item { color: #64748b; }
     </style>
 </head>
 <body class="h-screen flex flex-col overflow-hidden">
@@ -227,26 +198,22 @@
                 Exam<span class="text-indigo-600">Master</span>
             </h1>
         </div>
-        
         <button onclick="window.print()" class="bg-slate-900 hover:bg-slate-800 text-white px-4 py-2 rounded-lg flex items-center gap-2 font-bold transition-all text-sm shadow-md">
-            <i data-lucide="printer" class="w-4 h-4"></i> 
-            <span class="hidden sm:inline">ডাউনলোড / প্রিন্ট</span>
+            <i data-lucide="printer" class="w-4 h-4"></i> <span class="hidden sm:inline">ডাউনলোড / প্রিন্ট</span>
         </button>
     </header>
 
     <main class="flex-1 flex overflow-hidden relative">
-        
-        <!-- LEFT PANEL: Config & Questions (Switched by Tabs on Desktop/Mobile) -->
+        <!-- LEFT PANEL -->
         <div id="left-panel" class="w-full md:w-[450px] lg:w-[500px] flex-shrink-0 bg-slate-50 border-r border-slate-200 overflow-y-auto pb-24 md:pb-10 transition-all">
             <div class="p-4 md:p-6 space-y-6">
                 
-                <!-- TAB CONTENT: SETTINGS -->
+                <!-- SETTINGS TAB -->
                 <div id="tab-content-settings" class="hidden animate-in slide-in-from-left-2 duration-300">
                     <div class="flex items-center gap-2 mb-4 text-slate-800 font-bold border-b border-slate-200 pb-2">
                         <i data-lucide="settings-2" class="w-5 h-5 text-indigo-600"></i>
                         <h2>সেটিংস কনফিগারেশন</h2>
                     </div>
-
                     <!-- Header Config -->
                     <section class="bg-white p-4 rounded-xl shadow-sm border border-slate-200 space-y-4">
                         <label class="flex items-center gap-3 cursor-pointer group w-fit">
@@ -256,14 +223,12 @@
                             <input type="checkbox" id="header-show" checked onchange="updateHeaderConfig()" class="hidden"/>
                             <span class="text-sm font-bold text-slate-700">হেডার দেখান</span>
                         </label>
-                        
                         <div class="space-y-1">
                             <span class="text-[10px] font-bold text-slate-400 uppercase">হেডার টেক্সট</span>
                             <textarea id="header-text" oninput="updateHeaderConfig()" class="w-full p-3 bg-slate-50 border border-slate-200 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none text-sm min-h-[100px] leading-relaxed resize-none" placeholder="টেক্সট লিখুন...">বার্ষিক পরীক্ষা ২০২৪
 বিষয়: সাধারণ বিজ্ঞান
 সময়: ২ ঘণ্টা | পূর্ণমান: ১০০</textarea>
                         </div>
-
                         <div class="grid grid-cols-2 gap-3">
                             <div>
                                 <span class="text-[10px] font-bold text-slate-400 uppercase">হেডার সাইজ</span>
@@ -281,11 +246,10 @@
                             </div>
                         </div>
                     </section>
-
                     <!-- Page Config -->
                     <section class="bg-white p-4 rounded-xl shadow-sm border border-slate-200 space-y-4">
                         <div class="space-y-2">
-                            <span class="text-[10px] font-bold text-slate-400 uppercase">পেজ মার্জিন (চারপাশে)</span>
+                            <span class="text-[10px] font-bold text-slate-400 uppercase">পেজ মার্জিন (চারপাশে সমান)</span>
                             <div class="flex items-center gap-3 bg-slate-50 border border-slate-200 rounded-lg p-2">
                                 <i data-lucide="maximize" class="w-4 h-4 text-slate-400"></i>
                                 <input type="range" id="page-margin" min="5" max="30" value="12" class="flex-1 h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-indigo-600" oninput="updatePageConfig()">
@@ -293,7 +257,7 @@
                             </div>
                         </div>
                          <div class="space-y-2">
-                            <span class="text-[10px] font-bold text-slate-400 uppercase">কলাম গ্যাপ (মাঝখানের ফাঁকা)</span>
+                            <span class="text-[10px] font-bold text-slate-400 uppercase">কলাম গ্যাপ</span>
                             <div class="flex items-center gap-3 bg-slate-50 border border-slate-200 rounded-lg p-2">
                                 <i data-lucide="columns" class="w-4 h-4 text-slate-400"></i>
                                 <input type="range" id="page-gap" min="5" max="25" value="12" class="flex-1 h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-indigo-600" oninput="updatePageConfig()">
@@ -301,11 +265,10 @@
                             </div>
                         </div>
                     </section>
-
                     <!-- Question Config -->
                     <section class="bg-white p-4 rounded-xl shadow-sm border border-slate-200 space-y-4">
                         <div class="space-y-2">
-                            <span class="text-[10px] font-bold text-slate-400 uppercase">প্রশ্নের ফন্ট সাইজ (সবকিছু)</span>
+                            <span class="text-[10px] font-bold text-slate-400 uppercase">ফন্ট সাইজ</span>
                             <div class="flex items-center gap-3 bg-slate-50 border border-slate-200 rounded-lg p-2">
                                 <i data-lucide="type" class="w-4 h-4 text-slate-400"></i>
                                 <input type="range" id="question-font-size" min="10" max="24" value="12" class="flex-1 h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-indigo-600" oninput="updateQuestionConfig()">
@@ -313,26 +276,25 @@
                             </div>
                         </div>
                     </section>
-                    
                     <!-- Watermark -->
                     <section class="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
-                        <span class="text-[10px] font-bold text-slate-400 uppercase block mb-2">ওয়াটারমার্ক লোগো</span>
+                        <span class="text-[10px] font-bold text-slate-400 uppercase block mb-2">ওয়াটারমার্ক</span>
                         <div class="flex items-center gap-3">
                             <label class="flex-1 cursor-pointer bg-slate-50 border-2 border-dashed border-slate-200 rounded-lg p-3 hover:bg-slate-100 transition-all text-center">
                                 <input type="file" accept="image/*" id="watermark-upload" onchange="handleWatermarkUpload(this)" class="hidden" />
                                 <div class="flex flex-col items-center gap-1">
                                     <i data-lucide="image-plus" class="w-5 h-5 text-slate-400"></i>
-                                    <span id="watermark-label" class="text-xs text-slate-500 font-bold">লোগো আপলোড</span>
+                                    <span id="watermark-label" class="text-xs text-slate-500 font-bold">আপলোড</span>
                                 </div>
                             </label>
-                            <button id="watermark-remove" onclick="removeWatermark()" class="hidden p-3 text-rose-500 bg-rose-50 rounded-lg hover:bg-rose-100 border border-rose-100" title="রিমুভ করুন">
+                            <button id="watermark-remove" onclick="removeWatermark()" class="hidden p-3 text-rose-500 bg-rose-50 rounded-lg hover:bg-rose-100 border border-rose-100" title="রিমুভ">
                                 <i data-lucide="trash-2" class="w-5 h-5"></i>
                             </button>
                         </div>
                     </section>
                 </div>
 
-                <!-- TAB CONTENT: QUESTIONS -->
+                <!-- QUESTIONS TAB -->
                 <div id="tab-content-questions" class="hidden animate-in slide-in-from-left-2 duration-300">
                     <div class="flex items-center justify-between mb-4 border-b border-slate-200 pb-2">
                         <div class="flex items-center gap-2 text-slate-800 font-bold">
@@ -344,11 +306,9 @@
                         </button>
                     </div>
 
-                    <!-- Question Form -->
+                    <!-- Form -->
                     <form id="question-form" onsubmit="handleFormSubmit(event)" class="bg-white p-4 rounded-xl shadow-sm border border-slate-200 space-y-4 relative">
                         <input type="hidden" id="q-id">
-                        
-                        <!-- Form Header -->
                         <div class="flex justify-between items-center mb-1">
                             <span class="text-[10px] font-black text-indigo-500 uppercase tracking-wider bg-indigo-50 px-2 py-1 rounded" id="form-mode-text">নতুন প্রশ্ন</span>
                             <button type="button" id="btn-cancel-edit" onclick="cancelEdit()" class="hidden text-xs font-bold text-slate-500 hover:text-rose-500 flex items-center gap-1">
@@ -357,23 +317,20 @@
                         </div>
                         
                         <div class="space-y-2">
-                            <textarea id="q-text" required
-                                class="w-full p-3 bg-slate-50 border border-slate-200 rounded-lg h-24 focus:ring-2 focus:ring-indigo-500 outline-none transition-all text-sm text-slate-800 placeholder-slate-400 resize-none"
-                                placeholder="প্রশ্ন লিখুন... (গাণিতিক চিহ্নের জন্য গাইড দেখুন)"></textarea>
-                            
+                            <textarea id="q-text" required class="w-full p-3 bg-slate-50 border border-slate-200 rounded-lg h-24 focus:ring-2 focus:ring-indigo-500 outline-none transition-all text-sm text-slate-800 placeholder-slate-400 resize-none" placeholder="প্রশ্ন লিখুন..."></textarea>
                             <div class="flex items-center gap-2">
                                 <label class="flex items-center gap-2 cursor-pointer bg-slate-100 px-3 py-1.5 rounded-lg hover:bg-indigo-50 hover:text-indigo-600 transition-colors text-[10px] font-bold text-slate-600 border border-transparent hover:border-indigo-100">
                                     <input type="file" class="hidden" onchange="handleImageUpload(this, 'main')" />
                                     <i data-lucide="image" class="w-3.5 h-3.5"></i> ছবি যোগ করুন
                                 </label>
-                                <button type="button" id="btn-remove-main-img" onclick="removeImage('main')" class="hidden text-[10px] font-bold text-rose-500 hover:underline">ছবি মুছুন</button>
+                                <button type="button" id="btn-remove-main-img" onclick="removeImage('main')" class="hidden text-[10px] font-bold text-rose-500 hover:underline">মুছুন</button>
                                 <input type="hidden" id="q-image-data">
                             </div>
                         </div>
 
-                        <!-- Options Grid -->
+                        <!-- Options -->
                         <div class="grid grid-cols-1 gap-3">
-                            <!-- Option A -->
+                            <!-- Opt A -->
                             <div class="flex gap-2">
                                 <div class="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center font-black text-slate-500 text-xs flex-shrink-0">A</div>
                                 <div class="flex-1 space-y-1">
@@ -391,8 +348,7 @@
                                     <input type="hidden" id="q-img-A">
                                 </div>
                             </div>
-
-                            <!-- Option B -->
+                            <!-- Opt B -->
                             <div class="flex gap-2">
                                 <div class="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center font-black text-slate-500 text-xs flex-shrink-0">B</div>
                                 <div class="flex-1 space-y-1">
@@ -410,8 +366,7 @@
                                     <input type="hidden" id="q-img-B">
                                 </div>
                             </div>
-
-                            <!-- Option C -->
+                            <!-- Opt C -->
                             <div class="flex gap-2">
                                 <div class="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center font-black text-slate-500 text-xs flex-shrink-0">C</div>
                                 <div class="flex-1 space-y-1">
@@ -429,8 +384,7 @@
                                     <input type="hidden" id="q-img-C">
                                 </div>
                             </div>
-
-                            <!-- Option D -->
+                            <!-- Opt D -->
                             <div class="flex gap-2">
                                 <div class="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center font-black text-slate-500 text-xs flex-shrink-0">D</div>
                                 <div class="flex-1 space-y-1">
@@ -450,8 +404,8 @@
                             </div>
                         </div>
 
-                        <!-- Correct Answer & Explanation -->
-                        <div class="grid grid-cols-2 gap-3 pt-2">
+                        <!-- Ans & Exp with Image Support -->
+                        <div class="grid grid-cols-1 gap-3 pt-2">
                             <div class="space-y-1">
                                 <span class="text-[10px] font-bold text-slate-400 uppercase">সঠিক উত্তর</span>
                                 <select id="q-correct" class="w-full p-2 bg-slate-50 border border-slate-200 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none font-bold text-indigo-600 text-xs h-10">
@@ -462,8 +416,19 @@
                                 </select>
                             </div>
                             <div class="space-y-1">
-                                <span class="text-[10px] font-bold text-slate-400 uppercase">ব্যাখ্যা (ঐচ্ছিক)</span>
-                                <input id="q-explanation" class="w-full p-2 bg-slate-50 border border-slate-200 rounded-lg text-xs h-10 focus:ring-2 focus:ring-indigo-500 outline-none" placeholder="ব্যাখ্যা...">
+                                <div class="flex justify-between items-center">
+                                    <span class="text-[10px] font-bold text-slate-400 uppercase">ব্যাখ্যা (ঐচ্ছিক)</span>
+                                    <label class="text-[9px] font-bold text-indigo-500 cursor-pointer flex items-center gap-1">
+                                        <input type="file" class="hidden" onchange="handleImageUpload(this, 'exp')" />
+                                        <i data-lucide="image-plus" class="w-3 h-3"></i> ছবি
+                                    </label>
+                                </div>
+                                <textarea id="q-explanation" class="w-full p-2 bg-slate-50 border border-slate-200 rounded-lg text-xs h-14 focus:ring-2 focus:ring-indigo-500 outline-none" placeholder="ব্যাখ্যা লিখুন..."></textarea>
+                                <div id="img-indicator-exp" class="hidden flex items-center gap-1 text-[9px] text-emerald-600 font-bold bg-emerald-50 px-2 py-1 rounded w-fit">
+                                    <i data-lucide="check" class="w-3 h-3"></i> ব্যাখ্যা ছবি যুক্ত হয়েছে
+                                    <button type="button" onclick="removeImage('exp')" class="text-rose-500 hover:underline ml-2 font-bold">x</button>
+                                </div>
+                                <input type="hidden" id="q-img-exp">
                             </div>
                         </div>
 
@@ -473,57 +438,43 @@
                         </button>
                     </form>
 
-                    <!-- Question List Section -->
-                    <div id="question-list-section" class="space-y-4">
-                        <!-- Loaded by JS -->
-                    </div>
+                    <!-- List -->
+                    <div id="question-list-section" class="space-y-4"></div>
                 </div>
-
             </div>
         </div>
 
-        <!-- RIGHT PANEL / PREVIEW PANEL (Visible based on Logic) -->
+        <!-- RIGHT PANEL / PREVIEW -->
         <div id="preview-panel-container" class="flex-1 overflow-y-auto bg-slate-200 flex justify-center items-start hidden md:flex h-full">
             <div class="preview-scroll-wrapper min-h-full">
                 <div class="print-container drop-shadow-xl">
-                    <div id="a4-page" class="a4-page">
-                        <!-- Content injected via JS -->
-                    </div>
+                    <div id="a4-page" class="a4-page"></div>
                 </div>
             </div>
         </div>
     </main>
 
-    <!-- Bottom Navigation Bar -->
+    <!-- Bottom Nav -->
     <nav class="bottom-nav bg-white border-t border-slate-200 fixed bottom-0 left-0 w-full z-40 pb-safe shadow-[0_-5px_20px_rgba(0,0,0,0.03)] no-print">
         <div class="flex justify-around items-center h-16 max-w-lg mx-auto">
             <button onclick="switchMode('settings')" id="nav-settings" class="nav-item flex flex-col items-center justify-center w-full h-full gap-1 transition-all active:scale-95 group">
-                <div class="nav-icon p-1.5 rounded-full transition-colors group-hover:bg-slate-50">
-                    <i data-lucide="settings-2" class="w-5 h-5"></i>
-                </div>
+                <div class="nav-icon p-1.5 rounded-full transition-colors group-hover:bg-slate-50"><i data-lucide="settings-2" class="w-5 h-5"></i></div>
                 <span class="text-[10px] font-bold">সেটিংস</span>
             </button>
-            
             <button onclick="switchMode('questions')" id="nav-questions" class="nav-item flex flex-col items-center justify-center w-full h-full gap-1 transition-all active:scale-95 group">
-                <div class="nav-icon p-1.5 rounded-full transition-colors group-hover:bg-slate-50">
-                    <i data-lucide="list-plus" class="w-5 h-5"></i>
-                </div>
+                <div class="nav-icon p-1.5 rounded-full transition-colors group-hover:bg-slate-50"><i data-lucide="list-plus" class="w-5 h-5"></i></div>
                 <span class="text-[10px] font-bold">প্রশ্ন</span>
             </button>
-
             <button onclick="switchMode('preview')" id="nav-preview" class="nav-item flex flex-col items-center justify-center w-full h-full gap-1 transition-all active:scale-95 group md:hidden">
-                <div class="nav-icon p-1.5 rounded-full transition-colors group-hover:bg-slate-50">
-                    <i data-lucide="eye" class="w-5 h-5"></i>
-                </div>
+                <div class="nav-icon p-1.5 rounded-full transition-colors group-hover:bg-slate-50"><i data-lucide="eye" class="w-5 h-5"></i></div>
                 <span class="text-[10px] font-bold">প্রিভিউ</span>
             </button>
         </div>
     </nav>
 
     <script>
-        const STORAGE_KEY = 'exam_master_db_v2';
+        const STORAGE_KEY = 'exam_master_db_v3';
 
-        // State
         let state = {
             questions: [],
             header: {
@@ -532,20 +483,14 @@
                 fontSize: '18px',
                 color: '#000000'
             },
-            questionConfig: {
-                fontSize: '12px'
-            },
-            pageConfig: {
-                padding: '12mm',
-                gap: '12mm'
-            },
+            questionConfig: { fontSize: '12px' },
+            pageConfig: { padding: '12mm', gap: '12mm' },
             watermark: null,
-            activeMode: 'questions', // settings, questions, preview
+            activeMode: 'questions',
             editingQuestionId: null,
             listCollapsed: false
         };
 
-        // Rich Text Renderer
         function renderRichText(input) {
             if (!input) return '';
             const parts = input.split(/(\^[^^]+\^|_[^_]+_|\[[^/]+\/[^\]]+\]|\\sqrt\([^)]+\))/g);
@@ -561,11 +506,8 @@
             }).join('');
         }
 
-        // App Initialization
         function init() {
             loadData();
-            
-            // Set Inputs
             document.getElementById('header-text').value = state.header.text;
             document.getElementById('header-show').checked = state.header.show;
             document.getElementById('header-font-size').value = parseInt(state.header.fontSize);
@@ -585,45 +527,30 @@
             lucide.createIcons();
             updateList();
             updatePreview();
-            switchMode(state.activeMode); // Load last active mode
+            switchMode(state.activeMode);
         }
 
-        // Mode Switching (Navigation)
         function switchMode(mode) {
             state.activeMode = mode;
             saveData();
-
-            // Reset States
             const leftPanel = document.getElementById('left-panel');
             const previewPanel = document.getElementById('preview-panel-container');
             const settingsTab = document.getElementById('tab-content-settings');
             const questionsTab = document.getElementById('tab-content-questions');
             
-            // Nav Buttons
             document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
             document.getElementById(`nav-${mode}`)?.classList.add('active');
 
             if (mode === 'preview') {
-                // Mobile: Show only preview
                 if (window.innerWidth < 768) {
                     leftPanel.classList.add('hidden');
                     previewPanel.classList.remove('hidden');
-                } else {
-                    // Desktop: Do nothing special for preview button, it usually just stays on right
-                    // Maybe scroll to it? But layout is split.
-                    // Let's just default to 'questions' on left panel if user clicks preview on desktop (though button is hidden on desktop)
                 }
             } else {
-                // Settings or Questions Mode
-                // Mobile: Show left panel, hide preview
                 if (window.innerWidth < 768) {
                     leftPanel.classList.remove('hidden');
                     previewPanel.classList.add('hidden');
-                } else {
-                    // Desktop: Left panel always visible
                 }
-
-                // Switch Left Panel Content
                 if (mode === 'settings') {
                     settingsTab.classList.remove('hidden');
                     questionsTab.classList.add('hidden');
@@ -634,26 +561,20 @@
             }
         }
 
-        // Data Logic
-        function saveData() {
-            localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
-        }
-
+        function saveData() { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); }
         function loadData() {
             try {
                 const saved = localStorage.getItem(STORAGE_KEY);
                 if (saved) state = { ...state, ...JSON.parse(saved) };
             } catch (e) { console.error(e); }
         }
-
         function resetAllData() {
-            if (confirm('সব ডেটা মুছে যাবে। আপনি কি নিশ্চিত?')) {
+            if (confirm('সব মুছে যাবে। নিশ্চিত?')) {
                 localStorage.removeItem(STORAGE_KEY);
                 location.reload();
             }
         }
 
-        // Configuration Updates
         function updateHeaderConfig() {
             state.header.text = document.getElementById('header-text').value;
             state.header.show = document.getElementById('header-show').checked;
@@ -661,241 +582,136 @@
             document.getElementById('header-font-size-display').innerText = state.header.fontSize;
             state.header.color = document.getElementById('header-color').value;
             document.getElementById('header-color-val').innerText = state.header.color.toUpperCase();
-            
-            updateUIHeaderToggle();
-            updatePreview();
-            saveData();
+            updateUIHeaderToggle(); updatePreview(); saveData();
         }
-
         function updateUIHeaderToggle() {
-            const toggleBg = document.getElementById('header-show-toggle-bg');
-            const toggleDot = document.getElementById('header-show-toggle-dot');
-            if (state.header.show) {
-                toggleBg.classList.replace('bg-slate-300', 'bg-indigo-600');
-                toggleDot.classList.replace('translate-x-0', 'translate-x-4');
-            } else {
-                toggleBg.classList.replace('bg-indigo-600', 'bg-slate-300');
-                toggleDot.classList.replace('translate-x-4', 'translate-x-0');
-            }
+            const t = document.getElementById('header-show-toggle-bg'), d = document.getElementById('header-show-toggle-dot');
+            if (state.header.show) { t.classList.replace('bg-slate-300', 'bg-indigo-600'); d.classList.replace('translate-x-0', 'translate-x-4'); } 
+            else { t.classList.replace('bg-indigo-600', 'bg-slate-300'); d.classList.replace('translate-x-4', 'translate-x-0'); }
         }
-
         function updatePageConfig() {
             state.pageConfig.padding = document.getElementById('page-margin').value + 'mm';
             document.getElementById('page-margin-display').innerText = state.pageConfig.padding;
             state.pageConfig.gap = document.getElementById('page-gap').value + 'mm';
             document.getElementById('page-gap-display').innerText = state.pageConfig.gap;
-            updatePreview();
-            saveData();
+            updatePreview(); saveData();
         }
-
         function updateQuestionConfig() {
             state.questionConfig.fontSize = document.getElementById('question-font-size').value + 'px';
             document.getElementById('question-font-size-display').innerText = state.questionConfig.fontSize;
-            updatePreview();
-            saveData();
+            updatePreview(); saveData();
         }
 
-        // Images & Watermark
         function handleWatermarkUpload(input) {
             const file = input.files[0];
             if (file) {
-                const reader = new FileReader();
-                reader.onload = (e) => {
-                    state.watermark = e.target.result;
-                    document.getElementById('watermark-label').innerText = 'পরিবর্তন';
-                    document.getElementById('watermark-remove').classList.remove('hidden');
-                    updatePreview();
-                    saveData();
-                };
-                reader.readAsDataURL(file);
+                const r = new FileReader();
+                r.onload = (e) => { state.watermark = e.target.result; document.getElementById('watermark-label').innerText='পরিবর্তন'; document.getElementById('watermark-remove').classList.remove('hidden'); updatePreview(); saveData(); };
+                r.readAsDataURL(file);
             }
         }
-
-        function removeWatermark() {
-            state.watermark = null;
-            document.getElementById('watermark-upload').value = '';
-            document.getElementById('watermark-label').innerText = 'লোগো আপলোড';
-            document.getElementById('watermark-remove').classList.add('hidden');
-            updatePreview();
-            saveData();
-        }
+        function removeWatermark() { state.watermark = null; document.getElementById('watermark-upload').value=''; document.getElementById('watermark-label').innerText='আপলোড'; document.getElementById('watermark-remove').classList.add('hidden'); updatePreview(); saveData(); }
 
         function handleImageUpload(input, target) {
             const file = input.files[0];
             if (file) {
-                const reader = new FileReader();
-                reader.onload = (e) => {
-                    if (target === 'main') {
-                        document.getElementById('q-image-data').value = e.target.result;
-                        document.getElementById('btn-remove-main-img').classList.remove('hidden');
-                    } else {
-                        document.getElementById(`q-img-${target}`).value = e.target.result;
-                        document.getElementById(`img-indicator-${target}`).classList.remove('hidden');
-                        document.getElementById(`img-indicator-${target}`).classList.add('flex');
-                    }
+                const r = new FileReader();
+                r.onload = (e) => {
+                    if (target === 'main') { document.getElementById('q-image-data').value = e.target.result; document.getElementById('btn-remove-main-img').classList.remove('hidden'); }
+                    else if (target === 'exp') { document.getElementById('q-img-exp').value = e.target.result; document.getElementById('img-indicator-exp').classList.remove('hidden'); }
+                    else { document.getElementById(`q-img-${target}`).value = e.target.result; document.getElementById(`img-indicator-${target}`).classList.remove('hidden'); }
                 };
-                reader.readAsDataURL(file);
+                r.readAsDataURL(file);
             }
         }
-
         function removeImage(target) {
-            if (target === 'main') {
-                document.getElementById('q-image-data').value = '';
-                document.getElementById('btn-remove-main-img').classList.add('hidden');
-            } else {
-                document.getElementById(`q-img-${target}`).value = '';
-                document.getElementById(`img-indicator-${target}`).classList.add('hidden');
-                document.getElementById(`img-indicator-${target}`).classList.remove('flex');
-            }
+            if (target === 'main') { document.getElementById('q-image-data').value = ''; document.getElementById('btn-remove-main-img').classList.add('hidden'); }
+            else if (target === 'exp') { document.getElementById('q-img-exp').value = ''; document.getElementById('img-indicator-exp').classList.add('hidden'); }
+            else { document.getElementById(`q-img-${target}`).value = ''; document.getElementById(`img-indicator-${target}`).classList.add('hidden'); }
         }
 
-        // Question CRUD
         function handleFormSubmit(e) {
             e.preventDefault();
-            const newQuestion = {
+            const newQ = {
                 id: state.editingQuestionId || Date.now().toString(),
                 text: document.getElementById('q-text').value,
                 image: document.getElementById('q-image-data').value || undefined,
-                options: {
-                    A: document.getElementById('q-opt-A').value,
-                    B: document.getElementById('q-opt-B').value,
-                    C: document.getElementById('q-opt-C').value,
-                    D: document.getElementById('q-opt-D').value,
-                },
+                options: { A: document.getElementById('q-opt-A').value, B: document.getElementById('q-opt-B').value, C: document.getElementById('q-opt-C').value, D: document.getElementById('q-opt-D').value },
                 optionImages: {
-                    A: document.getElementById('q-img-A').value || undefined,
-                    B: document.getElementById('q-img-B').value || undefined,
-                    C: document.getElementById('q-img-C').value || undefined,
-                    D: document.getElementById('q-img-D').value || undefined,
+                    A: document.getElementById('q-img-A').value || undefined, B: document.getElementById('q-img-B').value || undefined,
+                    C: document.getElementById('q-img-C').value || undefined, D: document.getElementById('q-img-D').value || undefined
                 },
                 correctAnswer: document.getElementById('q-correct').value,
-                explanation: document.getElementById('q-explanation').value
+                explanation: document.getElementById('q-explanation').value,
+                expImage: document.getElementById('q-img-exp').value || undefined
             };
-
-            if (state.editingQuestionId) {
-                state.questions = state.questions.map(q => q.id === state.editingQuestionId ? newQuestion : q);
-                state.editingQuestionId = null;
-            } else {
-                state.questions.push(newQuestion);
-            }
-
-            resetForm();
-            updateList();
-            updatePreview();
-            saveData();
+            if (state.editingQuestionId) state.questions = state.questions.map(q => q.id === state.editingQuestionId ? newQ : q);
+            else state.questions.push(newQ);
+            resetForm(); updateList(); updatePreview(); saveData();
         }
 
         function resetForm() {
             document.getElementById('question-form').reset();
-            document.getElementById('q-id').value = '';
-            document.getElementById('q-image-data').value = '';
-            ['A', 'B', 'C', 'D'].forEach(opt => {
-                document.getElementById(`q-img-${opt}`).value = '';
-                document.getElementById(`img-indicator-${opt}`).classList.add('hidden');
-            });
-            document.getElementById('btn-remove-main-img').classList.add('hidden');
-            
+            document.getElementById('q-id').value = ''; document.getElementById('q-image-data').value = ''; document.getElementById('q-img-exp').value = '';
+            ['A','B','C','D'].forEach(o => { document.getElementById(`q-img-${o}`).value=''; document.getElementById(`img-indicator-${o}`).classList.add('hidden'); });
+            document.getElementById('btn-remove-main-img').classList.add('hidden'); document.getElementById('img-indicator-exp').classList.add('hidden');
             state.editingQuestionId = null;
-            document.getElementById('form-mode-text').innerText = 'নতুন প্রশ্ন';
-            document.getElementById('submit-text').innerText = 'প্রশ্ন যুক্ত করুন';
-            document.getElementById('btn-cancel-edit').classList.add('hidden');
-            
-            document.getElementById('submit-icon').setAttribute('data-lucide', 'plus-circle');
+            document.getElementById('form-mode-text').innerText='নতুন প্রশ্ন'; document.getElementById('submit-text').innerText='প্রশ্ন যুক্ত করুন';
+            document.getElementById('btn-cancel-edit').classList.add('hidden'); document.getElementById('submit-icon').setAttribute('data-lucide', 'plus-circle');
             lucide.createIcons();
         }
 
         function editQuestion(id) {
-            const q = state.questions.find(item => item.id === id);
-            if (!q) return;
-
+            const q = state.questions.find(i => i.id === id); if(!q) return;
             state.editingQuestionId = id;
-            
             document.getElementById('q-text').value = q.text;
             document.getElementById('q-image-data').value = q.image || '';
-            if (q.image) document.getElementById('btn-remove-main-img').classList.remove('hidden');
-            else document.getElementById('btn-remove-main-img').classList.add('hidden');
-
-            ['A', 'B', 'C', 'D'].forEach(opt => {
-                document.getElementById(`q-opt-${opt}`).value = q.options[opt];
-                document.getElementById(`q-img-${opt}`).value = q.optionImages?.[opt] || '';
-                if (q.optionImages?.[opt]) {
-                    document.getElementById(`img-indicator-${opt}`).classList.remove('hidden');
-                    document.getElementById(`img-indicator-${opt}`).classList.add('flex');
-                } else {
-                    document.getElementById(`img-indicator-${opt}`).classList.add('hidden');
-                }
+            if(q.image) document.getElementById('btn-remove-main-img').classList.remove('hidden'); else document.getElementById('btn-remove-main-img').classList.add('hidden');
+            
+            ['A','B','C','D'].forEach(o => {
+                document.getElementById(`q-opt-${o}`).value = q.options[o];
+                document.getElementById(`q-img-${o}`).value = q.optionImages?.[o] || '';
+                if(q.optionImages?.[o]) document.getElementById(`img-indicator-${o}`).classList.remove('hidden'); else document.getElementById(`img-indicator-${o}`).classList.add('hidden');
             });
 
             document.getElementById('q-correct').value = q.correctAnswer;
             document.getElementById('q-explanation').value = q.explanation || '';
+            document.getElementById('q-img-exp').value = q.expImage || '';
+            if(q.expImage) document.getElementById('img-indicator-exp').classList.remove('hidden'); else document.getElementById('img-indicator-exp').classList.add('hidden');
 
-            document.getElementById('form-mode-text').innerText = 'এডিট মোড';
-            document.getElementById('submit-text').innerText = 'আপডেট করুন';
-            document.getElementById('btn-cancel-edit').classList.remove('hidden');
-            
-            document.getElementById('submit-icon').setAttribute('data-lucide', 'save');
-            lucide.createIcons();
-            
-            document.getElementById('left-panel').scrollTo({ top: 0, behavior: 'smooth' });
+            document.getElementById('form-mode-text').innerText='এডিট মোড'; document.getElementById('submit-text').innerText='আপডেট করুন';
+            document.getElementById('btn-cancel-edit').classList.remove('hidden'); document.getElementById('submit-icon').setAttribute('data-lucide', 'save');
+            lucide.createIcons(); document.getElementById('left-panel').scrollTo({top:0,behavior:'smooth'});
         }
 
         function cancelEdit() { resetForm(); }
-
-        function deleteQuestion(id) {
-            if(confirm('মুছে ফেলতে চান?')) {
-                state.questions = state.questions.filter(q => q.id !== id);
-                if (state.editingQuestionId === id) resetForm();
-                updateList();
-                updatePreview();
-                saveData();
-            }
-        }
-        
-        function toggleList() {
-            state.listCollapsed = !state.listCollapsed;
-            updateList();
-            saveData();
-        }
+        function deleteQuestion(id) { if(confirm('মুছে ফেলতে চান?')) { state.questions = state.questions.filter(q=>q.id!==id); if(state.editingQuestionId===id) resetForm(); updateList(); updatePreview(); saveData(); } }
+        function toggleList() { state.listCollapsed = !state.listCollapsed; updateList(); saveData(); }
 
         function updateList() {
             const container = document.getElementById('question-list-section');
             const count = state.questions.length;
-
             const headerHtml = `
                 <div class="flex items-center justify-between px-1 select-none mb-4">
                     <div class="flex items-center gap-4 cursor-pointer" onclick="toggleList()">
-                        <h3 class="text-xs font-bold text-slate-500 uppercase tracking-widest flex items-center gap-2">
-                            প্রশ্ন তালিকা (${count})
-                            <i data-lucide="${state.listCollapsed ? 'chevron-down' : 'chevron-up'}" class="w-4 h-4"></i>
-                        </h3>
+                        <h3 class="text-xs font-bold text-slate-500 uppercase tracking-widest flex items-center gap-2">প্রশ্ন তালিকা (${count}) <i data-lucide="${state.listCollapsed?'chevron-down':'chevron-up'}" class="w-4 h-4"></i></h3>
                         <div class="h-px w-8 bg-slate-200"></div>
                     </div>
-                </div>
-            `;
-
-            if (count === 0) {
-                 container.innerHTML = headerHtml + `<div class="text-center text-slate-400 text-xs py-8 bg-slate-50 rounded-xl border border-dashed border-slate-200">কোনো প্রশ্ন নেই</div>`;
-                 lucide.createIcons();
-                 return;
-            }
-
-            let listContentHtml = '';
-            if (!state.listCollapsed) {
-                listContentHtml = state.questions.map((q, idx) => `
-                    <div class="bg-white p-4 rounded-xl border border-slate-100 shadow-sm hover:border-indigo-100 hover:shadow-md transition-all">
+                </div>`;
+            if(count===0) { container.innerHTML = headerHtml + `<div class="text-center text-slate-400 text-xs py-8 border border-dashed border-slate-200 rounded-lg">কোনো প্রশ্ন নেই</div>`; lucide.createIcons(); return; }
+            if(!state.listCollapsed) {
+                container.innerHTML = headerHtml + `<div class="space-y-3 pt-2">` + state.questions.map((q,i) => `
+                    <div class="bg-white p-4 rounded-xl border border-slate-100 shadow-sm hover:shadow-md transition-all">
                         <div class="flex justify-between items-start mb-2">
-                            <span class="flex items-center justify-center w-6 h-6 bg-slate-800 text-white text-[10px] font-black rounded-md shadow-sm">${idx + 1}</span>
+                            <span class="flex items-center justify-center w-6 h-6 bg-slate-800 text-white text-[10px] font-black rounded-md">${i+1}</span>
                             <div class="flex gap-1">
-                                <button onclick="editQuestion('${q.id}')" class="p-1.5 text-indigo-600 hover:bg-indigo-50 rounded-lg transition-all"><i data-lucide="edit-3" class="w-3.5 h-3.5"></i></button>
-                                <button onclick="deleteQuestion('${q.id}')" class="p-1.5 text-rose-500 hover:bg-rose-50 rounded-lg transition-all"><i data-lucide="trash-2" class="w-3.5 h-3.5"></i></button>
+                                <button onclick="editQuestion('${q.id}')" class="p-1.5 text-indigo-600 hover:bg-indigo-50 rounded-lg"><i data-lucide="edit-3" class="w-3.5 h-3.5"></i></button>
+                                <button onclick="deleteQuestion('${q.id}')" class="p-1.5 text-rose-500 hover:bg-rose-50 rounded-lg"><i data-lucide="trash-2" class="w-3.5 h-3.5"></i></button>
                             </div>
                         </div>
                         <div class="text-xs text-slate-700 font-medium line-clamp-2">${renderRichText(q.text)}</div>
-                    </div>
-                `).join('');
-                listContentHtml = `<div class="space-y-3 pt-2">${listContentHtml}</div>`;
-            }
-            container.innerHTML = headerHtml + listContentHtml;
+                    </div>`).join('') + `</div>`;
+            } else { container.innerHTML = headerHtml; }
             lucide.createIcons();
         }
 
@@ -904,15 +720,7 @@
             container.style.padding = state.pageConfig.padding;
             
             let watermarkHtml = state.watermark ? `<img src="${state.watermark}" alt="Watermark" class="watermark" />` : '';
-            
-            let headerHtml = '';
-            if (state.header.show) {
-                headerHtml = `
-                <header class="text-center mb-6 pb-4 border-b-[1.5px] border-slate-800" style="color: ${state.header.color};">
-                    <div style="font-size: ${state.header.fontSize}; line-height: 1.4; white-space: pre-wrap; font-weight: 700;">${state.header.text}</div>
-                </header>
-                `;
-            }
+            let headerHtml = state.header.show ? `<header class="text-center mb-6 pb-4 border-b-[1.5px] border-slate-800" style="color: ${state.header.color};"><div style="font-size: ${state.header.fontSize}; line-height: 1.4; white-space: pre-wrap; font-weight: 700;">${state.header.text}</div></header>` : '';
 
             const questionsHtml = state.questions.map((q, idx) => `
                 <div class="mb-6 break-inside-avoid">
@@ -920,7 +728,7 @@
                       <span class="whitespace-nowrap" style="font-size: inherit;">${idx + 1}.</span>
                       <div class="flex-1">
                         <div class="mb-1 leading-relaxed">${renderRichText(q.text)}</div>
-                        ${q.image ? `<div class="my-2 text-center"><img src="${q.image}" class="max-h-40 mx-auto rounded-sm border border-slate-200 p-1" /></div>` : ''}
+                        ${q.image ? `<img src="${q.image}" class="q-img" />` : ''}
                       </div>
                     </div>
                     <div class="grid grid-cols-2 gap-x-4 gap-y-2 ml-5 mb-2">
@@ -929,43 +737,27 @@
                           <span class="omr-option flex-shrink-0">${opt}</span>
                           <div class="flex-1">
                             ${renderRichText(q.options[opt])}
-                            ${q.optionImages?.[opt] ? `<div class="mt-1"><img src="${q.optionImages[opt]}" class="max-h-24 rounded-sm border border-slate-100" /></div>` : ''}
+                            ${q.optionImages?.[opt] ? `<img src="${q.optionImages[opt]}" class="opt-img" />` : ''}
                           </div>
                         </div>
                       `).join('')}
                     </div>
                     <div class="ml-5 space-y-2">
                       <div>
-                        <span class="inline-block border border-black px-2 py-1 font-bold text-black" style="font-size: 0.85em;">
-                            সঠিক উত্তর: ${q.correctAnswer}
-                        </span>
+                        <span class="inline-block border border-black px-2 py-1 font-bold text-black" style="font-size: 0.85em;">সঠিক উত্তর: ${q.correctAnswer}</span>
                       </div>
-                      ${q.explanation ? `
+                      ${(q.explanation || q.expImage) ? `
                         <div class="border border-black p-2 text-black leading-normal" style="font-size: 0.85em;">
-                          <span class="font-bold mr-1">ব্যাখ্যা:</span>
-                          ${renderRichText(q.explanation)}
+                          <span class="font-bold mr-1 underline">ব্যাখ্যা:</span>
+                          ${renderRichText(q.explanation || '')}
+                          ${q.expImage ? `<img src="${q.expImage}" class="exp-img" />` : ''}
                         </div>
                       ` : ''}
                     </div>
                 </div>
             `).join('');
 
-            const footerHtml = `
-                <div class="absolute bottom-6 w-full text-center left-0">
-                    <span class="inline-block text-[10px] font-bold text-black uppercase tracking-widest border-t border-slate-400 pt-1 px-4">
-                        পৃষ্ঠা - ১
-                    </span>
-                </div>
-            `;
-
-            container.innerHTML = `
-                ${watermarkHtml}
-                ${headerHtml}
-                <div class="columns-container leading-snug text-black" style="font-size: ${state.questionConfig.fontSize}; column-gap: ${state.pageConfig.gap};">
-                    ${questionsHtml}
-                </div>
-                ${footerHtml}
-            `;
+            container.innerHTML = `${watermarkHtml}${headerHtml}<div class="columns-container leading-snug text-black" style="font-size: ${state.questionConfig.fontSize}; column-gap: ${state.pageConfig.gap};">${questionsHtml}</div>`;
         }
 
         window.addEventListener('DOMContentLoaded', init);
