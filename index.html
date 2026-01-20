@@ -22,7 +22,7 @@
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
             overflow-x: hidden;
-            background-color: #f8fafc; /* slate-50 */
+            background-color: #f8fafc;
         }
 
         /* Responsive OMR Option Bubbles */
@@ -53,82 +53,7 @@
         .fraction-top { border-bottom: 1px solid; padding: 0 2px; line-height: 1; }
         .fraction-bottom { padding: 0 2px; line-height: 1; }
 
-        /* --- PRINT FIXES --- */
-        @media print {
-            @page {
-                size: A4;
-                margin: 0;
-            }
-            body, html {
-                height: auto !important;
-                overflow: visible !important;
-                background: white !important;
-            }
-            
-            /* Hide all UI elements explicitly */
-            body > header, 
-            nav, 
-            #editor-panel, 
-            .bottom-nav,
-            .no-print {
-                display: none !important;
-            }
-
-            /* Reset layout for print */
-            main {
-                display: block !important;
-                height: auto !important;
-                overflow: visible !important;
-            }
-
-            /* Ensure preview container takes full width */
-            #preview-panel-container {
-                display: block !important;
-                position: absolute !important;
-                top: 0 !important;
-                left: 0 !important;
-                width: 100% !important;
-                height: auto !important;
-                margin: 0 !important;
-                padding: 0 !important;
-                overflow: visible !important;
-                background: white !important;
-            }
-
-            .preview-scroll-wrapper {
-                display: block !important;
-                padding: 0 !important;
-                overflow: visible !important;
-                width: 100% !important;
-            }
-
-            .print-container {
-                box-shadow: none !important;
-                margin: 0 !important;
-                width: 100% !important;
-            }
-
-            .a4-page {
-                margin: 0 auto !important;
-                box-shadow: none !important;
-                border: none !important;
-                transform: none !important;
-                width: 210mm !important;
-                min-height: 297mm !important;
-                page-break-after: always;
-            }
-            
-            .columns-container {
-                column-fill: auto;
-            }
-            
-            .break-inside-avoid {
-                break-inside: avoid;
-                page-break-inside: avoid;
-            }
-        }
-
-        /* Preview Scaling */
+        /* Preview Container Styles */
         .preview-scroll-wrapper {
             width: 100%;
             display: flex;
@@ -143,30 +68,25 @@
             width: 210mm;
             min-height: 297mm;
             background: white;
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 0 15px rgba(0,0,0,0.1); /* Screen only shadow */
             position: relative;
             flex-shrink: 0;
-            border: 1px solid #e2e8f0;
+            border: 1px solid #e2e8f0; /* Screen only border */
             transform-origin: top center;
+            margin-bottom: 2rem;
         }
 
-        /* Mobile specific scaling for the preview */
-        @media (max-width: 768px) {
+        /* Screen-only Scaling for Mobile */
+        @media screen and (max-width: 768px) {
             .a4-page {
                 transform: scale(0.45);
-                margin-bottom: -160mm;
+                margin-bottom: -160mm; /* Compensate for empty space due to scaling */
             }
-            @media print {
-                .a4-page {
-                     transform: none !important;
-                     margin-bottom: 0 !important;
-                }
-            }
-            @media (max-width: 480px) {
-                .a4-page {
-                    transform: scale(0.38);
-                    margin-bottom: -185mm;
-                }
+        }
+        @media screen and (max-width: 480px) {
+            .a4-page {
+                transform: scale(0.38);
+                margin-bottom: -185mm;
             }
         }
 
@@ -191,6 +111,84 @@
             height: auto;
         }
 
+        /* --- STRICT PRINT STYLES --- */
+        @media print {
+            @page {
+                size: A4;
+                margin: 0;
+            }
+            
+            body, html {
+                height: auto !important;
+                overflow: visible !important;
+                background: white !important;
+                margin: 0 !important;
+                padding: 0 !important;
+            }
+            
+            /* Hide UI Elements */
+            body > header, 
+            nav, 
+            #left-panel,
+            .no-print {
+                display: none !important;
+            }
+
+            /* Main Layout Reset */
+            main {
+                display: block !important;
+                height: auto !important;
+                overflow: visible !important;
+            }
+
+            /* Preview Container Reset */
+            #preview-panel-container {
+                display: block !important;
+                position: static !important;
+                width: 100% !important;
+                height: auto !important;
+                margin: 0 !important;
+                padding: 0 !important;
+                background: white !important;
+                overflow: visible !important;
+            }
+
+            .preview-scroll-wrapper {
+                display: block !important;
+                padding: 0 !important;
+                width: 100% !important;
+                overflow: visible !important;
+            }
+
+            .print-container {
+                display: block !important;
+                box-shadow: none !important;
+                margin: 0 !important;
+            }
+
+            /* A4 Page Print Reset - The most critical part */
+            .a4-page {
+                margin: 0 auto !important;
+                box-shadow: none !important; /* Removes stains */
+                border: none !important; /* Removes border lines */
+                transform: none !important; /* Fixes blurriness */
+                width: 210mm !important;
+                min-height: 297mm !important;
+                padding: 0 !important; /* Padding handled by JS config */
+                page-break-after: always;
+                background: transparent !important;
+            }
+            
+            .columns-container {
+                column-fill: auto;
+            }
+            
+            .break-inside-avoid {
+                break-inside: avoid;
+                page-break-inside: avoid;
+            }
+        }
+
         /* Custom Scrollbar */
         ::-webkit-scrollbar {
             width: 6px;
@@ -206,14 +204,14 @@
 
         /* Nav Styles */
         .nav-item.active {
-            color: #4f46e5; /* indigo-600 */
+            color: #4f46e5;
         }
         .nav-item.active .nav-icon {
-            background-color: #e0e7ff; /* indigo-100 */
+            background-color: #e0e7ff;
             color: #4f46e5;
         }
         .nav-item {
-            color: #64748b; /* slate-500 */
+            color: #64748b;
         }
     </style>
 </head>
@@ -903,6 +901,8 @@
 
         function updatePreview() {
             const container = document.getElementById('a4-page');
+            
+            // Explicitly set padding here for rendering
             container.style.padding = state.pageConfig.padding;
             
             let watermarkHtml = state.watermark ? `<img src="${state.watermark}" alt="Watermark" class="watermark" />` : '';
@@ -951,8 +951,8 @@
             `).join('');
 
             const footerHtml = `
-                <div class="absolute bottom-6 w-full text-center">
-                    <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest border-t border-slate-200 pt-1 px-2">
+                <div class="absolute bottom-6 w-full text-center left-0">
+                    <span class="inline-block text-[10px] font-bold text-black uppercase tracking-widest border-t border-slate-400 pt-1 px-4">
                         পৃষ্ঠা - ১
                     </span>
                 </div>
