@@ -1,0 +1,974 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Exam Master MCQ Generator</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- KaTeX CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;500;600;700&display=swap');
+
+        body {
+            font-family: 'Hind Siliguri', sans-serif;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            overflow-x: hidden;
+            background-color: #f8fafc; /* slate-50 */
+        }
+
+        /* Responsive OMR Option Bubbles */
+        .omr-option {
+            font-family: sans-serif;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 1.6em; 
+            height: 1.6em;
+            border-radius: 50%;
+            border: 1.2px solid #000;
+            font-size: 0.8em; 
+            margin-right: 0.3em;
+            line-height: 1;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+
+        .fraction {
+            display: inline-flex;
+            flex-direction: column;
+            vertical-align: middle;
+            text-align: center;
+            font-size: 0.9em;
+            margin: 0 2px;
+        }
+        .fraction-top { border-bottom: 1px solid; padding: 0 2px; line-height: 1; }
+        .fraction-bottom { padding: 0 2px; line-height: 1; }
+
+        /* --- PRINT FIXES --- */
+        @media print {
+            @page {
+                size: A4;
+                margin: 0;
+            }
+            body, html {
+                height: auto !important;
+                overflow: visible !important;
+                background: white !important;
+            }
+            
+            /* Hide all UI elements explicitly */
+            body > header, 
+            nav, 
+            #editor-panel, 
+            .bottom-nav,
+            .no-print {
+                display: none !important;
+            }
+
+            /* Reset layout for print */
+            main {
+                display: block !important;
+                height: auto !important;
+                overflow: visible !important;
+            }
+
+            /* Ensure preview container takes full width */
+            #preview-panel-container {
+                display: block !important;
+                position: absolute !important;
+                top: 0 !important;
+                left: 0 !important;
+                width: 100% !important;
+                height: auto !important;
+                margin: 0 !important;
+                padding: 0 !important;
+                overflow: visible !important;
+                background: white !important;
+            }
+
+            .preview-scroll-wrapper {
+                display: block !important;
+                padding: 0 !important;
+                overflow: visible !important;
+                width: 100% !important;
+            }
+
+            .print-container {
+                box-shadow: none !important;
+                margin: 0 !important;
+                width: 100% !important;
+            }
+
+            .a4-page {
+                margin: 0 auto !important;
+                box-shadow: none !important;
+                border: none !important;
+                transform: none !important;
+                width: 210mm !important;
+                min-height: 297mm !important;
+                page-break-after: always;
+            }
+            
+            .columns-container {
+                column-fill: auto;
+            }
+            
+            .break-inside-avoid {
+                break-inside: avoid;
+                page-break-inside: avoid;
+            }
+        }
+
+        /* Preview Scaling */
+        .preview-scroll-wrapper {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding: 2rem 1rem;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .a4-page {
+            width: 210mm;
+            min-height: 297mm;
+            background: white;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+            position: relative;
+            flex-shrink: 0;
+            border: 1px solid #e2e8f0;
+            transform-origin: top center;
+        }
+
+        /* Mobile specific scaling for the preview */
+        @media (max-width: 768px) {
+            .a4-page {
+                transform: scale(0.45);
+                margin-bottom: -160mm;
+            }
+            @media print {
+                .a4-page {
+                     transform: none !important;
+                     margin-bottom: 0 !important;
+                }
+            }
+            @media (max-width: 480px) {
+                .a4-page {
+                    transform: scale(0.38);
+                    margin-bottom: -185mm;
+                }
+            }
+        }
+
+        .watermark {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) rotate(-45deg);
+            opacity: 0.08;
+            z-index: 0;
+            pointer-events: none;
+            width: 60%;
+            max-width: 400px;
+        }
+
+        .columns-container {
+            column-count: 2;
+            column-gap: 12mm;
+            column-rule: 0.5px solid #d1d5db;
+            position: relative;
+            z-index: 1;
+            height: auto;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+
+        /* Nav Styles */
+        .nav-item.active {
+            color: #4f46e5; /* indigo-600 */
+        }
+        .nav-item.active .nav-icon {
+            background-color: #e0e7ff; /* indigo-100 */
+            color: #4f46e5;
+        }
+        .nav-item {
+            color: #64748b; /* slate-500 */
+        }
+    </style>
+</head>
+<body class="h-screen flex flex-col overflow-hidden">
+
+    <!-- Navbar -->
+    <header class="bg-white border-b border-slate-200 px-4 py-3 flex justify-between items-center z-50">
+        <div class="flex items-center gap-2">
+            <div class="bg-indigo-600 p-1.5 rounded-lg shadow-sm">
+                <i data-lucide="layout" class="w-5 h-5 text-white"></i>
+            </div>
+            <h1 class="text-lg font-bold tracking-tight text-slate-800">
+                Exam<span class="text-indigo-600">Master</span>
+            </h1>
+        </div>
+        
+        <button onclick="window.print()" class="bg-slate-900 hover:bg-slate-800 text-white px-4 py-2 rounded-lg flex items-center gap-2 font-bold transition-all text-sm shadow-md">
+            <i data-lucide="printer" class="w-4 h-4"></i> 
+            <span class="hidden sm:inline">ডাউনলোড / প্রিন্ট</span>
+        </button>
+    </header>
+
+    <main class="flex-1 flex overflow-hidden relative">
+        
+        <!-- LEFT PANEL: Config & Questions (Switched by Tabs on Desktop/Mobile) -->
+        <div id="left-panel" class="w-full md:w-[450px] lg:w-[500px] flex-shrink-0 bg-slate-50 border-r border-slate-200 overflow-y-auto pb-24 md:pb-10 transition-all">
+            <div class="p-4 md:p-6 space-y-6">
+                
+                <!-- TAB CONTENT: SETTINGS -->
+                <div id="tab-content-settings" class="hidden animate-in slide-in-from-left-2 duration-300">
+                    <div class="flex items-center gap-2 mb-4 text-slate-800 font-bold border-b border-slate-200 pb-2">
+                        <i data-lucide="settings-2" class="w-5 h-5 text-indigo-600"></i>
+                        <h2>সেটিংস কনফিগারেশন</h2>
+                    </div>
+
+                    <!-- Header Config -->
+                    <section class="bg-white p-4 rounded-xl shadow-sm border border-slate-200 space-y-4">
+                        <label class="flex items-center gap-3 cursor-pointer group w-fit">
+                            <div id="header-show-toggle-bg" class="w-10 h-6 flex items-center rounded-full p-1 transition-colors bg-indigo-600">
+                                <div id="header-show-toggle-dot" class="bg-white w-4 h-4 rounded-full shadow-sm transform transition-transform translate-x-4"></div>
+                            </div>
+                            <input type="checkbox" id="header-show" checked onchange="updateHeaderConfig()" class="hidden"/>
+                            <span class="text-sm font-bold text-slate-700">হেডার দেখান</span>
+                        </label>
+                        
+                        <div class="space-y-1">
+                            <span class="text-[10px] font-bold text-slate-400 uppercase">হেডার টেক্সট</span>
+                            <textarea id="header-text" oninput="updateHeaderConfig()" class="w-full p-3 bg-slate-50 border border-slate-200 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none text-sm min-h-[100px] leading-relaxed resize-none" placeholder="টেক্সট লিখুন...">বার্ষিক পরীক্ষা ২০২৪
+বিষয়: সাধারণ বিজ্ঞান
+সময়: ২ ঘণ্টা | পূর্ণমান: ১০০</textarea>
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-3">
+                            <div>
+                                <span class="text-[10px] font-bold text-slate-400 uppercase">হেডার সাইজ</span>
+                                <div class="flex items-center gap-2 bg-slate-50 border border-slate-200 rounded-lg p-2 h-10">
+                                    <input type="range" id="header-font-size" min="10" max="60" value="18" class="flex-1 h-1.5 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-indigo-600" oninput="updateHeaderConfig()">
+                                    <span id="header-font-size-display" class="text-xs font-mono font-bold text-slate-500 w-8 text-right">18px</span>
+                                </div>
+                            </div>
+                            <div>
+                                <span class="text-[10px] font-bold text-slate-400 uppercase">টেক্সট কালার</span>
+                                <div class="flex items-center gap-2 bg-slate-50 border border-slate-200 rounded-lg p-1 h-10 px-2">
+                                    <input type="color" id="header-color" oninput="updateHeaderConfig()" value="#000000" class="w-6 h-6 rounded cursor-pointer border-none bg-transparent">
+                                    <span id="header-color-val" class="text-xs font-mono font-bold text-slate-500">#000000</span>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Page Config -->
+                    <section class="bg-white p-4 rounded-xl shadow-sm border border-slate-200 space-y-4">
+                        <div class="space-y-2">
+                            <span class="text-[10px] font-bold text-slate-400 uppercase">পেজ মার্জিন (চারপাশে)</span>
+                            <div class="flex items-center gap-3 bg-slate-50 border border-slate-200 rounded-lg p-2">
+                                <i data-lucide="maximize" class="w-4 h-4 text-slate-400"></i>
+                                <input type="range" id="page-margin" min="5" max="30" value="12" class="flex-1 h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-indigo-600" oninput="updatePageConfig()">
+                                <span id="page-margin-display" class="text-xs font-mono font-bold text-slate-500 w-10 text-right">12mm</span>
+                            </div>
+                        </div>
+                         <div class="space-y-2">
+                            <span class="text-[10px] font-bold text-slate-400 uppercase">কলাম গ্যাপ (মাঝখানের ফাঁকা)</span>
+                            <div class="flex items-center gap-3 bg-slate-50 border border-slate-200 rounded-lg p-2">
+                                <i data-lucide="columns" class="w-4 h-4 text-slate-400"></i>
+                                <input type="range" id="page-gap" min="5" max="25" value="12" class="flex-1 h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-indigo-600" oninput="updatePageConfig()">
+                                <span id="page-gap-display" class="text-xs font-mono font-bold text-slate-500 w-10 text-right">12mm</span>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Question Config -->
+                    <section class="bg-white p-4 rounded-xl shadow-sm border border-slate-200 space-y-4">
+                        <div class="space-y-2">
+                            <span class="text-[10px] font-bold text-slate-400 uppercase">প্রশ্নের ফন্ট সাইজ (সবকিছু)</span>
+                            <div class="flex items-center gap-3 bg-slate-50 border border-slate-200 rounded-lg p-2">
+                                <i data-lucide="type" class="w-4 h-4 text-slate-400"></i>
+                                <input type="range" id="question-font-size" min="10" max="24" value="12" class="flex-1 h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-indigo-600" oninput="updateQuestionConfig()">
+                                <span id="question-font-size-display" class="text-xs font-mono font-bold text-slate-500 w-10 text-right">12px</span>
+                            </div>
+                        </div>
+                    </section>
+                    
+                    <!-- Watermark -->
+                    <section class="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
+                        <span class="text-[10px] font-bold text-slate-400 uppercase block mb-2">ওয়াটারমার্ক লোগো</span>
+                        <div class="flex items-center gap-3">
+                            <label class="flex-1 cursor-pointer bg-slate-50 border-2 border-dashed border-slate-200 rounded-lg p-3 hover:bg-slate-100 transition-all text-center">
+                                <input type="file" accept="image/*" id="watermark-upload" onchange="handleWatermarkUpload(this)" class="hidden" />
+                                <div class="flex flex-col items-center gap-1">
+                                    <i data-lucide="image-plus" class="w-5 h-5 text-slate-400"></i>
+                                    <span id="watermark-label" class="text-xs text-slate-500 font-bold">লোগো আপলোড</span>
+                                </div>
+                            </label>
+                            <button id="watermark-remove" onclick="removeWatermark()" class="hidden p-3 text-rose-500 bg-rose-50 rounded-lg hover:bg-rose-100 border border-rose-100" title="রিমুভ করুন">
+                                <i data-lucide="trash-2" class="w-5 h-5"></i>
+                            </button>
+                        </div>
+                    </section>
+                </div>
+
+                <!-- TAB CONTENT: QUESTIONS -->
+                <div id="tab-content-questions" class="hidden animate-in slide-in-from-left-2 duration-300">
+                    <div class="flex items-center justify-between mb-4 border-b border-slate-200 pb-2">
+                        <div class="flex items-center gap-2 text-slate-800 font-bold">
+                            <i data-lucide="list-plus" class="w-5 h-5 text-indigo-600"></i>
+                            <h2>প্রশ্ন ম্যানেজমেন্ট</h2>
+                        </div>
+                        <button onclick="resetAllData()" class="text-[10px] font-bold text-white bg-rose-500 hover:bg-rose-600 px-3 py-1.5 rounded-lg flex items-center gap-1 transition-colors shadow-sm">
+                            <i data-lucide="rotate-ccw" class="w-3 h-3"></i> রিসেট
+                        </button>
+                    </div>
+
+                    <!-- Question Form -->
+                    <form id="question-form" onsubmit="handleFormSubmit(event)" class="bg-white p-4 rounded-xl shadow-sm border border-slate-200 space-y-4 relative">
+                        <input type="hidden" id="q-id">
+                        
+                        <!-- Form Header -->
+                        <div class="flex justify-between items-center mb-1">
+                            <span class="text-[10px] font-black text-indigo-500 uppercase tracking-wider bg-indigo-50 px-2 py-1 rounded" id="form-mode-text">নতুন প্রশ্ন</span>
+                            <button type="button" id="btn-cancel-edit" onclick="cancelEdit()" class="hidden text-xs font-bold text-slate-500 hover:text-rose-500 flex items-center gap-1">
+                                <i data-lucide="x" class="w-3 h-3"></i> বাতিল
+                            </button>
+                        </div>
+                        
+                        <div class="space-y-2">
+                            <textarea id="q-text" required
+                                class="w-full p-3 bg-slate-50 border border-slate-200 rounded-lg h-24 focus:ring-2 focus:ring-indigo-500 outline-none transition-all text-sm text-slate-800 placeholder-slate-400 resize-none"
+                                placeholder="প্রশ্ন লিখুন... (গাণিতিক চিহ্নের জন্য গাইড দেখুন)"></textarea>
+                            
+                            <div class="flex items-center gap-2">
+                                <label class="flex items-center gap-2 cursor-pointer bg-slate-100 px-3 py-1.5 rounded-lg hover:bg-indigo-50 hover:text-indigo-600 transition-colors text-[10px] font-bold text-slate-600 border border-transparent hover:border-indigo-100">
+                                    <input type="file" class="hidden" onchange="handleImageUpload(this, 'main')" />
+                                    <i data-lucide="image" class="w-3.5 h-3.5"></i> ছবি যোগ করুন
+                                </label>
+                                <button type="button" id="btn-remove-main-img" onclick="removeImage('main')" class="hidden text-[10px] font-bold text-rose-500 hover:underline">ছবি মুছুন</button>
+                                <input type="hidden" id="q-image-data">
+                            </div>
+                        </div>
+
+                        <!-- Options Grid -->
+                        <div class="grid grid-cols-1 gap-3">
+                            <!-- Option A -->
+                            <div class="flex gap-2">
+                                <div class="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center font-black text-slate-500 text-xs flex-shrink-0">A</div>
+                                <div class="flex-1 space-y-1">
+                                    <input id="q-opt-A" required class="w-full p-2 bg-slate-50 border border-slate-200 rounded-lg text-xs focus:ring-2 focus:ring-indigo-500 outline-none" placeholder="অপশন A">
+                                    <div class="flex items-center justify-between">
+                                        <label class="text-[9px] font-bold text-indigo-500 cursor-pointer flex items-center gap-1">
+                                            <input type="file" class="hidden" onchange="handleImageUpload(this, 'A')" />
+                                            <i data-lucide="image-plus" class="w-3 h-3"></i> ছবি
+                                        </label>
+                                        <div id="img-indicator-A" class="hidden flex items-center gap-1 text-[9px] text-emerald-600 font-bold">
+                                            <i data-lucide="check" class="w-3 h-3"></i> যুক্ত হয়েছে
+                                            <button type="button" onclick="removeImage('A')" class="text-rose-500 hover:underline ml-1">x</button>
+                                        </div>
+                                    </div>
+                                    <input type="hidden" id="q-img-A">
+                                </div>
+                            </div>
+
+                            <!-- Option B -->
+                            <div class="flex gap-2">
+                                <div class="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center font-black text-slate-500 text-xs flex-shrink-0">B</div>
+                                <div class="flex-1 space-y-1">
+                                    <input id="q-opt-B" required class="w-full p-2 bg-slate-50 border border-slate-200 rounded-lg text-xs focus:ring-2 focus:ring-indigo-500 outline-none" placeholder="অপশন B">
+                                    <div class="flex items-center justify-between">
+                                        <label class="text-[9px] font-bold text-indigo-500 cursor-pointer flex items-center gap-1">
+                                            <input type="file" class="hidden" onchange="handleImageUpload(this, 'B')" />
+                                            <i data-lucide="image-plus" class="w-3 h-3"></i> ছবি
+                                        </label>
+                                        <div id="img-indicator-B" class="hidden flex items-center gap-1 text-[9px] text-emerald-600 font-bold">
+                                            <i data-lucide="check" class="w-3 h-3"></i> যুক্ত হয়েছে
+                                            <button type="button" onclick="removeImage('B')" class="text-rose-500 hover:underline ml-1">x</button>
+                                        </div>
+                                    </div>
+                                    <input type="hidden" id="q-img-B">
+                                </div>
+                            </div>
+
+                            <!-- Option C -->
+                            <div class="flex gap-2">
+                                <div class="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center font-black text-slate-500 text-xs flex-shrink-0">C</div>
+                                <div class="flex-1 space-y-1">
+                                    <input id="q-opt-C" required class="w-full p-2 bg-slate-50 border border-slate-200 rounded-lg text-xs focus:ring-2 focus:ring-indigo-500 outline-none" placeholder="অপশন C">
+                                    <div class="flex items-center justify-between">
+                                        <label class="text-[9px] font-bold text-indigo-500 cursor-pointer flex items-center gap-1">
+                                            <input type="file" class="hidden" onchange="handleImageUpload(this, 'C')" />
+                                            <i data-lucide="image-plus" class="w-3 h-3"></i> ছবি
+                                        </label>
+                                        <div id="img-indicator-C" class="hidden flex items-center gap-1 text-[9px] text-emerald-600 font-bold">
+                                            <i data-lucide="check" class="w-3 h-3"></i> যুক্ত হয়েছে
+                                            <button type="button" onclick="removeImage('C')" class="text-rose-500 hover:underline ml-1">x</button>
+                                        </div>
+                                    </div>
+                                    <input type="hidden" id="q-img-C">
+                                </div>
+                            </div>
+
+                            <!-- Option D -->
+                            <div class="flex gap-2">
+                                <div class="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center font-black text-slate-500 text-xs flex-shrink-0">D</div>
+                                <div class="flex-1 space-y-1">
+                                    <input id="q-opt-D" required class="w-full p-2 bg-slate-50 border border-slate-200 rounded-lg text-xs focus:ring-2 focus:ring-indigo-500 outline-none" placeholder="অপশন D">
+                                    <div class="flex items-center justify-between">
+                                        <label class="text-[9px] font-bold text-indigo-500 cursor-pointer flex items-center gap-1">
+                                            <input type="file" class="hidden" onchange="handleImageUpload(this, 'D')" />
+                                            <i data-lucide="image-plus" class="w-3 h-3"></i> ছবি
+                                        </label>
+                                        <div id="img-indicator-D" class="hidden flex items-center gap-1 text-[9px] text-emerald-600 font-bold">
+                                            <i data-lucide="check" class="w-3 h-3"></i> যুক্ত হয়েছে
+                                            <button type="button" onclick="removeImage('D')" class="text-rose-500 hover:underline ml-1">x</button>
+                                        </div>
+                                    </div>
+                                    <input type="hidden" id="q-img-D">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Correct Answer & Explanation -->
+                        <div class="grid grid-cols-2 gap-3 pt-2">
+                            <div class="space-y-1">
+                                <span class="text-[10px] font-bold text-slate-400 uppercase">সঠিক উত্তর</span>
+                                <select id="q-correct" class="w-full p-2 bg-slate-50 border border-slate-200 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none font-bold text-indigo-600 text-xs h-10">
+                                    <option value="A">অপশন A</option>
+                                    <option value="B">অপশন B</option>
+                                    <option value="C">অপশন C</option>
+                                    <option value="D">অপশন D</option>
+                                </select>
+                            </div>
+                            <div class="space-y-1">
+                                <span class="text-[10px] font-bold text-slate-400 uppercase">ব্যাখ্যা (ঐচ্ছিক)</span>
+                                <input id="q-explanation" class="w-full p-2 bg-slate-50 border border-slate-200 rounded-lg text-xs h-10 focus:ring-2 focus:ring-indigo-500 outline-none" placeholder="ব্যাখ্যা...">
+                            </div>
+                        </div>
+
+                        <button type="submit" class="w-full py-3 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg flex items-center justify-center gap-2 font-bold text-sm shadow-indigo-200 shadow-lg active:scale-95 transition-all">
+                            <i id="submit-icon" data-lucide="plus-circle" class="w-4 h-4"></i>
+                            <span id="submit-text">প্রশ্ন যুক্ত করুন</span>
+                        </button>
+                    </form>
+
+                    <!-- Question List Section -->
+                    <div id="question-list-section" class="space-y-4">
+                        <!-- Loaded by JS -->
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- RIGHT PANEL / PREVIEW PANEL (Visible based on Logic) -->
+        <div id="preview-panel-container" class="flex-1 overflow-y-auto bg-slate-200 flex justify-center items-start hidden md:flex h-full">
+            <div class="preview-scroll-wrapper min-h-full">
+                <div class="print-container drop-shadow-xl">
+                    <div id="a4-page" class="a4-page">
+                        <!-- Content injected via JS -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Bottom Navigation Bar -->
+    <nav class="bottom-nav bg-white border-t border-slate-200 fixed bottom-0 left-0 w-full z-40 pb-safe shadow-[0_-5px_20px_rgba(0,0,0,0.03)] no-print">
+        <div class="flex justify-around items-center h-16 max-w-lg mx-auto">
+            <button onclick="switchMode('settings')" id="nav-settings" class="nav-item flex flex-col items-center justify-center w-full h-full gap-1 transition-all active:scale-95 group">
+                <div class="nav-icon p-1.5 rounded-full transition-colors group-hover:bg-slate-50">
+                    <i data-lucide="settings-2" class="w-5 h-5"></i>
+                </div>
+                <span class="text-[10px] font-bold">সেটিংস</span>
+            </button>
+            
+            <button onclick="switchMode('questions')" id="nav-questions" class="nav-item flex flex-col items-center justify-center w-full h-full gap-1 transition-all active:scale-95 group">
+                <div class="nav-icon p-1.5 rounded-full transition-colors group-hover:bg-slate-50">
+                    <i data-lucide="list-plus" class="w-5 h-5"></i>
+                </div>
+                <span class="text-[10px] font-bold">প্রশ্ন</span>
+            </button>
+
+            <button onclick="switchMode('preview')" id="nav-preview" class="nav-item flex flex-col items-center justify-center w-full h-full gap-1 transition-all active:scale-95 group md:hidden">
+                <div class="nav-icon p-1.5 rounded-full transition-colors group-hover:bg-slate-50">
+                    <i data-lucide="eye" class="w-5 h-5"></i>
+                </div>
+                <span class="text-[10px] font-bold">প্রিভিউ</span>
+            </button>
+        </div>
+    </nav>
+
+    <script>
+        const STORAGE_KEY = 'exam_master_db_v2';
+
+        // State
+        let state = {
+            questions: [],
+            header: {
+                text: 'বার্ষিক পরীক্ষা ২০২৪\nবিষয়: সাধারণ বিজ্ঞান\nসময়: ২ ঘণ্টা | পূর্ণমান: ১০০',
+                show: true,
+                fontSize: '18px',
+                color: '#000000'
+            },
+            questionConfig: {
+                fontSize: '12px'
+            },
+            pageConfig: {
+                padding: '12mm',
+                gap: '12mm'
+            },
+            watermark: null,
+            activeMode: 'questions', // settings, questions, preview
+            editingQuestionId: null,
+            listCollapsed: false
+        };
+
+        // Rich Text Renderer
+        function renderRichText(input) {
+            if (!input) return '';
+            const parts = input.split(/(\^[^^]+\^|_[^_]+_|\[[^/]+\/[^\]]+\]|\\sqrt\([^)]+\))/g);
+            return parts.map(part => {
+                if (part.startsWith('^') && part.endsWith('^')) return `<sup>${part.slice(1, -1)}</sup>`;
+                if (part.startsWith('_') && part.endsWith('_')) return `<sub>${part.slice(1, -1)}</sub>`;
+                if (part.startsWith('[') && part.endsWith(']')) {
+                    const [top, bottom] = part.slice(1, -1).split('/');
+                    return `<span class="fraction"><span class="fraction-top">${top}</span><span class="fraction-bottom">${bottom}</span></span>`;
+                }
+                if (part.startsWith('\\sqrt(') && part.endsWith(')')) return `<span>√<span class="border-t border-black px-0.5">${part.slice(6, -1)}</span></span>`;
+                return part;
+            }).join('');
+        }
+
+        // App Initialization
+        function init() {
+            loadData();
+            
+            // Set Inputs
+            document.getElementById('header-text').value = state.header.text;
+            document.getElementById('header-show').checked = state.header.show;
+            document.getElementById('header-font-size').value = parseInt(state.header.fontSize);
+            document.getElementById('header-font-size-display').innerText = state.header.fontSize;
+            document.getElementById('header-color').value = state.header.color;
+            document.getElementById('header-color-val').innerText = state.header.color.toUpperCase();
+            
+            document.getElementById('page-margin').value = parseInt(state.pageConfig.padding);
+            document.getElementById('page-margin-display').innerText = state.pageConfig.padding;
+            document.getElementById('page-gap').value = parseInt(state.pageConfig.gap);
+            document.getElementById('page-gap-display').innerText = state.pageConfig.gap;
+
+            document.getElementById('question-font-size').value = parseInt(state.questionConfig.fontSize);
+            document.getElementById('question-font-size-display').innerText = state.questionConfig.fontSize;
+            
+            updateUIHeaderToggle();
+            lucide.createIcons();
+            updateList();
+            updatePreview();
+            switchMode(state.activeMode); // Load last active mode
+        }
+
+        // Mode Switching (Navigation)
+        function switchMode(mode) {
+            state.activeMode = mode;
+            saveData();
+
+            // Reset States
+            const leftPanel = document.getElementById('left-panel');
+            const previewPanel = document.getElementById('preview-panel-container');
+            const settingsTab = document.getElementById('tab-content-settings');
+            const questionsTab = document.getElementById('tab-content-questions');
+            
+            // Nav Buttons
+            document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+            document.getElementById(`nav-${mode}`)?.classList.add('active');
+
+            if (mode === 'preview') {
+                // Mobile: Show only preview
+                if (window.innerWidth < 768) {
+                    leftPanel.classList.add('hidden');
+                    previewPanel.classList.remove('hidden');
+                } else {
+                    // Desktop: Do nothing special for preview button, it usually just stays on right
+                    // Maybe scroll to it? But layout is split.
+                    // Let's just default to 'questions' on left panel if user clicks preview on desktop (though button is hidden on desktop)
+                }
+            } else {
+                // Settings or Questions Mode
+                // Mobile: Show left panel, hide preview
+                if (window.innerWidth < 768) {
+                    leftPanel.classList.remove('hidden');
+                    previewPanel.classList.add('hidden');
+                } else {
+                    // Desktop: Left panel always visible
+                }
+
+                // Switch Left Panel Content
+                if (mode === 'settings') {
+                    settingsTab.classList.remove('hidden');
+                    questionsTab.classList.add('hidden');
+                } else {
+                    settingsTab.classList.add('hidden');
+                    questionsTab.classList.remove('hidden');
+                }
+            }
+        }
+
+        // Data Logic
+        function saveData() {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+        }
+
+        function loadData() {
+            try {
+                const saved = localStorage.getItem(STORAGE_KEY);
+                if (saved) state = { ...state, ...JSON.parse(saved) };
+            } catch (e) { console.error(e); }
+        }
+
+        function resetAllData() {
+            if (confirm('সব ডেটা মুছে যাবে। আপনি কি নিশ্চিত?')) {
+                localStorage.removeItem(STORAGE_KEY);
+                location.reload();
+            }
+        }
+
+        // Configuration Updates
+        function updateHeaderConfig() {
+            state.header.text = document.getElementById('header-text').value;
+            state.header.show = document.getElementById('header-show').checked;
+            state.header.fontSize = document.getElementById('header-font-size').value + 'px';
+            document.getElementById('header-font-size-display').innerText = state.header.fontSize;
+            state.header.color = document.getElementById('header-color').value;
+            document.getElementById('header-color-val').innerText = state.header.color.toUpperCase();
+            
+            updateUIHeaderToggle();
+            updatePreview();
+            saveData();
+        }
+
+        function updateUIHeaderToggle() {
+            const toggleBg = document.getElementById('header-show-toggle-bg');
+            const toggleDot = document.getElementById('header-show-toggle-dot');
+            if (state.header.show) {
+                toggleBg.classList.replace('bg-slate-300', 'bg-indigo-600');
+                toggleDot.classList.replace('translate-x-0', 'translate-x-4');
+            } else {
+                toggleBg.classList.replace('bg-indigo-600', 'bg-slate-300');
+                toggleDot.classList.replace('translate-x-4', 'translate-x-0');
+            }
+        }
+
+        function updatePageConfig() {
+            state.pageConfig.padding = document.getElementById('page-margin').value + 'mm';
+            document.getElementById('page-margin-display').innerText = state.pageConfig.padding;
+            state.pageConfig.gap = document.getElementById('page-gap').value + 'mm';
+            document.getElementById('page-gap-display').innerText = state.pageConfig.gap;
+            updatePreview();
+            saveData();
+        }
+
+        function updateQuestionConfig() {
+            state.questionConfig.fontSize = document.getElementById('question-font-size').value + 'px';
+            document.getElementById('question-font-size-display').innerText = state.questionConfig.fontSize;
+            updatePreview();
+            saveData();
+        }
+
+        // Images & Watermark
+        function handleWatermarkUpload(input) {
+            const file = input.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    state.watermark = e.target.result;
+                    document.getElementById('watermark-label').innerText = 'পরিবর্তন';
+                    document.getElementById('watermark-remove').classList.remove('hidden');
+                    updatePreview();
+                    saveData();
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function removeWatermark() {
+            state.watermark = null;
+            document.getElementById('watermark-upload').value = '';
+            document.getElementById('watermark-label').innerText = 'লোগো আপলোড';
+            document.getElementById('watermark-remove').classList.add('hidden');
+            updatePreview();
+            saveData();
+        }
+
+        function handleImageUpload(input, target) {
+            const file = input.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    if (target === 'main') {
+                        document.getElementById('q-image-data').value = e.target.result;
+                        document.getElementById('btn-remove-main-img').classList.remove('hidden');
+                    } else {
+                        document.getElementById(`q-img-${target}`).value = e.target.result;
+                        document.getElementById(`img-indicator-${target}`).classList.remove('hidden');
+                        document.getElementById(`img-indicator-${target}`).classList.add('flex');
+                    }
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function removeImage(target) {
+            if (target === 'main') {
+                document.getElementById('q-image-data').value = '';
+                document.getElementById('btn-remove-main-img').classList.add('hidden');
+            } else {
+                document.getElementById(`q-img-${target}`).value = '';
+                document.getElementById(`img-indicator-${target}`).classList.add('hidden');
+                document.getElementById(`img-indicator-${target}`).classList.remove('flex');
+            }
+        }
+
+        // Question CRUD
+        function handleFormSubmit(e) {
+            e.preventDefault();
+            const newQuestion = {
+                id: state.editingQuestionId || Date.now().toString(),
+                text: document.getElementById('q-text').value,
+                image: document.getElementById('q-image-data').value || undefined,
+                options: {
+                    A: document.getElementById('q-opt-A').value,
+                    B: document.getElementById('q-opt-B').value,
+                    C: document.getElementById('q-opt-C').value,
+                    D: document.getElementById('q-opt-D').value,
+                },
+                optionImages: {
+                    A: document.getElementById('q-img-A').value || undefined,
+                    B: document.getElementById('q-img-B').value || undefined,
+                    C: document.getElementById('q-img-C').value || undefined,
+                    D: document.getElementById('q-img-D').value || undefined,
+                },
+                correctAnswer: document.getElementById('q-correct').value,
+                explanation: document.getElementById('q-explanation').value
+            };
+
+            if (state.editingQuestionId) {
+                state.questions = state.questions.map(q => q.id === state.editingQuestionId ? newQuestion : q);
+                state.editingQuestionId = null;
+            } else {
+                state.questions.push(newQuestion);
+            }
+
+            resetForm();
+            updateList();
+            updatePreview();
+            saveData();
+        }
+
+        function resetForm() {
+            document.getElementById('question-form').reset();
+            document.getElementById('q-id').value = '';
+            document.getElementById('q-image-data').value = '';
+            ['A', 'B', 'C', 'D'].forEach(opt => {
+                document.getElementById(`q-img-${opt}`).value = '';
+                document.getElementById(`img-indicator-${opt}`).classList.add('hidden');
+            });
+            document.getElementById('btn-remove-main-img').classList.add('hidden');
+            
+            state.editingQuestionId = null;
+            document.getElementById('form-mode-text').innerText = 'নতুন প্রশ্ন';
+            document.getElementById('submit-text').innerText = 'প্রশ্ন যুক্ত করুন';
+            document.getElementById('btn-cancel-edit').classList.add('hidden');
+            
+            document.getElementById('submit-icon').setAttribute('data-lucide', 'plus-circle');
+            lucide.createIcons();
+        }
+
+        function editQuestion(id) {
+            const q = state.questions.find(item => item.id === id);
+            if (!q) return;
+
+            state.editingQuestionId = id;
+            
+            document.getElementById('q-text').value = q.text;
+            document.getElementById('q-image-data').value = q.image || '';
+            if (q.image) document.getElementById('btn-remove-main-img').classList.remove('hidden');
+            else document.getElementById('btn-remove-main-img').classList.add('hidden');
+
+            ['A', 'B', 'C', 'D'].forEach(opt => {
+                document.getElementById(`q-opt-${opt}`).value = q.options[opt];
+                document.getElementById(`q-img-${opt}`).value = q.optionImages?.[opt] || '';
+                if (q.optionImages?.[opt]) {
+                    document.getElementById(`img-indicator-${opt}`).classList.remove('hidden');
+                    document.getElementById(`img-indicator-${opt}`).classList.add('flex');
+                } else {
+                    document.getElementById(`img-indicator-${opt}`).classList.add('hidden');
+                }
+            });
+
+            document.getElementById('q-correct').value = q.correctAnswer;
+            document.getElementById('q-explanation').value = q.explanation || '';
+
+            document.getElementById('form-mode-text').innerText = 'এডিট মোড';
+            document.getElementById('submit-text').innerText = 'আপডেট করুন';
+            document.getElementById('btn-cancel-edit').classList.remove('hidden');
+            
+            document.getElementById('submit-icon').setAttribute('data-lucide', 'save');
+            lucide.createIcons();
+            
+            document.getElementById('left-panel').scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function cancelEdit() { resetForm(); }
+
+        function deleteQuestion(id) {
+            if(confirm('মুছে ফেলতে চান?')) {
+                state.questions = state.questions.filter(q => q.id !== id);
+                if (state.editingQuestionId === id) resetForm();
+                updateList();
+                updatePreview();
+                saveData();
+            }
+        }
+        
+        function toggleList() {
+            state.listCollapsed = !state.listCollapsed;
+            updateList();
+            saveData();
+        }
+
+        function updateList() {
+            const container = document.getElementById('question-list-section');
+            const count = state.questions.length;
+
+            const headerHtml = `
+                <div class="flex items-center justify-between px-1 select-none mb-4">
+                    <div class="flex items-center gap-4 cursor-pointer" onclick="toggleList()">
+                        <h3 class="text-xs font-bold text-slate-500 uppercase tracking-widest flex items-center gap-2">
+                            প্রশ্ন তালিকা (${count})
+                            <i data-lucide="${state.listCollapsed ? 'chevron-down' : 'chevron-up'}" class="w-4 h-4"></i>
+                        </h3>
+                        <div class="h-px w-8 bg-slate-200"></div>
+                    </div>
+                </div>
+            `;
+
+            if (count === 0) {
+                 container.innerHTML = headerHtml + `<div class="text-center text-slate-400 text-xs py-8 bg-slate-50 rounded-xl border border-dashed border-slate-200">কোনো প্রশ্ন নেই</div>`;
+                 lucide.createIcons();
+                 return;
+            }
+
+            let listContentHtml = '';
+            if (!state.listCollapsed) {
+                listContentHtml = state.questions.map((q, idx) => `
+                    <div class="bg-white p-4 rounded-xl border border-slate-100 shadow-sm hover:border-indigo-100 hover:shadow-md transition-all">
+                        <div class="flex justify-between items-start mb-2">
+                            <span class="flex items-center justify-center w-6 h-6 bg-slate-800 text-white text-[10px] font-black rounded-md shadow-sm">${idx + 1}</span>
+                            <div class="flex gap-1">
+                                <button onclick="editQuestion('${q.id}')" class="p-1.5 text-indigo-600 hover:bg-indigo-50 rounded-lg transition-all"><i data-lucide="edit-3" class="w-3.5 h-3.5"></i></button>
+                                <button onclick="deleteQuestion('${q.id}')" class="p-1.5 text-rose-500 hover:bg-rose-50 rounded-lg transition-all"><i data-lucide="trash-2" class="w-3.5 h-3.5"></i></button>
+                            </div>
+                        </div>
+                        <div class="text-xs text-slate-700 font-medium line-clamp-2">${renderRichText(q.text)}</div>
+                    </div>
+                `).join('');
+                listContentHtml = `<div class="space-y-3 pt-2">${listContentHtml}</div>`;
+            }
+            container.innerHTML = headerHtml + listContentHtml;
+            lucide.createIcons();
+        }
+
+        function updatePreview() {
+            const container = document.getElementById('a4-page');
+            container.style.padding = state.pageConfig.padding;
+            
+            let watermarkHtml = state.watermark ? `<img src="${state.watermark}" alt="Watermark" class="watermark" />` : '';
+            
+            let headerHtml = '';
+            if (state.header.show) {
+                headerHtml = `
+                <header class="text-center mb-6 pb-4 border-b-[1.5px] border-slate-800" style="color: ${state.header.color};">
+                    <div style="font-size: ${state.header.fontSize}; line-height: 1.4; white-space: pre-wrap; font-weight: 700;">${state.header.text}</div>
+                </header>
+                `;
+            }
+
+            const questionsHtml = state.questions.map((q, idx) => `
+                <div class="mb-6 break-inside-avoid">
+                    <div class="flex gap-2 font-bold mb-2">
+                      <span class="whitespace-nowrap" style="font-size: inherit;">${idx + 1}.</span>
+                      <div class="flex-1">
+                        <div class="mb-1 leading-relaxed">${renderRichText(q.text)}</div>
+                        ${q.image ? `<div class="my-2 text-center"><img src="${q.image}" class="max-h-40 mx-auto rounded-sm border border-slate-200 p-1" /></div>` : ''}
+                      </div>
+                    </div>
+                    <div class="grid grid-cols-2 gap-x-4 gap-y-2 ml-5 mb-2">
+                      ${['A', 'B', 'C', 'D'].map(opt => `
+                        <div class="flex items-start gap-1">
+                          <span class="omr-option flex-shrink-0">${opt}</span>
+                          <div class="flex-1">
+                            ${renderRichText(q.options[opt])}
+                            ${q.optionImages?.[opt] ? `<div class="mt-1"><img src="${q.optionImages[opt]}" class="max-h-24 rounded-sm border border-slate-100" /></div>` : ''}
+                          </div>
+                        </div>
+                      `).join('')}
+                    </div>
+                    <div class="ml-5 space-y-1">
+                      <div class="font-black text-slate-800 border-l-2 border-slate-300 pl-2" style="font-size: 0.85em;">
+                        সঠিক উত্তর: <span class="bg-slate-100 px-1.5 rounded">${q.correctAnswer}</span>
+                      </div>
+                      ${q.explanation ? `
+                        <div class="p-2 bg-slate-50 border border-slate-200 rounded-sm leading-normal text-slate-700 font-medium" style="font-size: 0.85em;">
+                          <span class="font-black text-black border-b border-slate-300 mr-1">ব্যাখ্যা:</span>
+                          ${renderRichText(q.explanation)}
+                        </div>
+                      ` : ''}
+                    </div>
+                </div>
+            `).join('');
+
+            const footerHtml = `
+                <div class="absolute bottom-6 w-full text-center">
+                    <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest border-t border-slate-200 pt-1 px-2">
+                        পৃষ্ঠা - ১
+                    </span>
+                </div>
+            `;
+
+            container.innerHTML = `
+                ${watermarkHtml}
+                ${headerHtml}
+                <div class="columns-container leading-snug text-black" style="font-size: ${state.questionConfig.fontSize}; column-gap: ${state.pageConfig.gap};">
+                    ${questionsHtml}
+                </div>
+                ${footerHtml}
+            `;
+        }
+
+        window.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+</html>
