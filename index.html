@@ -166,15 +166,15 @@
                 margin: 0 !important;
             }
 
-            /* A4 Page Print Reset - The most critical part */
+            /* A4 Page Print Reset */
             .a4-page {
                 margin: 0 auto !important;
-                box-shadow: none !important; /* Removes stains */
-                border: none !important; /* Removes border lines */
-                transform: none !important; /* Fixes blurriness */
+                box-shadow: none !important;
+                border: none !important;
+                transform: none !important;
                 width: 210mm !important;
                 min-height: 297mm !important;
-                padding: 0 !important; /* Padding handled by JS config */
+                padding: 0 !important;
                 page-break-after: always;
                 background: transparent !important;
             }
@@ -901,8 +901,6 @@
 
         function updatePreview() {
             const container = document.getElementById('a4-page');
-            
-            // Explicitly set padding here for rendering
             container.style.padding = state.pageConfig.padding;
             
             let watermarkHtml = state.watermark ? `<img src="${state.watermark}" alt="Watermark" class="watermark" />` : '';
@@ -936,13 +934,15 @@
                         </div>
                       `).join('')}
                     </div>
-                    <div class="ml-5 space-y-1">
-                      <div class="font-black text-slate-800 border-l-2 border-slate-300 pl-2" style="font-size: 0.85em;">
-                        সঠিক উত্তর: <span class="bg-slate-100 px-1.5 rounded">${q.correctAnswer}</span>
+                    <div class="ml-5 space-y-2">
+                      <div>
+                        <span class="inline-block border border-black px-2 py-1 font-bold text-black" style="font-size: 0.85em;">
+                            সঠিক উত্তর: ${q.correctAnswer}
+                        </span>
                       </div>
                       ${q.explanation ? `
-                        <div class="p-2 bg-slate-50 border border-slate-200 rounded-sm leading-normal text-slate-700 font-medium" style="font-size: 0.85em;">
-                          <span class="font-black text-black border-b border-slate-300 mr-1">ব্যাখ্যা:</span>
+                        <div class="border border-black p-2 text-black leading-normal" style="font-size: 0.85em;">
+                          <span class="font-bold mr-1">ব্যাখ্যা:</span>
                           ${renderRichText(q.explanation)}
                         </div>
                       ` : ''}
