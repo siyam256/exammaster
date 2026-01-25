@@ -12,16 +12,16 @@
     <script src="https://unpkg.com/lucide@latest"></script>
     
     <style>
-        /* --- Font Setup: SolaimanLipi --- */
+        /* --- Font Setup: SutonnyMJ --- */
         @font-face {
-            font-family: 'SolaimanLipi';
-            src: url('SolaimanLipi.ttf') format('truetype');
+            font-family: 'SutonnyMJ';
+            src: url('SutonnyMJ.ttf') format('truetype');
             font-weight: normal;
             font-style: normal;
         }
 
         body {
-            font-family: 'SolaimanLipi', sans-serif;
+            font-family: 'SutonnyMJ', sans-serif;
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
             overflow-x: hidden;
@@ -42,7 +42,7 @@
             font-size: 0.875rem; /* text-sm */
             line-height: 1.5;
             color: #1e293b;
-            font-family: 'SolaimanLipi', sans-serif;
+            font-family: 'SutonnyMJ', sans-serif;
         }
         
         .editor-box:focus {
@@ -149,9 +149,8 @@
         }
 
         /* --- Preview & Print Styles --- */
-        /* Changed from circles to simple text */
         .omr-option {
-            font-family: 'SolaimanLipi', sans-serif;
+            font-family: 'SutonnyMJ', sans-serif;
             display: inline-block;
             font-weight: bold;
             margin-right: 4px;
@@ -179,7 +178,7 @@
             transform-origin: top center;
             margin-bottom: 2rem;
             box-sizing: border-box;
-            font-family: 'SolaimanLipi', sans-serif;
+            font-family: 'SutonnyMJ', sans-serif;
         }
 
         .q-img { max-height: 150px; width: auto; max-width: 100%; display: block; margin: 4px auto; border: 1px solid #e2e8f0; border-radius: 4px; padding: 2px; }
@@ -886,8 +885,8 @@
 
             const questionsHtml = state.questions.map((q, idx) => `
                 <div class="mb-6 break-inside-avoid">
-                    <div class="flex gap-2 font-bold mb-2">
-                      <span class="whitespace-nowrap" style="font-size: inherit;">${idx + 1}.</span>
+                    <div class="flex gap-2 mb-2">
+                      <span class="whitespace-nowrap font-bold" style="font-size: inherit;">${idx + 1}.</span>
                       <div class="flex-1">
                         <div class="mb-1 leading-relaxed rich-text-content">${q.text}</div>
                         ${q.image ? `<img src="${q.image}" class="q-img" />` : ''}
