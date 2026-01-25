@@ -63,110 +63,39 @@
         .editor-box i, .editor-box em, .rich-text-content i, .rich-text-content em { font-style: italic; }
         .editor-box u, .rich-text-content u { text-decoration: underline; text-underline-offset: 2px; }
         
-        /* Explicit Sub/Sup styles */
         .editor-box sub, .rich-text-content sub { 
-            vertical-align: sub; 
-            font-size: 0.75em; 
-            line-height: 0; 
-            position: relative; 
-            bottom: -0.25em;
+            vertical-align: sub; font-size: 0.75em; line-height: 0; position: relative; bottom: -0.25em;
         }
         .editor-box sup, .rich-text-content sup { 
-            vertical-align: super; 
-            font-size: 0.75em; 
-            line-height: 0; 
-            position: relative; 
-            top: -0.5em;
+            vertical-align: super; font-size: 0.75em; line-height: 0; position: relative; top: -0.5em;
         }
 
         /* Math Styles */
-        .math-fraction {
-            display: inline-flex;
-            flex-direction: column;
-            text-align: center;
-            vertical-align: middle;
-            margin: 0 3px;
-            font-size: 0.9em;
-        }
-        
-        .math-fraction-top {
-            border-bottom: 1.5px solid currentColor;
-            padding: 0 3px;
-            display: block;
-            min-width: 14px;
-            min-height: 1em;
-            text-align: center;
-        }
-        
-        .math-fraction-bottom {
-            padding: 0 3px;
-            display: block;
-            min-width: 14px;
-            min-height: 1em;
-            text-align: center;
-        }
+        .math-fraction { display: inline-flex; flex-direction: column; text-align: center; vertical-align: middle; margin: 0 3px; font-size: 0.9em; }
+        .math-fraction-top { border-bottom: 1.5px solid currentColor; padding: 0 3px; display: block; min-width: 14px; min-height: 1em; text-align: center; }
+        .math-fraction-bottom { padding: 0 3px; display: block; min-width: 14px; min-height: 1em; text-align: center; }
+        .math-sqrt { display: inline-flex; align-items: stretch; margin: 0 2px; }
+        .math-sqrt-symbol { display: flex; align-items: center; font-size: 1.1em; line-height: 1; padding-right: 1px; }
+        .math-sqrt-content { border-top: 1.5px solid currentColor; padding-top: 1px; padding-left: 3px; padding-right: 2px; min-width: 14px; min-height: 1em; }
 
-        .math-sqrt {
-            display: inline-flex;
-            align-items: stretch;
-            margin: 0 2px;
-        }
-        
-        .math-sqrt-symbol {
-            display: flex;
-            align-items: center;
-            font-size: 1.1em;
-            line-height: 1;
-            padding-right: 1px;
-        }
-        
-        .math-sqrt-content {
-            border-top: 1.5px solid currentColor;
-            padding-top: 1px;
-            padding-left: 3px;
-            padding-right: 2px;
-            min-width: 14px;
-            min-height: 1em;
-        }
-
-        .editor-active {
-            border-color: #6366f1 !important;
-            background-color: #fff !important;
-        }
+        .editor-active { border-color: #6366f1 !important; background-color: #fff !important; }
 
         /* Toolbar Button Styles */
-        .toolbar-btn {
-            transition: all 0.1s;
-            outline: none !important;
-        }
-        .toolbar-btn.active {
-            background-color: #e0e7ff;
-            color: #4f46e5;
-        }
-        .toolbar-btn:not(.active):hover {
-            background-color: #f1f5f9;
-            color: #334155;
-        }
+        .toolbar-btn { transition: all 0.1s; outline: none !important; }
+        .toolbar-btn.active { background-color: #e0e7ff; color: #4f46e5; }
+        .toolbar-btn:not(.active):hover { background-color: #f1f5f9; color: #334155; }
 
         /* --- Preview & Print Styles --- */
         .omr-option {
-            font-family: 'SutonnyMJ', sans-serif;
+            font-family: 'Times New Roman', serif; 
             display: inline-block;
             font-weight: bold;
             margin-right: 4px;
             flex-shrink: 0;
         }
 
-        .preview-scroll-wrapper {
-            width: 100%;
-            display: flex;
-            justify-content: center;
-            align-items: flex-start;
-            padding: 2rem 1rem;
-            overflow-x: auto;
-            -webkit-overflow-scrolling: touch;
-        }
-
+        .preview-scroll-wrapper { width: 100%; display: flex; justify-content: center; align-items: flex-start; padding: 2rem 1rem; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+        
         .a4-page {
             width: 210mm;
             min-height: 297mm;
@@ -179,35 +108,44 @@
             margin-bottom: 2rem;
             box-sizing: border-box;
             font-family: 'SutonnyMJ', sans-serif;
+            display: flex;
+            flex-direction: column;
         }
 
+        /* Border Frame Style */
+        .border-frame {
+            border: 1px solid #000;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .question-text { font-weight: normal; }
         .q-img { max-height: 150px; width: auto; max-width: 100%; display: block; margin: 4px auto; border: 1px solid #e2e8f0; border-radius: 4px; padding: 2px; }
         .opt-img { max-height: 80px; width: auto; max-width: 100%; display: block; margin-top: 4px; border: 1px solid #e2e8f0; border-radius: 2px; }
         .exp-img { max-height: 120px; width: auto; max-width: 100%; display: block; margin: 4px 0; border: 1px solid #cbd5e1; border-radius: 2px; }
 
-        @media screen and (max-width: 768px) {
-            .a4-page { transform: scale(0.45); margin-bottom: -160mm; }
-        }
-        @media screen and (max-width: 480px) {
-            .a4-page { transform: scale(0.38); margin-bottom: -185mm; }
-        }
+        /* Answer Key: Grid Style */
+        .ans-table-grid { border-collapse: collapse; font-size: 0.9em; margin-bottom: 1rem; break-inside: avoid; background: white; }
+        .ans-table-grid td { border: 1px solid #000; text-align: center; padding: 4px 8px; min-width: 28px; }
+        .ans-table-header { background-color: #f3f4f6; font-weight: bold; font-family: 'Times New Roman', serif; } 
+        .ans-table-data { font-family: 'Times New Roman', serif; font-weight: bold; } 
 
-        .watermark {
-            position: absolute;
-            top: 50%; left: 50%;
-            transform: translate(-50%, -50%) rotate(-45deg);
-            opacity: 0.08; z-index: 0; pointer-events: none;
-            width: 60%; max-width: 400px;
-        }
+        /* Combined Answer & Explanation Table */
+        .combined-ans-exp-table { width: 100%; border-collapse: collapse; font-size: 0.9em; margin-top: 1.5rem; }
+        .combined-ans-exp-table th, .combined-ans-exp-table td { border: 1px solid #000; padding: 8px; vertical-align: top; }
+        .combined-ans-exp-table th { background-color: #f3f4f6; font-weight: bold; text-align: center; }
+        .col-q-no { width: 10%; text-align: center; font-family: 'Times New Roman', serif; font-weight: bold; }
+        .col-ans { width: 10%; text-align: center; font-family: 'Times New Roman', serif; font-weight: bold; }
+        .col-exp { text-align: left; }
 
-        .columns-container {
-            column-count: 2;
-            column-gap: 12mm;
-            column-rule: 0.5px solid #d1d5db;
-            position: relative;
-            z-index: 1;
-            height: auto;
-        }
+        @media screen and (max-width: 768px) { .a4-page { transform: scale(0.45); margin-bottom: -160mm; } }
+        @media screen and (max-width: 480px) { .a4-page { transform: scale(0.38); margin-bottom: -185mm; } }
+
+        .watermark { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-45deg); opacity: 0.08; z-index: 0; pointer-events: none; max-width: 90%; }
+        .columns-container { column-count: 2; column-gap: 12mm; column-rule: 0.5px solid #d1d5db; position: relative; z-index: 1; height: auto; }
 
         @media print {
             @page { size: A4; margin: 0; }
@@ -225,8 +163,6 @@
         ::-webkit-scrollbar { width: 6px; height: 6px; }
         ::-webkit-scrollbar-track { background: #f1f5f9; }
         ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
-        
-        /* Nav Styles */
         .nav-item { color: #64748b; transition: all 0.2s; }
         .nav-item.active { color: #4f46e5; }
         .nav-item.active .nav-icon { background-color: #e0e7ff; color: #4f46e5; }
@@ -293,10 +229,87 @@
                             </div>
                         </div>
                     </section>
+                    
+                    <!-- NEW Border Config -->
+                    <section class="bg-white p-4 rounded-xl shadow-sm border border-slate-200 space-y-4">
+                        <span class="text-[10px] font-bold text-slate-400 uppercase block mb-2">বর্ডার সেটিংস</span>
+                        
+                        <label class="flex items-center gap-3 cursor-pointer group w-fit">
+                            <div id="border-show-toggle-bg" class="w-10 h-6 flex items-center rounded-full p-1 transition-colors bg-slate-300">
+                                <div id="border-show-toggle-dot" class="bg-white w-4 h-4 rounded-full shadow-sm transform transition-transform translate-x-0"></div>
+                            </div>
+                            <input type="checkbox" id="border-show" onchange="updateBorderConfig()" class="hidden"/>
+                            <span class="text-sm font-bold text-slate-700">পেজ বর্ডার দেখান</span>
+                        </label>
+
+                        <div class="space-y-2">
+                            <span class="text-[10px] font-bold text-slate-400 uppercase">বর্ডার পুরুত্ব (চিকন/মোটা)</span>
+                            <div class="flex items-center gap-3 bg-slate-50 border border-slate-200 rounded-lg p-2">
+                                <i data-lucide="minus" class="w-4 h-4 text-slate-400"></i>
+                                <input type="range" id="border-width" min="1" max="10" step="0.5" value="2" class="flex-1 h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-indigo-600" oninput="updateBorderConfig()">
+                                <span id="border-width-display" class="text-xs font-mono font-bold text-slate-500 w-10 text-right">2px</span>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Visibility Config -->
+                    <section class="bg-white p-4 rounded-xl shadow-sm border border-slate-200 space-y-4">
+                        <span class="text-[10px] font-bold text-slate-400 uppercase block mb-2">দৃশ্যমানতা সেটিংস (প্রিভিউ)</span>
+                        
+                        <!-- Master Toggle for Questions -->
+                        <div class="bg-slate-50 p-2 rounded-lg border border-slate-100 mb-2">
+                            <label class="flex items-center gap-2 cursor-pointer">
+                                <input type="checkbox" id="questions-show" checked onchange="updateVisibilityConfig()" class="w-4 h-4 accent-indigo-600"/>
+                                <span class="text-xs font-bold text-indigo-700">প্রশ্ন দেখান</span>
+                            </label>
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-3">
+                            <label class="flex items-center gap-2 cursor-pointer">
+                                <input type="checkbox" id="ans-show" checked onchange="updateVisibilityConfig()" class="w-4 h-4 accent-indigo-600"/>
+                                <span class="text-xs font-bold text-slate-700">প্রশ্নের সাথে উত্তর</span>
+                            </label>
+                            <label class="flex items-center gap-2 cursor-pointer">
+                                <input type="checkbox" id="exp-show" checked onchange="updateVisibilityConfig()" class="w-4 h-4 accent-indigo-600"/>
+                                <span class="text-xs font-bold text-slate-700">প্রশ্নের সাথে ব্যাখ্যা</span>
+                            </label>
+                            <label class="flex items-center gap-2 cursor-pointer">
+                                <input type="checkbox" id="ans-table-show" onchange="updateVisibilityConfig()" class="w-4 h-4 accent-indigo-600"/>
+                                <span class="text-xs font-bold text-slate-700">উত্তরমালা (বক্স)</span>
+                            </label>
+                            <label class="flex items-center gap-2 cursor-pointer">
+                                <input type="checkbox" id="exp-bottom-show" onchange="updateVisibilityConfig()" class="w-4 h-4 accent-indigo-600"/>
+                                <span class="text-xs font-bold text-slate-700">আলাদা ব্যাখ্যা (বক্স)</span>
+                            </label>
+                        </div>
+                    </section>
+
+                    <!-- Question Config -->
+                    <section class="bg-white p-4 rounded-xl shadow-sm border border-slate-200 space-y-4">
+                        <span class="text-[10px] font-bold text-slate-400 uppercase block">প্রশ্ন কনফিগারেশন</span>
+                        <div class="space-y-2">
+                            <span class="text-[10px] font-bold text-slate-400 uppercase">ফন্ট সাইজ</span>
+                            <div class="flex items-center gap-3 bg-slate-50 border border-slate-200 rounded-lg p-2">
+                                <i data-lucide="type" class="w-4 h-4 text-slate-400"></i>
+                                <input type="range" id="question-font-size" min="10" max="24" value="12" class="flex-1 h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-indigo-600" oninput="updateQuestionConfig()">
+                                <span id="question-font-size-display" class="text-xs font-mono font-bold text-slate-500 w-10 text-right">12px</span>
+                            </div>
+                        </div>
+                        <div class="space-y-2">
+                            <span class="text-[10px] font-bold text-slate-400 uppercase">প্রশ্নের মাঝের গ্যাপ</span>
+                            <div class="flex items-center gap-3 bg-slate-50 border border-slate-200 rounded-lg p-2">
+                                <i data-lucide="arrow-up-down" class="w-4 h-4 text-slate-400"></i>
+                                <input type="range" id="question-gap-y" min="0.5" max="5" step="0.1" value="1.5" class="flex-1 h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-indigo-600" oninput="updateQuestionConfig()">
+                                <span id="question-gap-y-display" class="text-xs font-mono font-bold text-slate-500 w-10 text-right">1.5r</span>
+                            </div>
+                        </div>
+                    </section>
+
                     <!-- Page Config -->
                     <section class="bg-white p-4 rounded-xl shadow-sm border border-slate-200 space-y-4">
+                        <span class="text-[10px] font-bold text-slate-400 uppercase block">পেজ কনফিগারেশন</span>
                         <div class="space-y-2">
-                            <span class="text-[10px] font-bold text-slate-400 uppercase">পেজ মার্জিন (চারপাশে সমান)</span>
+                            <span class="text-[10px] font-bold text-slate-400 uppercase">পেজ মার্জিন (বর্ডারের বাইরে)</span>
                             <div class="flex items-center gap-3 bg-slate-50 border border-slate-200 rounded-lg p-2">
                                 <i data-lucide="maximize" class="w-4 h-4 text-slate-400"></i>
                                 <input type="range" id="page-margin" min="5" max="30" value="12" class="flex-1 h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-indigo-600" oninput="updatePageConfig()">
@@ -312,21 +325,11 @@
                             </div>
                         </div>
                     </section>
-                    <!-- Question Config -->
-                    <section class="bg-white p-4 rounded-xl shadow-sm border border-slate-200 space-y-4">
-                        <div class="space-y-2">
-                            <span class="text-[10px] font-bold text-slate-400 uppercase">ফন্ট সাইজ</span>
-                            <div class="flex items-center gap-3 bg-slate-50 border border-slate-200 rounded-lg p-2">
-                                <i data-lucide="type" class="w-4 h-4 text-slate-400"></i>
-                                <input type="range" id="question-font-size" min="10" max="24" value="12" class="flex-1 h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-indigo-600" oninput="updateQuestionConfig()">
-                                <span id="question-font-size-display" class="text-xs font-mono font-bold text-slate-500 w-10 text-right">12px</span>
-                            </div>
-                        </div>
-                    </section>
+
                     <!-- Watermark -->
                     <section class="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
                         <span class="text-[10px] font-bold text-slate-400 uppercase block mb-2">ওয়াটারমার্ক</span>
-                        <div class="flex items-center gap-3">
+                        <div class="flex items-center gap-3 mb-3">
                             <label class="flex-1 cursor-pointer bg-slate-50 border-2 border-dashed border-slate-200 rounded-lg p-3 hover:bg-slate-100 transition-all text-center">
                                 <input type="file" accept="image/*" id="watermark-upload" onchange="handleWatermarkUpload(this)" class="hidden" />
                                 <div class="flex flex-col items-center gap-1">
@@ -337,6 +340,14 @@
                             <button id="watermark-remove" onclick="removeWatermark()" class="hidden p-3 text-rose-500 bg-rose-50 rounded-lg hover:bg-rose-100 border border-rose-100" title="রিমুভ">
                                 <i data-lucide="trash-2" class="w-5 h-5"></i>
                             </button>
+                        </div>
+                        <div class="space-y-2">
+                            <span class="text-[10px] font-bold text-slate-400 uppercase">ওয়াটারমার্ক সাইজ</span>
+                            <div class="flex items-center gap-3 bg-slate-50 border border-slate-200 rounded-lg p-2">
+                                <i data-lucide="scaling" class="w-4 h-4 text-slate-400"></i>
+                                <input type="range" id="watermark-size" min="10" max="100" step="5" value="60" class="flex-1 h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-indigo-600" oninput="updateWatermarkConfig()">
+                                <span id="watermark-size-display" class="text-xs font-mono font-bold text-slate-500 w-10 text-right">60%</span>
+                            </div>
                         </div>
                     </section>
                 </div>
@@ -353,7 +364,7 @@
                         </button>
                     </div>
 
-                    <!-- WYSIWYG TOOLBAR (Floating/Sticky) -->
+                    <!-- WYSIWYG TOOLBAR -->
                     <div class="sticky top-0 z-20 bg-white/95 backdrop-blur border border-slate-200 rounded-lg shadow-sm mb-3 p-1 flex flex-wrap gap-1 items-center">
                         <button type="button" id="btn-bold" onmousedown="event.preventDefault(); formatDoc('bold')" class="toolbar-btn p-1.5 rounded text-slate-700" title="Bold">
                             <i data-lucide="bold" class="w-4 h-4"></i>
@@ -406,7 +417,7 @@
                             <div class="flex gap-2">
                                 <div class="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center font-black text-slate-500 text-xs flex-shrink-0">A</div>
                                 <div class="flex-1 space-y-1">
-                                    <div id="q-opt-A" contenteditable="true" class="editor-box py-2 min-h-[36px]" placeholder="অপশন A"></div>
+                                    <input id="q-opt-A" required class="w-full p-2 bg-slate-50 border border-slate-200 rounded-lg text-xs focus:ring-2 focus:ring-indigo-500 outline-none" placeholder="অপশন A">
                                     <div class="flex items-center justify-between">
                                         <label class="text-[9px] font-bold text-indigo-500 cursor-pointer flex items-center gap-1">
                                             <input type="file" class="hidden" onchange="handleImageUpload(this, 'A')" />
@@ -424,7 +435,7 @@
                             <div class="flex gap-2">
                                 <div class="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center font-black text-slate-500 text-xs flex-shrink-0">B</div>
                                 <div class="flex-1 space-y-1">
-                                    <div id="q-opt-B" contenteditable="true" class="editor-box py-2 min-h-[36px]" placeholder="অপশন B"></div>
+                                    <input id="q-opt-B" required class="w-full p-2 bg-slate-50 border border-slate-200 rounded-lg text-xs focus:ring-2 focus:ring-indigo-500 outline-none" placeholder="অপশন B">
                                     <div class="flex items-center justify-between">
                                         <label class="text-[9px] font-bold text-indigo-500 cursor-pointer flex items-center gap-1">
                                             <input type="file" class="hidden" onchange="handleImageUpload(this, 'B')" />
@@ -442,7 +453,7 @@
                             <div class="flex gap-2">
                                 <div class="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center font-black text-slate-500 text-xs flex-shrink-0">C</div>
                                 <div class="flex-1 space-y-1">
-                                    <div id="q-opt-C" contenteditable="true" class="editor-box py-2 min-h-[36px]" placeholder="অপশন C"></div>
+                                    <input id="q-opt-C" required class="w-full p-2 bg-slate-50 border border-slate-200 rounded-lg text-xs focus:ring-2 focus:ring-indigo-500 outline-none" placeholder="অপশন C">
                                     <div class="flex items-center justify-between">
                                         <label class="text-[9px] font-bold text-indigo-500 cursor-pointer flex items-center gap-1">
                                             <input type="file" class="hidden" onchange="handleImageUpload(this, 'C')" />
@@ -460,7 +471,7 @@
                             <div class="flex gap-2">
                                 <div class="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center font-black text-slate-500 text-xs flex-shrink-0">D</div>
                                 <div class="flex-1 space-y-1">
-                                    <div id="q-opt-D" contenteditable="true" class="editor-box py-2 min-h-[36px]" placeholder="অপশন D"></div>
+                                    <input id="q-opt-D" required class="w-full p-2 bg-slate-50 border border-slate-200 rounded-lg text-xs focus:ring-2 focus:ring-indigo-500 outline-none" placeholder="অপশন D">
                                     <div class="flex items-center justify-between">
                                         <label class="text-[9px] font-bold text-indigo-500 cursor-pointer flex items-center gap-1">
                                             <input type="file" class="hidden" onchange="handleImageUpload(this, 'D')" />
@@ -495,7 +506,7 @@
                                         <i data-lucide="image-plus" class="w-3 h-3"></i> ছবি
                                     </label>
                                 </div>
-                                <div id="q-explanation" contenteditable="true" class="editor-box min-h-[60px]" placeholder="ব্যাখ্যা লিখুন..."></div>
+                                <textarea id="q-explanation" class="w-full p-2 bg-slate-50 border border-slate-200 rounded-lg text-xs h-14 focus:ring-2 focus:ring-indigo-500 outline-none" placeholder="ব্যাখ্যা লিখুন..."></textarea>
                                 <div id="img-indicator-exp" class="hidden flex items-center gap-1 text-[9px] text-emerald-600 font-bold bg-emerald-50 px-2 py-1 rounded w-fit">
                                     <i data-lucide="check" class="w-3 h-3"></i> ব্যাখ্যা ছবি যুক্ত হয়েছে
                                     <button type="button" onclick="removeImage('exp')" class="text-rose-500 hover:underline ml-2 font-bold">x</button>
@@ -526,7 +537,7 @@
         </div>
     </main>
 
-    <!-- Bottom Nav (Fixed, Solid, Thin) -->
+    <!-- Bottom Nav -->
     <nav class="fixed bottom-0 left-0 w-full z-40 bg-white border-t border-slate-200 no-print pb-safe shadow-[0_-2px_10px_rgba(0,0,0,0.02)]">
         <div class="flex justify-around items-center h-14 max-w-lg mx-auto">
             <button onclick="switchMode('settings')" id="nav-settings" class="nav-item flex flex-col items-center justify-center w-full h-full gap-0.5 active:bg-slate-50">
@@ -555,9 +566,18 @@
                 fontSize: '18px',
                 color: '#000000'
             },
-            questionConfig: { fontSize: '12px' },
+            questionConfig: { fontSize: '12px', gapY: '1.5rem' },
             pageConfig: { padding: '12mm', gap: '12mm' },
+            borderConfig: { show: false, width: '2px' },
+            visibility: {
+                showQuestions: true,
+                showAns: true,
+                showExp: true,
+                showAnsTable: false,
+                showExpBottom: false
+            },
             watermark: null,
+            watermarkSize: '60%',
             activeMode: 'questions',
             editingQuestionId: null,
             listCollapsed: false
@@ -566,24 +586,21 @@
         // --- Rich Text Logic ---
         let currentEditor = null;
 
-        // Track active editor
         document.addEventListener('focusin', function(e) {
             if (e.target.isContentEditable) {
                 currentEditor = e.target;
                 document.querySelectorAll('.editor-box').forEach(el => el.classList.remove('editor-active'));
                 e.target.classList.add('editor-active');
-                updateToolbarState(); // Check initial state
+                updateToolbarState();
             }
         });
 
-        // Update toolbar state on keyup/mouseup
         document.addEventListener('keyup', updateToolbarState);
         document.addEventListener('mouseup', updateToolbarState);
-        document.addEventListener('selectionchange', updateToolbarState); // Better for realtime updates
+        document.addEventListener('selectionchange', updateToolbarState);
 
         function updateToolbarState() {
             if (!currentEditor) return;
-            
             const commands = ['bold', 'italic', 'underline', 'superscript', 'subscript'];
             commands.forEach(cmd => {
                 const isActive = document.queryCommandState(cmd);
@@ -604,14 +621,12 @@
 
         function insertFraction() {
             if (!currentEditor) return;
-            // Structure: span.math-fraction > span.math-fraction-top + span.math-fraction-bottom
             const html = `<span class="math-fraction" contenteditable="false"><span class="math-fraction-top" contenteditable="true"> </span><span class="math-fraction-bottom" contenteditable="true"> </span></span>&nbsp;`;
             insertHtmlAtCursor(html);
         }
 
         function insertRoot() {
             if (!currentEditor) return;
-            // Structure: span.math-sqrt > span.math-sqrt-symbol (√) + span.math-sqrt-content
             const html = `<span class="math-sqrt" contenteditable="false"><span class="math-sqrt-symbol">√</span><span class="math-sqrt-content" contenteditable="true"> </span></span>&nbsp;`;
             insertHtmlAtCursor(html);
         }
@@ -620,19 +635,13 @@
             const sel = window.getSelection();
             if (sel.getRangeAt && sel.rangeCount) {
                 let range = sel.getRangeAt(0);
-                // Ensure we are inside the current editor
                 if (!currentEditor.contains(range.commonAncestorContainer)) return;
-                
                 range.deleteContents();
                 const el = document.createElement("div");
                 el.innerHTML = html;
                 let frag = document.createDocumentFragment(), node, lastNode;
-                while ( (node = el.firstChild) ) {
-                    lastNode = frag.appendChild(node);
-                }
+                while ( (node = el.firstChild) ) { lastNode = frag.appendChild(node); }
                 range.insertNode(frag);
-                
-                // Move cursor after insertion
                 if (lastNode) {
                     range = range.cloneRange();
                     range.setStartAfter(lastNode);
@@ -658,10 +667,32 @@
             document.getElementById('page-gap').value = parseInt(state.pageConfig.gap);
             document.getElementById('page-gap-display').innerText = state.pageConfig.gap;
 
+            // Border Config Init
+            document.getElementById('border-show').checked = state.borderConfig?.show || false;
+            document.getElementById('border-width').value = parseFloat(state.borderConfig?.width) || 2;
+            document.getElementById('border-width-display').innerText = state.borderConfig?.width || '2px';
+
+            // Visibility Config
+            document.getElementById('questions-show').checked = state.visibility.showQuestions !== false;
+            document.getElementById('ans-show').checked = state.visibility.showAns;
+            document.getElementById('exp-show').checked = state.visibility.showExp;
+            document.getElementById('ans-table-show').checked = state.visibility.showAnsTable || false;
+            document.getElementById('exp-bottom-show').checked = state.visibility.showExpBottom || false;
+
+            // Question & Watermark Config
             document.getElementById('question-font-size').value = parseInt(state.questionConfig.fontSize);
             document.getElementById('question-font-size-display').innerText = state.questionConfig.fontSize;
             
+            const gapYVal = state.questionConfig.gapY ? parseFloat(state.questionConfig.gapY) : 1.5;
+            document.getElementById('question-gap-y').value = gapYVal;
+            document.getElementById('question-gap-y-display').innerText = gapYVal + 'r';
+
+            const wSize = state.watermarkSize ? parseInt(state.watermarkSize) : 60;
+            document.getElementById('watermark-size').value = wSize;
+            document.getElementById('watermark-size-display').innerText = wSize + '%';
+            
             updateUIHeaderToggle();
+            updateUIBorderToggle();
             lucide.createIcons();
             updateList();
             updatePreview();
@@ -703,7 +734,16 @@
         function loadData() {
             try {
                 const saved = localStorage.getItem(STORAGE_KEY);
-                if (saved) state = { ...state, ...JSON.parse(saved) };
+                if (saved) {
+                    const parsed = JSON.parse(saved);
+                    state = { 
+                        ...state, 
+                        ...parsed,
+                        visibility: { ...state.visibility, ...(parsed.visibility || {}) },
+                        questionConfig: { ...state.questionConfig, ...(parsed.questionConfig || {}) },
+                        borderConfig: { ...state.borderConfig, ...(parsed.borderConfig || {}) }
+                    };
+                }
             } catch (e) { console.error(e); }
         }
         function resetAllData() {
@@ -727,6 +767,30 @@
             if (state.header.show) { t.classList.replace('bg-slate-300', 'bg-indigo-600'); d.classList.replace('translate-x-0', 'translate-x-4'); } 
             else { t.classList.replace('bg-indigo-600', 'bg-slate-300'); d.classList.replace('translate-x-4', 'translate-x-0'); }
         }
+
+        function updateBorderConfig() {
+            state.borderConfig = {
+                show: document.getElementById('border-show').checked,
+                width: document.getElementById('border-width').value + 'px'
+            };
+            document.getElementById('border-width-display').innerText = state.borderConfig.width;
+            updateUIBorderToggle(); updatePreview(); saveData();
+        }
+        function updateUIBorderToggle() {
+            const t = document.getElementById('border-show-toggle-bg'), d = document.getElementById('border-show-toggle-dot');
+            if (state.borderConfig?.show) { t.classList.replace('bg-slate-300', 'bg-indigo-600'); d.classList.replace('translate-x-0', 'translate-x-4'); } 
+            else { t.classList.replace('bg-indigo-600', 'bg-slate-300'); d.classList.replace('translate-x-4', 'translate-x-0'); }
+        }
+
+        function updateVisibilityConfig() {
+            state.visibility.showQuestions = document.getElementById('questions-show').checked;
+            state.visibility.showAns = document.getElementById('ans-show').checked;
+            state.visibility.showExp = document.getElementById('exp-show').checked;
+            state.visibility.showAnsTable = document.getElementById('ans-table-show').checked;
+            state.visibility.showExpBottom = document.getElementById('exp-bottom-show').checked;
+            updatePreview(); saveData();
+        }
+
         function updatePageConfig() {
             state.pageConfig.padding = document.getElementById('page-margin').value + 'mm';
             document.getElementById('page-margin-display').innerText = state.pageConfig.padding;
@@ -737,6 +801,13 @@
         function updateQuestionConfig() {
             state.questionConfig.fontSize = document.getElementById('question-font-size').value + 'px';
             document.getElementById('question-font-size-display').innerText = state.questionConfig.fontSize;
+            state.questionConfig.gapY = document.getElementById('question-gap-y').value + 'rem';
+            document.getElementById('question-gap-y-display').innerText = document.getElementById('question-gap-y').value + 'r';
+            updatePreview(); saveData();
+        }
+        function updateWatermarkConfig() {
+            state.watermarkSize = document.getElementById('watermark-size').value + '%';
+            document.getElementById('watermark-size-display').innerText = state.watermarkSize;
             updatePreview(); saveData();
         }
 
@@ -772,7 +843,6 @@
             e.preventDefault();
             const newQ = {
                 id: state.editingQuestionId || Date.now().toString(),
-                // Use innerHTML for Rich Text
                 text: document.getElementById('q-text').innerHTML,
                 image: document.getElementById('q-image-data').value || undefined,
                 options: { 
@@ -790,7 +860,6 @@
                 expImage: document.getElementById('q-img-exp').value || undefined
             };
             
-            // Basic validation for empty content (strip tags to check text)
             if(document.getElementById('q-text').innerText.trim() === '' && !newQ.image) {
                 alert('প্রশ্ন বা ছবি দিন');
                 return;
@@ -803,7 +872,6 @@
 
         function resetForm() {
             document.getElementById('question-form').reset();
-            // Clear contenteditable fields
             document.getElementById('q-text').innerHTML = '';
             ['A','B','C','D'].forEach(o => document.getElementById(`q-opt-${o}`).innerHTML = '');
             document.getElementById('q-explanation').innerHTML = '';
@@ -815,16 +883,12 @@
             document.getElementById('form-mode-text').innerText='নতুন প্রশ্ন'; document.getElementById('submit-text').innerText='প্রশ্ন যুক্ত করুন';
             document.getElementById('btn-cancel-edit').classList.add('hidden'); document.getElementById('submit-icon').setAttribute('data-lucide', 'plus-circle');
             lucide.createIcons();
-            
-            // Focus on question text
             document.getElementById('q-text').focus();
         }
 
         function editQuestion(id) {
             const q = state.questions.find(i => i.id === id); if(!q) return;
             state.editingQuestionId = id;
-            
-            // Set InnerHTML
             document.getElementById('q-text').innerHTML = q.text;
             document.getElementById('q-image-data').value = q.image || '';
             if(q.image) document.getElementById('btn-remove-main-img').classList.remove('hidden'); else document.getElementById('btn-remove-main-img').classList.add('hidden');
@@ -878,47 +942,158 @@
 
         function updatePreview() {
             const container = document.getElementById('a4-page');
-            container.style.padding = state.pageConfig.padding;
             
-            let watermarkHtml = state.watermark ? `<img src="${state.watermark}" alt="Watermark" class="watermark" />` : '';
+            const bShow = state.borderConfig?.show;
+            const bWidth = state.borderConfig?.width || '2px';
+            const pagePad = state.pageConfig.padding;
+
+            container.style.padding = pagePad;
+            
+            let watermarkHtml = state.watermark ? `<img src="${state.watermark}" alt="Watermark" class="watermark" style="width: ${state.watermarkSize};" />` : '';
             let headerHtml = state.header.show ? `<header class="text-center mb-6 pb-4 border-b-[1.5px] border-slate-800" style="color: ${state.header.color};"><div style="font-size: ${state.header.fontSize}; line-height: 1.4; white-space: pre-wrap; font-weight: 700;">${state.header.text}</div></header>` : '';
 
-            const questionsHtml = state.questions.map((q, idx) => `
-                <div class="mb-6 break-inside-avoid">
-                    <div class="flex gap-2 mb-2">
-                      <span class="whitespace-nowrap font-bold" style="font-size: inherit;">${idx + 1}.</span>
-                      <div class="flex-1">
-                        <div class="mb-1 leading-relaxed rich-text-content">${q.text}</div>
-                        ${q.image ? `<img src="${q.image}" class="q-img" />` : ''}
-                      </div>
-                    </div>
-                    <div class="grid grid-cols-2 gap-x-4 gap-y-2 ml-5 mb-2">
-                      ${['A', 'B', 'C', 'D'].map(opt => `
-                        <div class="flex items-start gap-1">
-                          <span class="omr-option flex-shrink-0">${opt}.</span>
+            // Generate Questions
+            let questionsHtml = '';
+            if (state.visibility.showQuestions !== false) {
+                questionsHtml = `<div class="columns-container leading-snug text-black" style="font-size: ${state.questionConfig.fontSize}; column-gap: ${state.pageConfig.gap};">` +
+                state.questions.map((q, idx) => `
+                    <div class="break-inside-avoid" style="margin-bottom: ${state.questionConfig.gapY};">
+                        <div class="flex gap-2 mb-2">
+                          <span class="whitespace-nowrap font-bold" style="font-size: inherit;">${idx + 1}.</span>
                           <div class="flex-1">
-                            <div class="rich-text-content inline-block">${q.options[opt]}</div>
-                            ${q.optionImages?.[opt] ? `<img src="${q.optionImages[opt]}" class="opt-img" />` : ''}
+                            <div class="mb-1 leading-relaxed rich-text-content question-text">${q.text}</div>
+                            ${q.image ? `<img src="${q.image}" class="q-img" />` : ''}
                           </div>
                         </div>
-                      `).join('')}
-                    </div>
-                    <div class="ml-5 space-y-2">
-                      <div>
-                        <span class="inline-block border border-black px-2 py-1 font-bold text-black" style="font-size: 0.85em;">সঠিক উত্তর: ${q.correctAnswer}</span>
-                      </div>
-                      ${(q.explanation || q.expImage) ? `
-                        <div class="border border-black p-2 text-black leading-normal" style="font-size: 0.85em;">
-                          <span class="font-bold mr-1 underline">ব্যাখ্যা:</span>
-                          <div class="rich-text-content inline">${q.explanation || ''}</div>
-                          ${q.expImage ? `<img src="${q.expImage}" class="exp-img" />` : ''}
+                        <div class="grid grid-cols-2 gap-x-4 gap-y-2 ml-5 mb-2">
+                          ${['A', 'B', 'C', 'D'].map(opt => `
+                            <div class="flex items-start gap-1">
+                              <span class="omr-option flex-shrink-0">${opt}.</span>
+                              <div class="flex-1">
+                                <div class="rich-text-content inline-block">${q.options[opt]}</div>
+                                ${q.optionImages?.[opt] ? `<img src="${q.optionImages[opt]}" class="opt-img" />` : ''}
+                              </div>
+                            </div>
+                          `).join('')}
                         </div>
-                      ` : ''}
+                        <div class="ml-5 space-y-2">
+                          ${state.visibility.showAns ? `
+                            <div>
+                                <span class="inline-block border border-black px-2 py-1 font-bold text-black" style="font-size: 0.85em;">সঠিক উত্তর: ${q.correctAnswer}</span>
+                            </div>
+                          ` : ''}
+                          ${state.visibility.showExp && (q.explanation || q.expImage) ? `
+                            <div class="border border-black p-2 text-black leading-normal" style="font-size: 0.85em;">
+                              <span class="font-bold mr-1 underline">ব্যাখ্যা:</span>
+                              <div class="rich-text-content inline">${q.explanation || ''}</div>
+                              ${q.expImage ? `<img src="${q.expImage}" class="exp-img" />` : ''}
+                            </div>
+                          ` : ''}
+                        </div>
                     </div>
-                </div>
-            `).join('');
+                `).join('') + `</div>`;
+            }
 
-            container.innerHTML = `${watermarkHtml}${headerHtml}<div class="columns-container leading-snug text-black" style="font-size: ${state.questionConfig.fontSize}; column-gap: ${state.pageConfig.gap};">${questionsHtml}</div>`;
+            // Bottom Section Logic
+            let bottomSectionHtml = '';
+
+            // Case 1: Both "Answer Table" AND "Exp Bottom" are CHECKED -> Show 3-Column Table
+            if (state.visibility.showAnsTable && state.visibility.showExpBottom && state.questions.length > 0) {
+                let rows = state.questions.map((q, idx) => `
+                    <tr>
+                        <td class="col-q-no">${idx + 1}</td>
+                        <td class="col-ans">${q.correctAnswer}</td>
+                        <td class="col-exp">
+                            <div class="rich-text-content">${q.explanation || ''}</div>
+                            ${q.expImage ? `<img src="${q.expImage}" class="exp-img mt-1" />` : ''}
+                        </td>
+                    </tr>
+                `).join('');
+
+                bottomSectionHtml = `
+                    <div class="mt-8 break-inside-avoid">
+                        <h3 class="font-bold border-b border-black mb-2 inline-block">উত্তর ও ব্যাখ্যা</h3>
+                        <table class="combined-ans-exp-table">
+                            <thead>
+                                <tr>
+                                    <th class="col-q-no">প্রশ্ন নং</th>
+                                    <th class="col-ans">উত্তর</th>
+                                    <th class="col-exp">ব্যাখ্যা</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${rows}
+                            </tbody>
+                        </table>
+                    </div>
+                `;
+            }
+            // Case 2: Only "Answer Table" is CHECKED -> Show Grid Box
+            else if (state.visibility.showAnsTable && !state.visibility.showExpBottom && state.questions.length > 0) {
+                const chunkSize = 15;
+                let tables = [];
+                for (let i = 0; i < state.questions.length; i += chunkSize) {
+                    const chunk = state.questions.slice(i, i + chunkSize);
+                    let headerRow = '';
+                    let dataRow = '';
+                    chunk.forEach((q, cIdx) => {
+                        const qNum = i + cIdx + 1;
+                        headerRow += `<td class="ans-table-header">${qNum}</td>`;
+                        dataRow += `<td class="ans-table-data">${q.correctAnswer}</td>`;
+                    });
+                    tables.push(`
+                        <table class="ans-table-grid">
+                            <tr>${headerRow}</tr>
+                            <tr>${dataRow}</tr>
+                        </table>
+                    `);
+                }
+                
+                bottomSectionHtml = `
+                    <div class="mt-8 break-inside-avoid">
+                        <h3 class="font-bold border-b border-black mb-2 inline-block">উত্তরমালা</h3>
+                        <div class="flex flex-wrap gap-x-4">
+                            ${tables.join('')}
+                        </div>
+                    </div>
+                `;
+            }
+            // Case 3: Only "Exp Bottom" is CHECKED
+            else if (!state.visibility.showAnsTable && state.visibility.showExpBottom && state.questions.length > 0) {
+                 const exps = state.questions.map((q, idx) => {
+                    if (!q.explanation && !q.expImage) return '';
+                    return `
+                        <div class="mb-3">
+                            <span class="font-bold mr-1">${idx + 1}.</span>
+                            <div class="inline rich-text-content">${q.explanation || ''}</div>
+                            ${q.expImage ? `<img src="${q.expImage}" class="exp-img mt-1" />` : ''}
+                        </div>
+                    `;
+                }).join('');
+                
+                bottomSectionHtml = `
+                    <div class="mt-8">
+                        <h3 class="font-bold border-b border-black mb-4 inline-block">ব্যাখ্যা ও সমাধান</h3>
+                        <div class="space-y-1 text-sm">
+                            ${exps}
+                        </div>
+                    </div>
+                `;
+            }
+
+            let contentHtml = `
+                ${watermarkHtml}
+                ${headerHtml}
+                ${questionsHtml}
+                ${bottomSectionHtml}
+            `;
+
+            if (bShow) {
+                // Fixed 8mm padding inside border
+                contentHtml = `<div class="border-frame" style="border-width: ${bWidth}; padding: 8mm;">${contentHtml}</div>`;
+            }
+
+            container.innerHTML = contentHtml;
         }
 
         window.addEventListener('DOMContentLoaded', init);
