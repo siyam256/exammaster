@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="bn">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
@@ -12,7 +12,7 @@
     <script src="https://unpkg.com/lucide@latest"></script>
     
     <style>
-        /* --- Font Setup: SutonnyMJ --- */
+        /* --- Font Setup: SutonnyMJ for Preview --- */
         @font-face {
             font-family: 'SutonnyMJ';
             src: url('SutonnyMJ.ttf') format('truetype');
@@ -20,15 +20,16 @@
             font-style: normal;
         }
 
+        /* Default Font for UI is System Sans (Tailwind default) */
         body {
-            font-family: 'SutonnyMJ', sans-serif;
+            font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
             overflow-x: hidden;
             background-color: #f8fafc;
         }
 
-        /* --- WYSIWYG Editor Styles --- */
+        /* --- WYSIWYG Editor Styles (Using SutonnyMJ for Bangla typing) --- */
         .editor-box {
             min-height: 40px;
             max-height: 300px;
@@ -39,10 +40,10 @@
             padding: 0.75rem;
             outline: none;
             transition: all 0.2s;
-            font-size: 0.875rem; /* text-sm */
+            font-size: 1rem; 
             line-height: 1.5;
             color: #1e293b;
-            font-family: 'SutonnyMJ', sans-serif;
+            font-family: 'SutonnyMJ', sans-serif; /* Keeping Bangla font for input */
         }
         
         .editor-box:focus {
@@ -56,6 +57,8 @@
             content: attr(placeholder);
             color: #94a3b8;
             pointer-events: none;
+            font-family: ui-sans-serif, system-ui; /* Placeholder in English font */
+            font-size: 0.875rem;
         }
 
         /* --- FIX: Restore Default Styles for Rich Text inside Editor & Preview --- */
@@ -107,7 +110,7 @@
             transform-origin: top center;
             margin-bottom: 2rem;
             box-sizing: border-box;
-            font-family: 'SutonnyMJ', sans-serif;
+            font-family: 'SutonnyMJ', sans-serif; /* Only Preview is SutonnyMJ */
             display: flex;
             flex-direction: column;
         }
@@ -182,7 +185,7 @@
             </h1>
         </div>
         <button onclick="window.print()" class="bg-slate-900 hover:bg-slate-800 text-white px-4 py-2 rounded-lg flex items-center gap-2 font-bold transition-all text-sm shadow-md active:scale-95">
-            <i data-lucide="printer" class="w-4 h-4"></i> <span class="hidden sm:inline">ডাউনলোড / প্রিন্ট</span>
+            <i data-lucide="printer" class="w-4 h-4"></i> <span class="hidden sm:inline">Download / Print</span>
         </button>
     </header>
 
@@ -195,7 +198,7 @@
                 <div id="tab-content-settings" class="hidden animate-in slide-in-from-left-2 duration-300">
                     <div class="flex items-center gap-2 mb-4 text-slate-800 font-bold border-b border-slate-200 pb-2">
                         <i data-lucide="settings-2" class="w-5 h-5 text-indigo-600"></i>
-                        <h2>সেটিংস কনফিগারেশন</h2>
+                        <h2>Settings Configuration</h2>
                     </div>
                     <!-- Header Config -->
                     <section class="bg-white p-4 rounded-xl shadow-sm border border-slate-200 space-y-4">
@@ -204,24 +207,24 @@
                                 <div id="header-show-toggle-dot" class="bg-white w-4 h-4 rounded-full shadow-sm transform transition-transform translate-x-4"></div>
                             </div>
                             <input type="checkbox" id="header-show" checked onchange="updateHeaderConfig()" class="hidden"/>
-                            <span class="text-sm font-bold text-slate-700">হেডার দেখান</span>
+                            <span class="text-sm font-bold text-slate-700">Show Header</span>
                         </label>
                         <div class="space-y-1">
-                            <span class="text-[10px] font-bold text-slate-400 uppercase">হেডার টেক্সট</span>
-                            <textarea id="header-text" oninput="updateHeaderConfig()" class="w-full p-3 bg-slate-50 border border-slate-200 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none text-sm min-h-[100px] leading-relaxed resize-none" placeholder="টেক্সট লিখুন...">বার্ষিক পরীক্ষা ২০২৪
+                            <span class="text-[10px] font-bold text-slate-400 uppercase">Header Text</span>
+                            <textarea id="header-text" oninput="updateHeaderConfig()" class="w-full p-3 bg-slate-50 border border-slate-200 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none text-sm min-h-[100px] leading-relaxed resize-none font-[SutonnyMJ]" placeholder="Write header text...">বার্ষিক পরীক্ষা ২০২৪
 বিষয়: সাধারণ বিজ্ঞান
 সময়: ২ ঘণ্টা | পূর্ণমান: ১০০</textarea>
                         </div>
                         <div class="grid grid-cols-2 gap-3">
                             <div>
-                                <span class="text-[10px] font-bold text-slate-400 uppercase">হেডার সাইজ</span>
+                                <span class="text-[10px] font-bold text-slate-400 uppercase">Header Size</span>
                                 <div class="flex items-center gap-2 bg-slate-50 border border-slate-200 rounded-lg p-2 h-10">
                                     <input type="range" id="header-font-size" min="10" max="60" value="18" class="flex-1 h-1.5 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-indigo-600" oninput="updateHeaderConfig()">
                                     <span id="header-font-size-display" class="text-xs font-mono font-bold text-slate-500 w-8 text-right">18px</span>
                                 </div>
                             </div>
                             <div>
-                                <span class="text-[10px] font-bold text-slate-400 uppercase">টেক্সট কালার</span>
+                                <span class="text-[10px] font-bold text-slate-400 uppercase">Text Color</span>
                                 <div class="flex items-center gap-2 bg-slate-50 border border-slate-200 rounded-lg p-1 h-10 px-2">
                                     <input type="color" id="header-color" oninput="updateHeaderConfig()" value="#000000" class="w-6 h-6 rounded cursor-pointer border-none bg-transparent">
                                     <span id="header-color-val" class="text-xs font-mono font-bold text-slate-500">#000000</span>
@@ -230,20 +233,20 @@
                         </div>
                     </section>
                     
-                    <!-- NEW Border Config -->
+                    <!-- Border Config -->
                     <section class="bg-white p-4 rounded-xl shadow-sm border border-slate-200 space-y-4">
-                        <span class="text-[10px] font-bold text-slate-400 uppercase block mb-2">বর্ডার সেটিংস</span>
+                        <span class="text-[10px] font-bold text-slate-400 uppercase block mb-2">Border Settings</span>
                         
                         <label class="flex items-center gap-3 cursor-pointer group w-fit">
                             <div id="border-show-toggle-bg" class="w-10 h-6 flex items-center rounded-full p-1 transition-colors bg-slate-300">
                                 <div id="border-show-toggle-dot" class="bg-white w-4 h-4 rounded-full shadow-sm transform transition-transform translate-x-0"></div>
                             </div>
                             <input type="checkbox" id="border-show" onchange="updateBorderConfig()" class="hidden"/>
-                            <span class="text-sm font-bold text-slate-700">পেজ বর্ডার দেখান</span>
+                            <span class="text-sm font-bold text-slate-700">Show Page Border</span>
                         </label>
 
                         <div class="space-y-2">
-                            <span class="text-[10px] font-bold text-slate-400 uppercase">বর্ডার পুরুত্ব (চিকন/মোটা)</span>
+                            <span class="text-[10px] font-bold text-slate-400 uppercase">Border Thickness</span>
                             <div class="flex items-center gap-3 bg-slate-50 border border-slate-200 rounded-lg p-2">
                                 <i data-lucide="minus" class="w-4 h-4 text-slate-400"></i>
                                 <input type="range" id="border-width" min="1" max="10" step="0.5" value="2" class="flex-1 h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-indigo-600" oninput="updateBorderConfig()">
@@ -254,41 +257,42 @@
 
                     <!-- Visibility Config -->
                     <section class="bg-white p-4 rounded-xl shadow-sm border border-slate-200 space-y-4">
-                        <span class="text-[10px] font-bold text-slate-400 uppercase block mb-2">দৃশ্যমানতা সেটিংস (প্রিভিউ)</span>
+                        <span class="text-[10px] font-bold text-slate-400 uppercase block mb-2">Visibility Settings (Preview)</span>
                         
                         <!-- Master Toggle for Questions -->
                         <div class="bg-slate-50 p-2 rounded-lg border border-slate-100 mb-2">
                             <label class="flex items-center gap-2 cursor-pointer">
                                 <input type="checkbox" id="questions-show" checked onchange="updateVisibilityConfig()" class="w-4 h-4 accent-indigo-600"/>
-                                <span class="text-xs font-bold text-indigo-700">প্রশ্ন দেখান</span>
+                                <span class="text-xs font-bold text-indigo-700">Show Questions</span>
                             </label>
                         </div>
 
                         <div class="grid grid-cols-2 gap-3">
                             <label class="flex items-center gap-2 cursor-pointer">
                                 <input type="checkbox" id="ans-show" checked onchange="updateVisibilityConfig()" class="w-4 h-4 accent-indigo-600"/>
-                                <span class="text-xs font-bold text-slate-700">প্রশ্নের সাথে উত্তর</span>
+                                <span class="text-xs font-bold text-slate-700">Inline Answer</span>
                             </label>
                             <label class="flex items-center gap-2 cursor-pointer">
                                 <input type="checkbox" id="exp-show" checked onchange="updateVisibilityConfig()" class="w-4 h-4 accent-indigo-600"/>
-                                <span class="text-xs font-bold text-slate-700">প্রশ্নের সাথে ব্যাখ্যা</span>
+                                <span class="text-xs font-bold text-slate-700">Inline Explanation</span>
                             </label>
                             <label class="flex items-center gap-2 cursor-pointer">
                                 <input type="checkbox" id="ans-table-show" onchange="updateVisibilityConfig()" class="w-4 h-4 accent-indigo-600"/>
-                                <span class="text-xs font-bold text-slate-700">উত্তরমালা (বক্স)</span>
+                                <span class="text-xs font-bold text-slate-700">Answer Key (Box)</span>
                             </label>
                             <label class="flex items-center gap-2 cursor-pointer">
                                 <input type="checkbox" id="exp-bottom-show" onchange="updateVisibilityConfig()" class="w-4 h-4 accent-indigo-600"/>
-                                <span class="text-xs font-bold text-slate-700">আলাদা ব্যাখ্যা (বক্স)</span>
+                                <span class="text-xs font-bold text-slate-700">Separate Explanation (Box)</span>
                             </label>
                         </div>
+                        <p class="text-[10px] text-slate-400 italic mt-2">Note: If both "Answer Key" and "Separate Explanation" are checked, a 3-column table will appear.</p>
                     </section>
 
                     <!-- Question Config -->
                     <section class="bg-white p-4 rounded-xl shadow-sm border border-slate-200 space-y-4">
-                        <span class="text-[10px] font-bold text-slate-400 uppercase block">প্রশ্ন কনফিগারেশন</span>
+                        <span class="text-[10px] font-bold text-slate-400 uppercase block">Question Configuration</span>
                         <div class="space-y-2">
-                            <span class="text-[10px] font-bold text-slate-400 uppercase">ফন্ট সাইজ</span>
+                            <span class="text-[10px] font-bold text-slate-400 uppercase">Font Size</span>
                             <div class="flex items-center gap-3 bg-slate-50 border border-slate-200 rounded-lg p-2">
                                 <i data-lucide="type" class="w-4 h-4 text-slate-400"></i>
                                 <input type="range" id="question-font-size" min="10" max="24" value="12" class="flex-1 h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-indigo-600" oninput="updateQuestionConfig()">
@@ -296,7 +300,7 @@
                             </div>
                         </div>
                         <div class="space-y-2">
-                            <span class="text-[10px] font-bold text-slate-400 uppercase">প্রশ্নের মাঝের গ্যাপ</span>
+                            <span class="text-[10px] font-bold text-slate-400 uppercase">Question Gap</span>
                             <div class="flex items-center gap-3 bg-slate-50 border border-slate-200 rounded-lg p-2">
                                 <i data-lucide="arrow-up-down" class="w-4 h-4 text-slate-400"></i>
                                 <input type="range" id="question-gap-y" min="0.5" max="5" step="0.1" value="1.5" class="flex-1 h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-indigo-600" oninput="updateQuestionConfig()">
@@ -307,9 +311,9 @@
 
                     <!-- Page Config -->
                     <section class="bg-white p-4 rounded-xl shadow-sm border border-slate-200 space-y-4">
-                        <span class="text-[10px] font-bold text-slate-400 uppercase block">পেজ কনফিগারেশন</span>
+                        <span class="text-[10px] font-bold text-slate-400 uppercase block">Page Configuration</span>
                         <div class="space-y-2">
-                            <span class="text-[10px] font-bold text-slate-400 uppercase">পেজ মার্জিন (বর্ডারের বাইরে)</span>
+                            <span class="text-[10px] font-bold text-slate-400 uppercase">Page Margin</span>
                             <div class="flex items-center gap-3 bg-slate-50 border border-slate-200 rounded-lg p-2">
                                 <i data-lucide="maximize" class="w-4 h-4 text-slate-400"></i>
                                 <input type="range" id="page-margin" min="5" max="30" value="12" class="flex-1 h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-indigo-600" oninput="updatePageConfig()">
@@ -317,7 +321,7 @@
                             </div>
                         </div>
                          <div class="space-y-2">
-                            <span class="text-[10px] font-bold text-slate-400 uppercase">কলাম গ্যাপ</span>
+                            <span class="text-[10px] font-bold text-slate-400 uppercase">Column Gap</span>
                             <div class="flex items-center gap-3 bg-slate-50 border border-slate-200 rounded-lg p-2">
                                 <i data-lucide="columns" class="w-4 h-4 text-slate-400"></i>
                                 <input type="range" id="page-gap" min="5" max="25" value="12" class="flex-1 h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-indigo-600" oninput="updatePageConfig()">
@@ -328,21 +332,21 @@
 
                     <!-- Watermark -->
                     <section class="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
-                        <span class="text-[10px] font-bold text-slate-400 uppercase block mb-2">ওয়াটারমার্ক</span>
+                        <span class="text-[10px] font-bold text-slate-400 uppercase block mb-2">Watermark</span>
                         <div class="flex items-center gap-3 mb-3">
                             <label class="flex-1 cursor-pointer bg-slate-50 border-2 border-dashed border-slate-200 rounded-lg p-3 hover:bg-slate-100 transition-all text-center">
                                 <input type="file" accept="image/*" id="watermark-upload" onchange="handleWatermarkUpload(this)" class="hidden" />
                                 <div class="flex flex-col items-center gap-1">
                                     <i data-lucide="image-plus" class="w-5 h-5 text-slate-400"></i>
-                                    <span id="watermark-label" class="text-xs text-slate-500 font-bold">আপলোড</span>
+                                    <span id="watermark-label" class="text-xs text-slate-500 font-bold">Upload</span>
                                 </div>
                             </label>
-                            <button id="watermark-remove" onclick="removeWatermark()" class="hidden p-3 text-rose-500 bg-rose-50 rounded-lg hover:bg-rose-100 border border-rose-100" title="রিমুভ">
+                            <button id="watermark-remove" onclick="removeWatermark()" class="hidden p-3 text-rose-500 bg-rose-50 rounded-lg hover:bg-rose-100 border border-rose-100" title="Remove">
                                 <i data-lucide="trash-2" class="w-5 h-5"></i>
                             </button>
                         </div>
                         <div class="space-y-2">
-                            <span class="text-[10px] font-bold text-slate-400 uppercase">ওয়াটারমার্ক সাইজ</span>
+                            <span class="text-[10px] font-bold text-slate-400 uppercase">Watermark Size</span>
                             <div class="flex items-center gap-3 bg-slate-50 border border-slate-200 rounded-lg p-2">
                                 <i data-lucide="scaling" class="w-4 h-4 text-slate-400"></i>
                                 <input type="range" id="watermark-size" min="10" max="100" step="5" value="60" class="flex-1 h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-indigo-600" oninput="updateWatermarkConfig()">
@@ -357,10 +361,10 @@
                     <div class="flex items-center justify-between mb-4 border-b border-slate-200 pb-2">
                         <div class="flex items-center gap-2 text-slate-800 font-bold">
                             <i data-lucide="list-plus" class="w-5 h-5 text-indigo-600"></i>
-                            <h2>প্রশ্ন ম্যানেজমেন্ট</h2>
+                            <h2>Question Management</h2>
                         </div>
                         <button onclick="resetAllData()" class="text-[10px] font-bold text-white bg-rose-500 hover:bg-rose-600 px-3 py-1.5 rounded-lg flex items-center gap-1 transition-colors shadow-sm">
-                            <i data-lucide="rotate-ccw" class="w-3 h-3"></i> রিসেট
+                            <i data-lucide="rotate-ccw" class="w-3 h-3"></i> Reset
                         </button>
                     </div>
 
@@ -391,22 +395,22 @@
                     <form id="question-form" onsubmit="handleFormSubmit(event)" class="bg-white p-4 rounded-xl shadow-sm border border-slate-200 space-y-4 relative">
                         <input type="hidden" id="q-id">
                         <div class="flex justify-between items-center mb-1">
-                            <span class="text-[10px] font-black text-indigo-500 uppercase tracking-wider bg-indigo-50 px-2 py-1 rounded" id="form-mode-text">নতুন প্রশ্ন</span>
+                            <span class="text-[10px] font-black text-indigo-500 uppercase tracking-wider bg-indigo-50 px-2 py-1 rounded" id="form-mode-text">New Question</span>
                             <button type="button" id="btn-cancel-edit" onclick="cancelEdit()" class="hidden text-xs font-bold text-slate-500 hover:text-rose-500 flex items-center gap-1">
-                                <i data-lucide="x" class="w-3 h-3"></i> বাতিল
+                                <i data-lucide="x" class="w-3 h-3"></i> Cancel
                             </button>
                         </div>
                         
                         <div class="space-y-2">
                             <!-- Question Text (Editable Div) -->
-                            <div id="q-text" contenteditable="true" class="editor-box w-full" placeholder="প্রশ্ন লিখুন..."></div>
+                            <div id="q-text" contenteditable="true" class="editor-box w-full" placeholder="Write question..."></div>
                             
                             <div class="flex items-center gap-2">
                                 <label class="flex items-center gap-2 cursor-pointer bg-slate-100 px-3 py-1.5 rounded-lg hover:bg-indigo-50 hover:text-indigo-600 transition-colors text-[10px] font-bold text-slate-600 border border-transparent hover:border-indigo-100">
                                     <input type="file" class="hidden" onchange="handleImageUpload(this, 'main')" />
-                                    <i data-lucide="image" class="w-3.5 h-3.5"></i> ছবি যোগ করুন
+                                    <i data-lucide="image" class="w-3.5 h-3.5"></i> Add Image
                                 </label>
-                                <button type="button" id="btn-remove-main-img" onclick="removeImage('main')" class="hidden text-[10px] font-bold text-rose-500 hover:underline">মুছুন</button>
+                                <button type="button" id="btn-remove-main-img" onclick="removeImage('main')" class="hidden text-[10px] font-bold text-rose-500 hover:underline">Remove</button>
                                 <input type="hidden" id="q-image-data">
                             </div>
                         </div>
@@ -417,14 +421,14 @@
                             <div class="flex gap-2">
                                 <div class="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center font-black text-slate-500 text-xs flex-shrink-0">A</div>
                                 <div class="flex-1 space-y-1">
-                                    <input id="q-opt-A" required class="w-full p-2 bg-slate-50 border border-slate-200 rounded-lg text-xs focus:ring-2 focus:ring-indigo-500 outline-none" placeholder="অপশন A">
-                                    <div class="flex items-center justify-between">
+                                    <input id="q-opt-A" required class="w-full p-2 bg-slate-50 border border-slate-200 rounded-lg text-xs focus:ring-2 focus:ring-indigo-500 outline-none editor-box h-10 overflow-hidden" placeholder="Option A">
+                                    <div class="flex items-center justify-between mt-1">
                                         <label class="text-[9px] font-bold text-indigo-500 cursor-pointer flex items-center gap-1">
                                             <input type="file" class="hidden" onchange="handleImageUpload(this, 'A')" />
-                                            <i data-lucide="image-plus" class="w-3 h-3"></i> ছবি
+                                            <i data-lucide="image-plus" class="w-3 h-3"></i> Image
                                         </label>
                                         <div id="img-indicator-A" class="hidden flex items-center gap-1 text-[9px] text-emerald-600 font-bold">
-                                            <i data-lucide="check" class="w-3 h-3"></i> যুক্ত হয়েছে
+                                            <i data-lucide="check" class="w-3 h-3"></i> Added
                                             <button type="button" onclick="removeImage('A')" class="text-rose-500 hover:underline ml-1">x</button>
                                         </div>
                                     </div>
@@ -435,14 +439,14 @@
                             <div class="flex gap-2">
                                 <div class="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center font-black text-slate-500 text-xs flex-shrink-0">B</div>
                                 <div class="flex-1 space-y-1">
-                                    <input id="q-opt-B" required class="w-full p-2 bg-slate-50 border border-slate-200 rounded-lg text-xs focus:ring-2 focus:ring-indigo-500 outline-none" placeholder="অপশন B">
-                                    <div class="flex items-center justify-between">
+                                    <input id="q-opt-B" required class="w-full p-2 bg-slate-50 border border-slate-200 rounded-lg text-xs focus:ring-2 focus:ring-indigo-500 outline-none editor-box h-10 overflow-hidden" placeholder="Option B">
+                                    <div class="flex items-center justify-between mt-1">
                                         <label class="text-[9px] font-bold text-indigo-500 cursor-pointer flex items-center gap-1">
                                             <input type="file" class="hidden" onchange="handleImageUpload(this, 'B')" />
-                                            <i data-lucide="image-plus" class="w-3 h-3"></i> ছবি
+                                            <i data-lucide="image-plus" class="w-3 h-3"></i> Image
                                         </label>
                                         <div id="img-indicator-B" class="hidden flex items-center gap-1 text-[9px] text-emerald-600 font-bold">
-                                            <i data-lucide="check" class="w-3 h-3"></i> যুক্ত হয়েছে
+                                            <i data-lucide="check" class="w-3 h-3"></i> Added
                                             <button type="button" onclick="removeImage('B')" class="text-rose-500 hover:underline ml-1">x</button>
                                         </div>
                                     </div>
@@ -453,14 +457,14 @@
                             <div class="flex gap-2">
                                 <div class="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center font-black text-slate-500 text-xs flex-shrink-0">C</div>
                                 <div class="flex-1 space-y-1">
-                                    <input id="q-opt-C" required class="w-full p-2 bg-slate-50 border border-slate-200 rounded-lg text-xs focus:ring-2 focus:ring-indigo-500 outline-none" placeholder="অপশন C">
-                                    <div class="flex items-center justify-between">
+                                    <input id="q-opt-C" required class="w-full p-2 bg-slate-50 border border-slate-200 rounded-lg text-xs focus:ring-2 focus:ring-indigo-500 outline-none editor-box h-10 overflow-hidden" placeholder="Option C">
+                                    <div class="flex items-center justify-between mt-1">
                                         <label class="text-[9px] font-bold text-indigo-500 cursor-pointer flex items-center gap-1">
                                             <input type="file" class="hidden" onchange="handleImageUpload(this, 'C')" />
-                                            <i data-lucide="image-plus" class="w-3 h-3"></i> ছবি
+                                            <i data-lucide="image-plus" class="w-3 h-3"></i> Image
                                         </label>
                                         <div id="img-indicator-C" class="hidden flex items-center gap-1 text-[9px] text-emerald-600 font-bold">
-                                            <i data-lucide="check" class="w-3 h-3"></i> যুক্ত হয়েছে
+                                            <i data-lucide="check" class="w-3 h-3"></i> Added
                                             <button type="button" onclick="removeImage('C')" class="text-rose-500 hover:underline ml-1">x</button>
                                         </div>
                                     </div>
@@ -471,14 +475,14 @@
                             <div class="flex gap-2">
                                 <div class="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center font-black text-slate-500 text-xs flex-shrink-0">D</div>
                                 <div class="flex-1 space-y-1">
-                                    <input id="q-opt-D" required class="w-full p-2 bg-slate-50 border border-slate-200 rounded-lg text-xs focus:ring-2 focus:ring-indigo-500 outline-none" placeholder="অপশন D">
-                                    <div class="flex items-center justify-between">
+                                    <input id="q-opt-D" required class="w-full p-2 bg-slate-50 border border-slate-200 rounded-lg text-xs focus:ring-2 focus:ring-indigo-500 outline-none editor-box h-10 overflow-hidden" placeholder="Option D">
+                                    <div class="flex items-center justify-between mt-1">
                                         <label class="text-[9px] font-bold text-indigo-500 cursor-pointer flex items-center gap-1">
                                             <input type="file" class="hidden" onchange="handleImageUpload(this, 'D')" />
-                                            <i data-lucide="image-plus" class="w-3 h-3"></i> ছবি
+                                            <i data-lucide="image-plus" class="w-3 h-3"></i> Image
                                         </label>
                                         <div id="img-indicator-D" class="hidden flex items-center gap-1 text-[9px] text-emerald-600 font-bold">
-                                            <i data-lucide="check" class="w-3 h-3"></i> যুক্ত হয়েছে
+                                            <i data-lucide="check" class="w-3 h-3"></i> Added
                                             <button type="button" onclick="removeImage('D')" class="text-rose-500 hover:underline ml-1">x</button>
                                         </div>
                                     </div>
@@ -490,25 +494,25 @@
                         <!-- Ans & Exp with Image Support -->
                         <div class="grid grid-cols-1 gap-3 pt-2">
                             <div class="space-y-1">
-                                <span class="text-[10px] font-bold text-slate-400 uppercase">সঠিক উত্তর</span>
+                                <span class="text-[10px] font-bold text-slate-400 uppercase">Correct Answer</span>
                                 <select id="q-correct" class="w-full p-2 bg-slate-50 border border-slate-200 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none font-bold text-indigo-600 text-xs h-10">
-                                    <option value="A">অপশন A</option>
-                                    <option value="B">অপশন B</option>
-                                    <option value="C">অপশন C</option>
-                                    <option value="D">অপশন D</option>
+                                    <option value="A">Option A</option>
+                                    <option value="B">Option B</option>
+                                    <option value="C">Option C</option>
+                                    <option value="D">Option D</option>
                                 </select>
                             </div>
                             <div class="space-y-1">
                                 <div class="flex justify-between items-center">
-                                    <span class="text-[10px] font-bold text-slate-400 uppercase">ব্যাখ্যা (ঐচ্ছিক)</span>
+                                    <span class="text-[10px] font-bold text-slate-400 uppercase">Explanation (Optional)</span>
                                     <label class="text-[9px] font-bold text-indigo-500 cursor-pointer flex items-center gap-1">
                                         <input type="file" class="hidden" onchange="handleImageUpload(this, 'exp')" />
-                                        <i data-lucide="image-plus" class="w-3 h-3"></i> ছবি
+                                        <i data-lucide="image-plus" class="w-3 h-3"></i> Image
                                     </label>
                                 </div>
-                                <textarea id="q-explanation" class="w-full p-2 bg-slate-50 border border-slate-200 rounded-lg text-xs h-14 focus:ring-2 focus:ring-indigo-500 outline-none" placeholder="ব্যাখ্যা লিখুন..."></textarea>
+                                <textarea id="q-explanation" class="w-full p-2 bg-slate-50 border border-slate-200 rounded-lg text-xs h-14 focus:ring-2 focus:ring-indigo-500 outline-none editor-box" placeholder="Write explanation..."></textarea>
                                 <div id="img-indicator-exp" class="hidden flex items-center gap-1 text-[9px] text-emerald-600 font-bold bg-emerald-50 px-2 py-1 rounded w-fit">
-                                    <i data-lucide="check" class="w-3 h-3"></i> ব্যাখ্যা ছবি যুক্ত হয়েছে
+                                    <i data-lucide="check" class="w-3 h-3"></i> Explanation Image Added
                                     <button type="button" onclick="removeImage('exp')" class="text-rose-500 hover:underline ml-2 font-bold">x</button>
                                 </div>
                                 <input type="hidden" id="q-img-exp">
@@ -517,7 +521,7 @@
 
                         <button type="submit" class="w-full py-3 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg flex items-center justify-center gap-2 font-bold text-sm shadow-indigo-200 shadow-lg active:scale-95 transition-all">
                             <i id="submit-icon" data-lucide="plus-circle" class="w-4 h-4"></i>
-                            <span id="submit-text">প্রশ্ন যুক্ত করুন</span>
+                            <span id="submit-text">Add Question</span>
                         </button>
                     </form>
 
@@ -542,21 +546,21 @@
         <div class="flex justify-around items-center h-14 max-w-lg mx-auto">
             <button onclick="switchMode('settings')" id="nav-settings" class="nav-item flex flex-col items-center justify-center w-full h-full gap-0.5 active:bg-slate-50">
                 <div class="nav-icon p-1.5 rounded-lg"><i data-lucide="settings-2" class="w-5 h-5"></i></div>
-                <span class="text-[10px] font-bold tracking-wide">সেটিংস</span>
+                <span class="text-[10px] font-bold tracking-wide">Settings</span>
             </button>
             <button onclick="switchMode('questions')" id="nav-questions" class="nav-item flex flex-col items-center justify-center w-full h-full gap-0.5 active:bg-slate-50">
                 <div class="nav-icon p-1.5 rounded-lg"><i data-lucide="list-plus" class="w-5 h-5"></i></div>
-                <span class="text-[10px] font-bold tracking-wide">প্রশ্ন</span>
+                <span class="text-[10px] font-bold tracking-wide">Questions</span>
             </button>
             <button onclick="switchMode('preview')" id="nav-preview" class="nav-item flex flex-col items-center justify-center w-full h-full gap-0.5 active:bg-slate-50 md:hidden">
                 <div class="nav-icon p-1.5 rounded-lg"><i data-lucide="eye" class="w-5 h-5"></i></div>
-                <span class="text-[10px] font-bold tracking-wide">প্রিভিউ</span>
+                <span class="text-[10px] font-bold tracking-wide">Preview</span>
             </button>
         </div>
     </nav>
 
     <script>
-        const STORAGE_KEY = 'exam_master_db_v4_rich';
+        const STORAGE_KEY = 'exam_master_db_v6_english';
 
         let state = {
             questions: [],
@@ -568,7 +572,7 @@
             },
             questionConfig: { fontSize: '12px', gapY: '1.5rem' },
             pageConfig: { padding: '12mm', gap: '12mm' },
-            borderConfig: { show: false, width: '2px' },
+            borderConfig: { show: false, width: '2px', padding: '8mm' },
             visibility: {
                 showQuestions: true,
                 showAns: true,
@@ -747,7 +751,7 @@
             } catch (e) { console.error(e); }
         }
         function resetAllData() {
-            if (confirm('সব মুছে যাবে। নিশ্চিত?')) {
+            if (confirm('Everything will be reset. Are you sure?')) {
                 localStorage.removeItem(STORAGE_KEY);
                 location.reload();
             }
@@ -771,7 +775,8 @@
         function updateBorderConfig() {
             state.borderConfig = {
                 show: document.getElementById('border-show').checked,
-                width: document.getElementById('border-width').value + 'px'
+                width: document.getElementById('border-width').value + 'px',
+                padding: '8mm' // Fixed padding
             };
             document.getElementById('border-width-display').innerText = state.borderConfig.width;
             updateUIBorderToggle(); updatePreview(); saveData();
@@ -815,11 +820,11 @@
             const file = input.files[0];
             if (file) {
                 const r = new FileReader();
-                r.onload = (e) => { state.watermark = e.target.result; document.getElementById('watermark-label').innerText='পরিবর্তন'; document.getElementById('watermark-remove').classList.remove('hidden'); updatePreview(); saveData(); };
+                r.onload = (e) => { state.watermark = e.target.result; document.getElementById('watermark-label').innerText='Change'; document.getElementById('watermark-remove').classList.remove('hidden'); updatePreview(); saveData(); };
                 r.readAsDataURL(file);
             }
         }
-        function removeWatermark() { state.watermark = null; document.getElementById('watermark-upload').value=''; document.getElementById('watermark-label').innerText='আপলোড'; document.getElementById('watermark-remove').classList.add('hidden'); updatePreview(); saveData(); }
+        function removeWatermark() { state.watermark = null; document.getElementById('watermark-upload').value=''; document.getElementById('watermark-label').innerText='Upload'; document.getElementById('watermark-remove').classList.add('hidden'); updatePreview(); saveData(); }
 
         function handleImageUpload(input, target) {
             const file = input.files[0];
@@ -846,22 +851,22 @@
                 text: document.getElementById('q-text').innerHTML,
                 image: document.getElementById('q-image-data').value || undefined,
                 options: { 
-                    A: document.getElementById('q-opt-A').innerHTML, 
-                    B: document.getElementById('q-opt-B').innerHTML, 
-                    C: document.getElementById('q-opt-C').innerHTML, 
-                    D: document.getElementById('q-opt-D').innerHTML 
+                    A: document.getElementById('q-opt-A').value, 
+                    B: document.getElementById('q-opt-B').value, 
+                    C: document.getElementById('q-opt-C').value, 
+                    D: document.getElementById('q-opt-D').value 
                 },
                 optionImages: {
                     A: document.getElementById('q-img-A').value || undefined, B: document.getElementById('q-img-B').value || undefined,
                     C: document.getElementById('q-img-C').value || undefined, D: document.getElementById('q-img-D').value || undefined
                 },
                 correctAnswer: document.getElementById('q-correct').value,
-                explanation: document.getElementById('q-explanation').innerHTML,
+                explanation: document.getElementById('q-explanation').value,
                 expImage: document.getElementById('q-img-exp').value || undefined
             };
             
             if(document.getElementById('q-text').innerText.trim() === '' && !newQ.image) {
-                alert('প্রশ্ন বা ছবি দিন');
+                alert('Please enter a question or image');
                 return;
             }
 
@@ -873,15 +878,24 @@
         function resetForm() {
             document.getElementById('question-form').reset();
             document.getElementById('q-text').innerHTML = '';
-            ['A','B','C','D'].forEach(o => document.getElementById(`q-opt-${o}`).innerHTML = '');
-            document.getElementById('q-explanation').innerHTML = '';
-
-            document.getElementById('q-id').value = ''; document.getElementById('q-image-data').value = ''; document.getElementById('q-img-exp').value = '';
-            ['A','B','C','D'].forEach(o => { document.getElementById(`q-img-${o}`).value=''; document.getElementById(`img-indicator-${o}`).classList.add('hidden'); });
-            document.getElementById('btn-remove-main-img').classList.add('hidden'); document.getElementById('img-indicator-exp').classList.add('hidden');
+            document.getElementById('q-image-data').value = '';
+            
+            ['A','B','C','D'].forEach(o => { 
+                document.getElementById(`q-opt-${o}`).value = ''; 
+                document.getElementById(`q-img-${o}`).value=''; 
+                document.getElementById(`img-indicator-${o}`).classList.add('hidden'); 
+            });
+            
+            document.getElementById('q-explanation').value = '';
+            document.getElementById('q-img-exp').value = '';
+            document.getElementById('btn-remove-main-img').classList.add('hidden'); 
+            document.getElementById('img-indicator-exp').classList.add('hidden');
+            
             state.editingQuestionId = null;
-            document.getElementById('form-mode-text').innerText='নতুন প্রশ্ন'; document.getElementById('submit-text').innerText='প্রশ্ন যুক্ত করুন';
-            document.getElementById('btn-cancel-edit').classList.add('hidden'); document.getElementById('submit-icon').setAttribute('data-lucide', 'plus-circle');
+            document.getElementById('form-mode-text').innerText='New Question'; 
+            document.getElementById('submit-text').innerText='Add Question';
+            document.getElementById('btn-cancel-edit').classList.add('hidden'); 
+            document.getElementById('submit-icon').setAttribute('data-lucide', 'plus-circle');
             lucide.createIcons();
             document.getElementById('q-text').focus();
         }
@@ -889,28 +903,34 @@
         function editQuestion(id) {
             const q = state.questions.find(i => i.id === id); if(!q) return;
             state.editingQuestionId = id;
+            
+            // Rich Text HTML
             document.getElementById('q-text').innerHTML = q.text;
+            
             document.getElementById('q-image-data').value = q.image || '';
             if(q.image) document.getElementById('btn-remove-main-img').classList.remove('hidden'); else document.getElementById('btn-remove-main-img').classList.add('hidden');
             
             ['A','B','C','D'].forEach(o => {
-                document.getElementById(`q-opt-${o}`).innerHTML = q.options[o];
+                document.getElementById(`q-opt-${o}`).value = q.options[o];
                 document.getElementById(`q-img-${o}`).value = q.optionImages?.[o] || '';
                 if(q.optionImages?.[o]) document.getElementById(`img-indicator-${o}`).classList.remove('hidden'); else document.getElementById(`img-indicator-${o}`).classList.add('hidden');
             });
 
             document.getElementById('q-correct').value = q.correctAnswer;
-            document.getElementById('q-explanation').innerHTML = q.explanation || '';
+            document.getElementById('q-explanation').value = q.explanation || '';
             document.getElementById('q-img-exp').value = q.expImage || '';
             if(q.expImage) document.getElementById('img-indicator-exp').classList.remove('hidden'); else document.getElementById('img-indicator-exp').classList.add('hidden');
 
-            document.getElementById('form-mode-text').innerText='এডিট মোড'; document.getElementById('submit-text').innerText='আপডেট করুন';
-            document.getElementById('btn-cancel-edit').classList.remove('hidden'); document.getElementById('submit-icon').setAttribute('data-lucide', 'save');
-            lucide.createIcons(); document.getElementById('left-panel').scrollTo({top:0,behavior:'smooth'});
+            document.getElementById('form-mode-text').innerText='Edit Mode'; 
+            document.getElementById('submit-text').innerText='Update';
+            document.getElementById('btn-cancel-edit').classList.remove('hidden'); 
+            document.getElementById('submit-icon').setAttribute('data-lucide', 'save');
+            lucide.createIcons(); 
+            document.getElementById('left-panel').scrollTo({top:0,behavior:'smooth'});
         }
 
         function cancelEdit() { resetForm(); }
-        function deleteQuestion(id) { if(confirm('মুছে ফেলতে চান?')) { state.questions = state.questions.filter(q=>q.id!==id); if(state.editingQuestionId===id) resetForm(); updateList(); updatePreview(); saveData(); } }
+        function deleteQuestion(id) { if(confirm('Are you sure you want to delete?')) { state.questions = state.questions.filter(q=>q.id!==id); if(state.editingQuestionId===id) resetForm(); updateList(); updatePreview(); saveData(); } }
         function toggleList() { state.listCollapsed = !state.listCollapsed; updateList(); saveData(); }
 
         function updateList() {
@@ -919,11 +939,11 @@
             const headerHtml = `
                 <div class="flex items-center justify-between px-1 select-none mb-4">
                     <div class="flex items-center gap-4 cursor-pointer" onclick="toggleList()">
-                        <h3 class="text-xs font-bold text-slate-500 uppercase tracking-widest flex items-center gap-2">প্রশ্ন তালিকা (${count}) <i data-lucide="${state.listCollapsed?'chevron-down':'chevron-up'}" class="w-4 h-4"></i></h3>
+                        <h3 class="text-xs font-bold text-slate-500 uppercase tracking-widest flex items-center gap-2">Question List (${count}) <i data-lucide="${state.listCollapsed?'chevron-down':'chevron-up'}" class="w-4 h-4"></i></h3>
                         <div class="h-px w-8 bg-slate-200"></div>
                     </div>
                 </div>`;
-            if(count===0) { container.innerHTML = headerHtml + `<div class="text-center text-slate-400 text-xs py-8 border border-dashed border-slate-200 rounded-lg">কোনো প্রশ্ন নেই</div>`; lucide.createIcons(); return; }
+            if(count===0) { container.innerHTML = headerHtml + `<div class="text-center text-slate-400 text-xs py-8 border border-dashed border-slate-200 rounded-lg">No questions found</div>`; lucide.createIcons(); return; }
             if(!state.listCollapsed) {
                 container.innerHTML = headerHtml + `<div class="space-y-3 pt-2">` + state.questions.map((q,i) => `
                     <div class="bg-white p-4 rounded-xl border border-slate-100 shadow-sm hover:shadow-md transition-all">
@@ -934,7 +954,7 @@
                                 <button onclick="deleteQuestion('${q.id}')" class="p-1.5 text-rose-500 hover:bg-rose-50 rounded-lg"><i data-lucide="trash-2" class="w-3.5 h-3.5"></i></button>
                             </div>
                         </div>
-                        <div class="text-xs text-slate-700 font-medium line-clamp-2 rich-text-content">${q.text}</div>
+                        <div class="text-xs text-slate-700 font-medium line-clamp-2 rich-text-content" style="font-family: 'SutonnyMJ', sans-serif;">${q.text}</div>
                     </div>`).join('') + `</div>`;
             } else { container.innerHTML = headerHtml; }
             lucide.createIcons();
