@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="bn">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
@@ -12,7 +12,7 @@
     <script src="https://unpkg.com/lucide@latest"></script>
     
     <style>
-        /* --- Font Setup: SutonnyMJ for Preview --- */
+        /* --- Font Setup: SutonnyMJ --- */
         @font-face {
             font-family: 'SutonnyMJ';
             src: url('SutonnyMJ.ttf') format('truetype');
@@ -20,8 +20,8 @@
             font-style: normal;
         }
 
-        /* Default Font for UI is System Sans (Tailwind default) */
         body {
+            /* UI in English Font, Preview in SutonnyMJ */
             font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
@@ -29,7 +29,7 @@
             background-color: #f8fafc;
         }
 
-        /* --- WYSIWYG Editor Styles (Using SutonnyMJ for Bangla typing) --- */
+        /* --- WYSIWYG Editor Styles --- */
         .editor-box {
             min-height: 40px;
             max-height: 300px;
@@ -40,10 +40,10 @@
             padding: 0.75rem;
             outline: none;
             transition: all 0.2s;
-            font-size: 1rem; 
+            font-size: 1rem;
             line-height: 1.5;
             color: #1e293b;
-            font-family: 'SutonnyMJ', sans-serif; /* Keeping Bangla font for input */
+            font-family: 'SutonnyMJ', sans-serif; /* Input in Bangla Font */
         }
         
         .editor-box:focus {
@@ -57,21 +57,17 @@
             content: attr(placeholder);
             color: #94a3b8;
             pointer-events: none;
-            font-family: ui-sans-serif, system-ui; /* Placeholder in English font */
+            font-family: ui-sans-serif, system-ui; /* Placeholder English */
             font-size: 0.875rem;
         }
 
-        /* --- FIX: Restore Default Styles for Rich Text inside Editor & Preview --- */
-        .editor-box b, .editor-box strong, .rich-text-content b, .rich-text-content strong { font-weight: 700; }
-        .editor-box i, .editor-box em, .rich-text-content i, .rich-text-content em { font-style: italic; }
-        .editor-box u, .rich-text-content u { text-decoration: underline; text-underline-offset: 2px; }
+        /* --- FIX: Restore Default Styles --- */
+        .editor-box b, .editor-box strong { font-weight: 700; }
+        .editor-box i, .editor-box em { font-style: italic; }
+        .editor-box u { text-decoration: underline; text-underline-offset: 2px; }
         
-        .editor-box sub, .rich-text-content sub { 
-            vertical-align: sub; font-size: 0.75em; line-height: 0; position: relative; bottom: -0.25em;
-        }
-        .editor-box sup, .rich-text-content sup { 
-            vertical-align: super; font-size: 0.75em; line-height: 0; position: relative; top: -0.5em;
-        }
+        .editor-box sub, .rich-text-content sub { vertical-align: sub; font-size: 0.75em; line-height: 0; position: relative; bottom: -0.25em; }
+        .editor-box sup, .rich-text-content sup { vertical-align: super; font-size: 0.75em; line-height: 0; position: relative; top: -0.5em; }
 
         /* Math Styles */
         .math-fraction { display: inline-flex; flex-direction: column; text-align: center; vertical-align: middle; margin: 0 3px; font-size: 0.9em; }
@@ -83,7 +79,6 @@
 
         .editor-active { border-color: #6366f1 !important; background-color: #fff !important; }
 
-        /* Toolbar Button Styles */
         .toolbar-btn { transition: all 0.1s; outline: none !important; }
         .toolbar-btn.active { background-color: #e0e7ff; color: #4f46e5; }
         .toolbar-btn:not(.active):hover { background-color: #f1f5f9; color: #334155; }
@@ -110,12 +105,11 @@
             transform-origin: top center;
             margin-bottom: 2rem;
             box-sizing: border-box;
-            font-family: 'SutonnyMJ', sans-serif; /* Only Preview is SutonnyMJ */
+            font-family: 'SutonnyMJ', sans-serif;
             display: flex;
             flex-direction: column;
         }
 
-        /* Border Frame Style */
         .border-frame {
             border: 1px solid #000;
             flex: 1;
@@ -130,13 +124,11 @@
         .opt-img { max-height: 80px; width: auto; max-width: 100%; display: block; margin-top: 4px; border: 1px solid #e2e8f0; border-radius: 2px; }
         .exp-img { max-height: 120px; width: auto; max-width: 100%; display: block; margin: 4px 0; border: 1px solid #cbd5e1; border-radius: 2px; }
 
-        /* Answer Key: Grid Style */
         .ans-table-grid { border-collapse: collapse; font-size: 0.9em; margin-bottom: 1rem; break-inside: avoid; background: white; }
         .ans-table-grid td { border: 1px solid #000; text-align: center; padding: 4px 8px; min-width: 28px; }
         .ans-table-header { background-color: #f3f4f6; font-weight: bold; font-family: 'Times New Roman', serif; } 
         .ans-table-data { font-family: 'Times New Roman', serif; font-weight: bold; } 
 
-        /* Combined Answer & Explanation Table */
         .combined-ans-exp-table { width: 100%; border-collapse: collapse; font-size: 0.9em; margin-top: 1.5rem; }
         .combined-ans-exp-table th, .combined-ans-exp-table td { border: 1px solid #000; padding: 8px; vertical-align: top; }
         .combined-ans-exp-table th { background-color: #f3f4f6; font-weight: bold; text-align: center; }
@@ -150,15 +142,40 @@
         .watermark { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-45deg); opacity: 0.08; z-index: 0; pointer-events: none; max-width: 90%; }
         .columns-container { column-count: 2; column-gap: 12mm; column-rule: 0.5px solid #d1d5db; position: relative; z-index: 1; height: auto; }
 
+        /* --- OPTIMIZED PRINT PDF STYLES --- */
         @media print {
-            @page { size: A4; margin: 0; }
-            body, html { height: auto !important; overflow: visible !important; background: white !important; margin: 0 !important; padding: 0 !important; }
+            @page { 
+                size: A4; 
+                margin: 0; /* Removing browser headers/footers */
+            }
+            body, html { 
+                height: auto !important; 
+                overflow: visible !important; 
+                background: white !important; 
+                margin: 0 !important; 
+                padding: 0 !important;
+                -webkit-print-color-adjust: exact; /* Force background graphics/colors */
+                print-color-adjust: exact;
+            }
             body > header, nav, #left-panel, .no-print { display: none !important; }
             main { display: block !important; height: auto !important; overflow: visible !important; }
-            #preview-panel-container { display: block !important; position: static !important; width: 100% !important; height: auto !important; margin: 0 !important; padding: 0 !important; background: white !important; overflow: visible !important; }
+            #preview-panel-container { 
+                display: block !important; position: static !important; width: 100% !important; 
+                height: auto !important; margin: 0 !important; padding: 0 !important; 
+                background: white !important; overflow: visible !important; 
+            }
             .preview-scroll-wrapper { display: block !important; padding: 0 !important; width: 100% !important; overflow: visible !important; }
             .print-container { display: block !important; box-shadow: none !important; margin: 0 !important; }
-            .a4-page { margin: 0 auto !important; box-shadow: none !important; border: none !important; transform: none !important; width: 210mm !important; min-height: 297mm !important; page-break-after: always; background: transparent !important; }
+            .a4-page { 
+                margin: 0 auto !important; 
+                box-shadow: none !important; 
+                border: none !important; 
+                transform: none !important; 
+                width: 210mm !important; 
+                min-height: 297mm !important; 
+                page-break-after: always; 
+                background: white !important;
+            }
             .columns-container { column-fill: auto; }
             .break-inside-avoid { break-inside: avoid; page-break-inside: avoid; }
         }
@@ -184,8 +201,8 @@
                 Exam<span class="text-indigo-600">Master</span>
             </h1>
         </div>
-        <button onclick="window.print()" class="bg-slate-900 hover:bg-slate-800 text-white px-4 py-2 rounded-lg flex items-center gap-2 font-bold transition-all text-sm shadow-md active:scale-95">
-            <i data-lucide="printer" class="w-4 h-4"></i> <span class="hidden sm:inline">Download / Print</span>
+        <button onclick="downloadPDF()" class="bg-indigo-700 hover:bg-indigo-800 text-white px-4 py-2 rounded-lg flex items-center gap-2 font-bold transition-all text-sm shadow-md active:scale-95">
+            <i data-lucide="file-down" class="w-4 h-4"></i> <span class="hidden sm:inline">Save PDF</span>
         </button>
     </header>
 
@@ -1017,7 +1034,6 @@
             // Bottom Section Logic
             let bottomSectionHtml = '';
 
-            // Case 1: Both "Answer Table" AND "Exp Bottom" are CHECKED -> Show 3-Column Table
             if (state.visibility.showAnsTable && state.visibility.showExpBottom && state.questions.length > 0) {
                 let rows = state.questions.map((q, idx) => `
                     <tr>
@@ -1048,7 +1064,6 @@
                     </div>
                 `;
             }
-            // Case 2: Only "Answer Table" is CHECKED -> Show Grid Box
             else if (state.visibility.showAnsTable && !state.visibility.showExpBottom && state.questions.length > 0) {
                 const chunkSize = 15;
                 let tables = [];
@@ -1078,7 +1093,6 @@
                     </div>
                 `;
             }
-            // Case 3: Only "Exp Bottom" is CHECKED
             else if (!state.visibility.showAnsTable && state.visibility.showExpBottom && state.questions.length > 0) {
                  const exps = state.questions.map((q, idx) => {
                     if (!q.explanation && !q.expImage) return '';
@@ -1109,11 +1123,24 @@
             `;
 
             if (bShow) {
-                // Fixed 8mm padding inside border
                 contentHtml = `<div class="border-frame" style="border-width: ${bWidth}; padding: 8mm;">${contentHtml}</div>`;
             }
 
             container.innerHTML = contentHtml;
+        }
+
+        // New PDF Download Function
+        function downloadPDF() {
+            const originalTitle = document.title;
+            const headerText = state.header.text.split('\n')[0] || 'Question_Paper';
+            // Sanitize filename
+            document.title = headerText.replace(/[^a-z0-9\u0980-\u09FF\s]/gi, '_').trim() || 'Exam_Paper';
+            
+            // Trigger native print dialog which allows "Save as PDF"
+            window.print();
+            
+            // Restore title
+            document.title = originalTitle;
         }
 
         window.addEventListener('DOMContentLoaded', init);
