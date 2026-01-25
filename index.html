@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="bn">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
@@ -12,7 +12,7 @@
     <script src="https://unpkg.com/lucide@latest"></script>
     
     <style>
-        /* --- Font Setup: SutonnyMJ --- */
+        /* --- Font Setup: SutonnyMJ for Preview --- */
         @font-face {
             font-family: 'SutonnyMJ';
             src: url('SutonnyMJ.ttf') format('truetype');
@@ -20,8 +20,8 @@
             font-style: normal;
         }
 
+        /* Default UI Font */
         body {
-            /* UI in English Font, Preview in SutonnyMJ */
             font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
@@ -29,7 +29,7 @@
             background-color: #f8fafc;
         }
 
-        /* --- WYSIWYG Editor Styles --- */
+        /* --- WYSIWYG Editor Styles (SutonnyMJ for Bangla input) --- */
         .editor-box {
             min-height: 40px;
             max-height: 300px;
@@ -40,10 +40,10 @@
             padding: 0.75rem;
             outline: none;
             transition: all 0.2s;
-            font-size: 1rem;
+            font-size: 1.1rem; /* Slightly larger for SutonnyMJ visibility */
             line-height: 1.5;
             color: #1e293b;
-            font-family: 'SutonnyMJ', sans-serif; /* Input in Bangla Font */
+            font-family: 'SutonnyMJ', sans-serif;
         }
         
         .editor-box:focus {
@@ -57,14 +57,14 @@
             content: attr(placeholder);
             color: #94a3b8;
             pointer-events: none;
-            font-family: ui-sans-serif, system-ui; /* Placeholder English */
+            font-family: ui-sans-serif, system-ui; 
             font-size: 0.875rem;
         }
 
-        /* --- FIX: Restore Default Styles --- */
-        .editor-box b, .editor-box strong { font-weight: 700; }
-        .editor-box i, .editor-box em { font-style: italic; }
-        .editor-box u { text-decoration: underline; text-underline-offset: 2px; }
+        /* Text Formatting */
+        .editor-box b, .editor-box strong, .rich-text-content b, .rich-text-content strong { font-weight: 700; }
+        .editor-box i, .editor-box em, .rich-text-content i, .rich-text-content em { font-style: italic; }
+        .editor-box u, .rich-text-content u { text-decoration: underline; text-underline-offset: 2px; }
         
         .editor-box sub, .rich-text-content sub { vertical-align: sub; font-size: 0.75em; line-height: 0; position: relative; bottom: -0.25em; }
         .editor-box sup, .rich-text-content sup { vertical-align: super; font-size: 0.75em; line-height: 0; position: relative; top: -0.5em; }
@@ -78,12 +78,11 @@
         .math-sqrt-content { border-top: 1.5px solid currentColor; padding-top: 1px; padding-left: 3px; padding-right: 2px; min-width: 14px; min-height: 1em; }
 
         .editor-active { border-color: #6366f1 !important; background-color: #fff !important; }
-
         .toolbar-btn { transition: all 0.1s; outline: none !important; }
         .toolbar-btn.active { background-color: #e0e7ff; color: #4f46e5; }
         .toolbar-btn:not(.active):hover { background-color: #f1f5f9; color: #334155; }
 
-        /* --- Preview & Print Styles --- */
+        /* --- Preview Styles --- */
         .omr-option {
             font-family: 'Times New Roman', serif; 
             display: inline-block;
@@ -92,7 +91,7 @@
             flex-shrink: 0;
         }
 
-        .preview-scroll-wrapper { width: 100%; display: flex; justify-content: center; align-items: flex-start; padding: 2rem 1rem; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+        .preview-scroll-wrapper { width: 100%; display: flex; justify-content: center; align-items: flex-start; padding: 2rem 1rem; overflow-x: auto; }
         
         .a4-page {
             width: 210mm;
@@ -110,6 +109,7 @@
             flex-direction: column;
         }
 
+        /* Border Frame Style */
         .border-frame {
             border: 1px solid #000;
             flex: 1;
@@ -124,60 +124,84 @@
         .opt-img { max-height: 80px; width: auto; max-width: 100%; display: block; margin-top: 4px; border: 1px solid #e2e8f0; border-radius: 2px; }
         .exp-img { max-height: 120px; width: auto; max-width: 100%; display: block; margin: 4px 0; border: 1px solid #cbd5e1; border-radius: 2px; }
 
-        .ans-table-grid { border-collapse: collapse; font-size: 0.9em; margin-bottom: 1rem; break-inside: avoid; background: white; }
-        .ans-table-grid td { border: 1px solid #000; text-align: center; padding: 4px 8px; min-width: 28px; }
+        /* Answer Key: Grid Style */
+        .ans-table-grid { border-collapse: collapse; font-size: 0.9em; margin-bottom: 1rem; break-inside: avoid; background: white; width: 100%; }
+        .ans-table-grid td { border: 1px solid #000; text-align: center; padding: 2px; }
         .ans-table-header { background-color: #f3f4f6; font-weight: bold; font-family: 'Times New Roman', serif; } 
         .ans-table-data { font-family: 'Times New Roman', serif; font-weight: bold; } 
 
-        .combined-ans-exp-table { width: 100%; border-collapse: collapse; font-size: 0.9em; margin-top: 1.5rem; }
-        .combined-ans-exp-table th, .combined-ans-exp-table td { border: 1px solid #000; padding: 8px; vertical-align: top; }
-        .combined-ans-exp-table th { background-color: #f3f4f6; font-weight: bold; text-align: center; }
-        .col-q-no { width: 10%; text-align: center; font-family: 'Times New Roman', serif; font-weight: bold; }
-        .col-ans { width: 10%; text-align: center; font-family: 'Times New Roman', serif; font-weight: bold; }
+        /* Combined Answer & Explanation Table */
+        .combined-ans-exp-table { width: 100%; border-collapse: collapse; font-size: 0.9em; margin-top: 1rem; break-inside: auto; }
+        .combined-ans-exp-table th, .combined-ans-exp-table td { border: 1px solid #000; padding: 6px; vertical-align: top; page-break-inside: avoid; }
+        .combined-ans-exp-table th { background-color: #f3f4f6; font-weight: bold; text-align: center; font-family: 'SutonnyMJ', sans-serif; }
+        .col-q-no { width: 8%; text-align: center; font-family: 'Times New Roman', serif; font-weight: bold; }
+        .col-ans { width: 8%; text-align: center; font-family: 'Times New Roman', serif; font-weight: bold; }
         .col-exp { text-align: left; }
 
         @media screen and (max-width: 768px) { .a4-page { transform: scale(0.45); margin-bottom: -160mm; } }
-        @media screen and (max-width: 480px) { .a4-page { transform: scale(0.38); margin-bottom: -185mm; } }
-
         .watermark { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-45deg); opacity: 0.08; z-index: 0; pointer-events: none; max-width: 90%; }
         .columns-container { column-count: 2; column-gap: 12mm; column-rule: 0.5px solid #d1d5db; position: relative; z-index: 1; height: auto; }
 
-        /* --- OPTIMIZED PRINT PDF STYLES --- */
+        /* --- REAL PDF GENERATION STYLES (CRITICAL) --- */
         @media print {
             @page { 
-                size: A4; 
-                margin: 0; /* Removing browser headers/footers */
+                size: A4 portrait; 
+                margin: 0; /* Remove browser default margins */
             }
-            body, html { 
+            body { 
+                background: white; 
+                margin: 0; 
+                padding: 0; 
+            }
+            /* Hide UI Elements */
+            body > header, nav, #left-panel, .no-print { display: none !important; }
+            
+            /* Main Container Reset */
+            main { 
+                display: block !important; 
                 height: auto !important; 
                 overflow: visible !important; 
-                background: white !important; 
-                margin: 0 !important; 
-                padding: 0 !important;
-                -webkit-print-color-adjust: exact; /* Force background graphics/colors */
-                print-color-adjust: exact;
+                width: 100% !important;
             }
-            body > header, nav, #left-panel, .no-print { display: none !important; }
-            main { display: block !important; height: auto !important; overflow: visible !important; }
             #preview-panel-container { 
-                display: block !important; position: static !important; width: 100% !important; 
-                height: auto !important; margin: 0 !important; padding: 0 !important; 
-                background: white !important; overflow: visible !important; 
+                display: block !important; 
+                position: static !important; 
+                width: 100% !important; 
+                height: auto !important; 
+                margin: 0 !important; 
+                padding: 0 !important; 
+                background: white !important; 
+                overflow: visible !important; 
             }
-            .preview-scroll-wrapper { display: block !important; padding: 0 !important; width: 100% !important; overflow: visible !important; }
-            .print-container { display: block !important; box-shadow: none !important; margin: 0 !important; }
+            .preview-scroll-wrapper { 
+                display: block !important; 
+                padding: 0 !important; 
+                width: 100% !important; 
+                overflow: visible !important; 
+            }
+            .print-container { 
+                box-shadow: none !important; 
+                margin: 0 !important; 
+                width: 100% !important;
+            }
             .a4-page { 
                 margin: 0 auto !important; 
                 box-shadow: none !important; 
                 border: none !important; 
                 transform: none !important; 
                 width: 210mm !important; 
-                min-height: 297mm !important; 
+                /* min-height: 296mm !important; Avoid cutting off content */
+                height: auto !important;
                 page-break-after: always; 
                 background: white !important;
+                padding-top: 5mm !important; /* Ensure top padding in print */
             }
-            .columns-container { column-fill: auto; }
+            /* Force Graphics (Colors/Images) */
+            * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+            
+            /* Break Handling */
             .break-inside-avoid { break-inside: avoid; page-break-inside: avoid; }
+            tr, td, th { page-break-inside: avoid; }
         }
 
         ::-webkit-scrollbar { width: 6px; height: 6px; }
@@ -186,13 +210,12 @@
         .nav-item { color: #64748b; transition: all 0.2s; }
         .nav-item.active { color: #4f46e5; }
         .nav-item.active .nav-icon { background-color: #e0e7ff; color: #4f46e5; }
-        .nav-icon { transition: all 0.2s; }
     </style>
 </head>
 <body class="h-screen flex flex-col overflow-hidden bg-slate-50">
 
     <!-- Navbar -->
-    <header class="bg-white border-b border-slate-200 px-4 py-3 flex justify-between items-center z-50 sticky top-0 w-full">
+    <header class="bg-white border-b border-slate-200 px-4 py-3 flex justify-between items-center z-50 sticky top-0 w-full no-print">
         <div class="flex items-center gap-2">
             <div class="bg-indigo-600 p-1.5 rounded-lg shadow-sm">
                 <i data-lucide="layout" class="w-5 h-5 text-white"></i>
@@ -202,28 +225,24 @@
             </h1>
         </div>
         <button onclick="downloadPDF()" class="bg-indigo-700 hover:bg-indigo-800 text-white px-4 py-2 rounded-lg flex items-center gap-2 font-bold transition-all text-sm shadow-md active:scale-95">
-            <i data-lucide="file-down" class="w-4 h-4"></i> <span class="hidden sm:inline">Save PDF</span>
+            <i data-lucide="file-down" class="w-4 h-4"></i> <span class="hidden sm:inline">Save as PDF</span>
         </button>
     </header>
 
     <main class="flex-1 flex overflow-hidden relative">
-        <!-- LEFT PANEL -->
-        <div id="left-panel" class="w-full md:w-[450px] lg:w-[500px] flex-shrink-0 bg-white border-r border-slate-200 overflow-y-auto pb-20 md:pb-10 transition-all">
+        <!-- LEFT PANEL (SETTINGS) -->
+        <div id="left-panel" class="w-full md:w-[450px] lg:w-[500px] flex-shrink-0 bg-white border-r border-slate-200 overflow-y-auto pb-20 md:pb-10 transition-all no-print">
             <div class="p-4 md:p-6 space-y-6">
-                
                 <!-- SETTINGS TAB -->
                 <div id="tab-content-settings" class="hidden animate-in slide-in-from-left-2 duration-300">
                     <div class="flex items-center gap-2 mb-4 text-slate-800 font-bold border-b border-slate-200 pb-2">
                         <i data-lucide="settings-2" class="w-5 h-5 text-indigo-600"></i>
                         <h2>Settings Configuration</h2>
                     </div>
-                    <!-- Header Config -->
+                    <!-- Header -->
                     <section class="bg-white p-4 rounded-xl shadow-sm border border-slate-200 space-y-4">
                         <label class="flex items-center gap-3 cursor-pointer group w-fit">
-                            <div id="header-show-toggle-bg" class="w-10 h-6 flex items-center rounded-full p-1 transition-colors bg-indigo-600">
-                                <div id="header-show-toggle-dot" class="bg-white w-4 h-4 rounded-full shadow-sm transform transition-transform translate-x-4"></div>
-                            </div>
-                            <input type="checkbox" id="header-show" checked onchange="updateHeaderConfig()" class="hidden"/>
+                            <input type="checkbox" id="header-show" checked onchange="updateHeaderConfig()" class="w-4 h-4 accent-indigo-600"/>
                             <span class="text-sm font-bold text-slate-700">Show Header</span>
                         </label>
                         <div class="space-y-1">
@@ -234,56 +253,38 @@
                         </div>
                         <div class="grid grid-cols-2 gap-3">
                             <div>
-                                <span class="text-[10px] font-bold text-slate-400 uppercase">Header Size</span>
-                                <div class="flex items-center gap-2 bg-slate-50 border border-slate-200 rounded-lg p-2 h-10">
-                                    <input type="range" id="header-font-size" min="10" max="60" value="18" class="flex-1 h-1.5 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-indigo-600" oninput="updateHeaderConfig()">
-                                    <span id="header-font-size-display" class="text-xs font-mono font-bold text-slate-500 w-8 text-right">18px</span>
-                                </div>
+                                <span class="text-[10px] font-bold text-slate-400 uppercase">Size</span>
+                                <input type="range" id="header-font-size" min="10" max="60" value="18" class="w-full h-1.5 bg-slate-200 rounded-lg accent-indigo-600" oninput="updateHeaderConfig()">
                             </div>
                             <div>
-                                <span class="text-[10px] font-bold text-slate-400 uppercase">Text Color</span>
-                                <div class="flex items-center gap-2 bg-slate-50 border border-slate-200 rounded-lg p-1 h-10 px-2">
-                                    <input type="color" id="header-color" oninput="updateHeaderConfig()" value="#000000" class="w-6 h-6 rounded cursor-pointer border-none bg-transparent">
-                                    <span id="header-color-val" class="text-xs font-mono font-bold text-slate-500">#000000</span>
-                                </div>
+                                <span class="text-[10px] font-bold text-slate-400 uppercase">Color</span>
+                                <input type="color" id="header-color" oninput="updateHeaderConfig()" value="#000000" class="w-full h-8 rounded cursor-pointer border-none bg-transparent">
                             </div>
                         </div>
                     </section>
                     
-                    <!-- Border Config -->
+                    <!-- Border -->
                     <section class="bg-white p-4 rounded-xl shadow-sm border border-slate-200 space-y-4">
                         <span class="text-[10px] font-bold text-slate-400 uppercase block mb-2">Border Settings</span>
-                        
                         <label class="flex items-center gap-3 cursor-pointer group w-fit">
-                            <div id="border-show-toggle-bg" class="w-10 h-6 flex items-center rounded-full p-1 transition-colors bg-slate-300">
-                                <div id="border-show-toggle-dot" class="bg-white w-4 h-4 rounded-full shadow-sm transform transition-transform translate-x-0"></div>
-                            </div>
-                            <input type="checkbox" id="border-show" onchange="updateBorderConfig()" class="hidden"/>
+                            <input type="checkbox" id="border-show" onchange="updateBorderConfig()" class="w-4 h-4 accent-indigo-600"/>
                             <span class="text-sm font-bold text-slate-700">Show Page Border</span>
                         </label>
-
                         <div class="space-y-2">
-                            <span class="text-[10px] font-bold text-slate-400 uppercase">Border Thickness</span>
-                            <div class="flex items-center gap-3 bg-slate-50 border border-slate-200 rounded-lg p-2">
-                                <i data-lucide="minus" class="w-4 h-4 text-slate-400"></i>
-                                <input type="range" id="border-width" min="1" max="10" step="0.5" value="2" class="flex-1 h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-indigo-600" oninput="updateBorderConfig()">
-                                <span id="border-width-display" class="text-xs font-mono font-bold text-slate-500 w-10 text-right">2px</span>
-                            </div>
+                            <span class="text-[10px] font-bold text-slate-400 uppercase">Thickness</span>
+                            <input type="range" id="border-width" min="1" max="10" step="0.5" value="2" class="w-full h-2 bg-slate-200 rounded-lg accent-indigo-600" oninput="updateBorderConfig()">
                         </div>
                     </section>
 
-                    <!-- Visibility Config -->
+                    <!-- Visibility -->
                     <section class="bg-white p-4 rounded-xl shadow-sm border border-slate-200 space-y-4">
-                        <span class="text-[10px] font-bold text-slate-400 uppercase block mb-2">Visibility Settings (Preview)</span>
-                        
-                        <!-- Master Toggle for Questions -->
+                        <span class="text-[10px] font-bold text-slate-400 uppercase block mb-2">Visibility (Preview & Print)</span>
                         <div class="bg-slate-50 p-2 rounded-lg border border-slate-100 mb-2">
                             <label class="flex items-center gap-2 cursor-pointer">
                                 <input type="checkbox" id="questions-show" checked onchange="updateVisibilityConfig()" class="w-4 h-4 accent-indigo-600"/>
                                 <span class="text-xs font-bold text-indigo-700">Show Questions</span>
                             </label>
                         </div>
-
                         <div class="grid grid-cols-2 gap-3">
                             <label class="flex items-center gap-2 cursor-pointer">
                                 <input type="checkbox" id="ans-show" checked onchange="updateVisibilityConfig()" class="w-4 h-4 accent-indigo-600"/>
@@ -291,7 +292,7 @@
                             </label>
                             <label class="flex items-center gap-2 cursor-pointer">
                                 <input type="checkbox" id="exp-show" checked onchange="updateVisibilityConfig()" class="w-4 h-4 accent-indigo-600"/>
-                                <span class="text-xs font-bold text-slate-700">Inline Explanation</span>
+                                <span class="text-xs font-bold text-slate-700">Inline Exp.</span>
                             </label>
                             <label class="flex items-center gap-2 cursor-pointer">
                                 <input type="checkbox" id="ans-table-show" onchange="updateVisibilityConfig()" class="w-4 h-4 accent-indigo-600"/>
@@ -299,51 +300,34 @@
                             </label>
                             <label class="flex items-center gap-2 cursor-pointer">
                                 <input type="checkbox" id="exp-bottom-show" onchange="updateVisibilityConfig()" class="w-4 h-4 accent-indigo-600"/>
-                                <span class="text-xs font-bold text-slate-700">Separate Explanation (Box)</span>
+                                <span class="text-xs font-bold text-slate-700">Separate Exp. (Box)</span>
                             </label>
-                        </div>
-                        <p class="text-[10px] text-slate-400 italic mt-2">Note: If both "Answer Key" and "Separate Explanation" are checked, a 3-column table will appear.</p>
-                    </section>
-
-                    <!-- Question Config -->
-                    <section class="bg-white p-4 rounded-xl shadow-sm border border-slate-200 space-y-4">
-                        <span class="text-[10px] font-bold text-slate-400 uppercase block">Question Configuration</span>
-                        <div class="space-y-2">
-                            <span class="text-[10px] font-bold text-slate-400 uppercase">Font Size</span>
-                            <div class="flex items-center gap-3 bg-slate-50 border border-slate-200 rounded-lg p-2">
-                                <i data-lucide="type" class="w-4 h-4 text-slate-400"></i>
-                                <input type="range" id="question-font-size" min="10" max="24" value="12" class="flex-1 h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-indigo-600" oninput="updateQuestionConfig()">
-                                <span id="question-font-size-display" class="text-xs font-mono font-bold text-slate-500 w-10 text-right">12px</span>
-                            </div>
-                        </div>
-                        <div class="space-y-2">
-                            <span class="text-[10px] font-bold text-slate-400 uppercase">Question Gap</span>
-                            <div class="flex items-center gap-3 bg-slate-50 border border-slate-200 rounded-lg p-2">
-                                <i data-lucide="arrow-up-down" class="w-4 h-4 text-slate-400"></i>
-                                <input type="range" id="question-gap-y" min="0.5" max="5" step="0.1" value="1.5" class="flex-1 h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-indigo-600" oninput="updateQuestionConfig()">
-                                <span id="question-gap-y-display" class="text-xs font-mono font-bold text-slate-500 w-10 text-right">1.5r</span>
-                            </div>
                         </div>
                     </section>
 
                     <!-- Page Config -->
                     <section class="bg-white p-4 rounded-xl shadow-sm border border-slate-200 space-y-4">
-                        <span class="text-[10px] font-bold text-slate-400 uppercase block">Page Configuration</span>
+                        <span class="text-[10px] font-bold text-slate-400 uppercase block">Page Layout</span>
                         <div class="space-y-2">
                             <span class="text-[10px] font-bold text-slate-400 uppercase">Page Margin</span>
-                            <div class="flex items-center gap-3 bg-slate-50 border border-slate-200 rounded-lg p-2">
-                                <i data-lucide="maximize" class="w-4 h-4 text-slate-400"></i>
-                                <input type="range" id="page-margin" min="5" max="30" value="12" class="flex-1 h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-indigo-600" oninput="updatePageConfig()">
-                                <span id="page-margin-display" class="text-xs font-mono font-bold text-slate-500 w-10 text-right">12mm</span>
-                            </div>
+                            <input type="range" id="page-margin" min="5" max="30" value="12" class="w-full h-2 bg-slate-200 rounded-lg accent-indigo-600" oninput="updatePageConfig()">
                         </div>
                          <div class="space-y-2">
                             <span class="text-[10px] font-bold text-slate-400 uppercase">Column Gap</span>
-                            <div class="flex items-center gap-3 bg-slate-50 border border-slate-200 rounded-lg p-2">
-                                <i data-lucide="columns" class="w-4 h-4 text-slate-400"></i>
-                                <input type="range" id="page-gap" min="5" max="25" value="12" class="flex-1 h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-indigo-600" oninput="updatePageConfig()">
-                                <span id="page-gap-display" class="text-xs font-mono font-bold text-slate-500 w-10 text-right">12mm</span>
-                            </div>
+                            <input type="range" id="page-gap" min="5" max="25" value="12" class="w-full h-2 bg-slate-200 rounded-lg accent-indigo-600" oninput="updatePageConfig()">
+                        </div>
+                    </section>
+
+                    <!-- Question Config -->
+                    <section class="bg-white p-4 rounded-xl shadow-sm border border-slate-200 space-y-4">
+                        <span class="text-[10px] font-bold text-slate-400 uppercase block">Font & Spacing</span>
+                        <div class="space-y-2">
+                            <span class="text-[10px] font-bold text-slate-400 uppercase">Font Size</span>
+                            <input type="range" id="question-font-size" min="10" max="24" value="12" class="w-full h-2 bg-slate-200 rounded-lg accent-indigo-600" oninput="updateQuestionConfig()">
+                        </div>
+                        <div class="space-y-2">
+                            <span class="text-[10px] font-bold text-slate-400 uppercase">Question Gap</span>
+                            <input type="range" id="question-gap-y" min="0.5" max="5" step="0.1" value="1.5" class="w-full h-2 bg-slate-200 rounded-lg accent-indigo-600" oninput="updateQuestionConfig()">
                         </div>
                     </section>
 
@@ -353,22 +337,13 @@
                         <div class="flex items-center gap-3 mb-3">
                             <label class="flex-1 cursor-pointer bg-slate-50 border-2 border-dashed border-slate-200 rounded-lg p-3 hover:bg-slate-100 transition-all text-center">
                                 <input type="file" accept="image/*" id="watermark-upload" onchange="handleWatermarkUpload(this)" class="hidden" />
-                                <div class="flex flex-col items-center gap-1">
-                                    <i data-lucide="image-plus" class="w-5 h-5 text-slate-400"></i>
-                                    <span id="watermark-label" class="text-xs text-slate-500 font-bold">Upload</span>
-                                </div>
+                                <span id="watermark-label" class="text-xs text-slate-500 font-bold">Upload</span>
                             </label>
-                            <button id="watermark-remove" onclick="removeWatermark()" class="hidden p-3 text-rose-500 bg-rose-50 rounded-lg hover:bg-rose-100 border border-rose-100" title="Remove">
-                                <i data-lucide="trash-2" class="w-5 h-5"></i>
-                            </button>
+                            <button id="watermark-remove" onclick="removeWatermark()" class="hidden p-3 text-rose-500 bg-rose-50 rounded-lg hover:bg-rose-100 border border-rose-100" title="Remove"><i data-lucide="trash-2" class="w-5 h-5"></i></button>
                         </div>
                         <div class="space-y-2">
-                            <span class="text-[10px] font-bold text-slate-400 uppercase">Watermark Size</span>
-                            <div class="flex items-center gap-3 bg-slate-50 border border-slate-200 rounded-lg p-2">
-                                <i data-lucide="scaling" class="w-4 h-4 text-slate-400"></i>
-                                <input type="range" id="watermark-size" min="10" max="100" step="5" value="60" class="flex-1 h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-indigo-600" oninput="updateWatermarkConfig()">
-                                <span id="watermark-size-display" class="text-xs font-mono font-bold text-slate-500 w-10 text-right">60%</span>
-                            </div>
+                            <span class="text-[10px] font-bold text-slate-400 uppercase">Size</span>
+                            <input type="range" id="watermark-size" min="10" max="100" step="5" value="60" class="w-full h-2 bg-slate-200 rounded-lg accent-indigo-600" oninput="updateWatermarkConfig()">
                         </div>
                     </section>
                 </div>
@@ -387,25 +362,15 @@
 
                     <!-- WYSIWYG TOOLBAR -->
                     <div class="sticky top-0 z-20 bg-white/95 backdrop-blur border border-slate-200 rounded-lg shadow-sm mb-3 p-1 flex flex-wrap gap-1 items-center">
-                        <button type="button" id="btn-bold" onmousedown="event.preventDefault(); formatDoc('bold')" class="toolbar-btn p-1.5 rounded text-slate-700" title="Bold">
-                            <i data-lucide="bold" class="w-4 h-4"></i>
-                        </button>
-                        <button type="button" id="btn-italic" onmousedown="event.preventDefault(); formatDoc('italic')" class="toolbar-btn p-1.5 rounded text-slate-700" title="Italic">
-                            <i data-lucide="italic" class="w-4 h-4"></i>
-                        </button>
-                        <button type="button" id="btn-underline" onmousedown="event.preventDefault(); formatDoc('underline')" class="toolbar-btn p-1.5 rounded text-slate-700" title="Underline">
-                            <i data-lucide="underline" class="w-4 h-4"></i>
-                        </button>
+                        <button type="button" onmousedown="event.preventDefault(); formatDoc('bold')" class="toolbar-btn p-1.5 rounded text-slate-700" title="Bold"><i data-lucide="bold" class="w-4 h-4"></i></button>
+                        <button type="button" onmousedown="event.preventDefault(); formatDoc('italic')" class="toolbar-btn p-1.5 rounded text-slate-700" title="Italic"><i data-lucide="italic" class="w-4 h-4"></i></button>
+                        <button type="button" onmousedown="event.preventDefault(); formatDoc('underline')" class="toolbar-btn p-1.5 rounded text-slate-700" title="Underline"><i data-lucide="underline" class="w-4 h-4"></i></button>
                         <div class="w-px h-5 bg-slate-200 mx-1"></div>
-                        <button type="button" id="btn-superscript" onmousedown="event.preventDefault(); formatDoc('superscript')" class="toolbar-btn p-1.5 rounded text-slate-700 font-serif font-bold text-sm" title="Superscript">x²</button>
-                        <button type="button" id="btn-subscript" onmousedown="event.preventDefault(); formatDoc('subscript')" class="toolbar-btn p-1.5 rounded text-slate-700 font-serif font-bold text-sm" title="Subscript">x₂</button>
+                        <button type="button" onmousedown="event.preventDefault(); formatDoc('superscript')" class="toolbar-btn p-1.5 rounded text-slate-700 font-serif font-bold text-sm" title="Superscript">x²</button>
+                        <button type="button" onmousedown="event.preventDefault(); formatDoc('subscript')" class="toolbar-btn p-1.5 rounded text-slate-700 font-serif font-bold text-sm" title="Subscript">x₂</button>
                         <div class="w-px h-5 bg-slate-200 mx-1"></div>
-                        <button type="button" onmousedown="event.preventDefault(); insertFraction()" class="toolbar-btn p-1.5 rounded text-slate-700 font-bold text-sm flex items-center gap-1 border border-slate-100" title="Fraction">
-                            <span>½</span>
-                        </button>
-                        <button type="button" onmousedown="event.preventDefault(); insertRoot()" class="toolbar-btn p-1.5 rounded text-slate-700 font-bold text-sm flex items-center gap-1 border border-slate-100" title="Square Root">
-                            <span>√</span>
-                        </button>
+                        <button type="button" onmousedown="event.preventDefault(); insertFraction()" class="toolbar-btn p-1.5 rounded text-slate-700 font-bold text-sm flex items-center gap-1 border border-slate-100" title="Fraction">½</button>
+                        <button type="button" onmousedown="event.preventDefault(); insertRoot()" class="toolbar-btn p-1.5 rounded text-slate-700 font-bold text-sm flex items-center gap-1 border border-slate-100" title="Square Root">√</button>
                     </div>
 
                     <!-- Form -->
@@ -419,124 +384,58 @@
                         </div>
                         
                         <div class="space-y-2">
-                            <!-- Question Text (Editable Div) -->
                             <div id="q-text" contenteditable="true" class="editor-box w-full" placeholder="Write question..."></div>
-                            
-                            <div class="flex items-center gap-2">
-                                <label class="flex items-center gap-2 cursor-pointer bg-slate-100 px-3 py-1.5 rounded-lg hover:bg-indigo-50 hover:text-indigo-600 transition-colors text-[10px] font-bold text-slate-600 border border-transparent hover:border-indigo-100">
-                                    <input type="file" class="hidden" onchange="handleImageUpload(this, 'main')" />
-                                    <i data-lucide="image" class="w-3.5 h-3.5"></i> Add Image
-                                </label>
-                                <button type="button" id="btn-remove-main-img" onclick="removeImage('main')" class="hidden text-[10px] font-bold text-rose-500 hover:underline">Remove</button>
-                                <input type="hidden" id="q-image-data">
-                            </div>
+                            <label class="flex items-center gap-2 cursor-pointer bg-slate-100 px-3 py-1.5 rounded-lg hover:bg-indigo-50 hover:text-indigo-600 transition-colors text-[10px] font-bold text-slate-600 border border-transparent hover:border-indigo-100 w-fit">
+                                <input type="file" class="hidden" onchange="handleImageUpload(this, 'main')" />
+                                <i data-lucide="image" class="w-3.5 h-3.5"></i> Add Image
+                            </label>
+                            <input type="hidden" id="q-image-data">
                         </div>
 
                         <!-- Options -->
                         <div class="grid grid-cols-1 gap-3">
-                            <!-- Opt A -->
                             <div class="flex gap-2">
                                 <div class="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center font-black text-slate-500 text-xs flex-shrink-0">A</div>
                                 <div class="flex-1 space-y-1">
                                     <input id="q-opt-A" required class="w-full p-2 bg-slate-50 border border-slate-200 rounded-lg text-xs focus:ring-2 focus:ring-indigo-500 outline-none editor-box h-10 overflow-hidden" placeholder="Option A">
-                                    <div class="flex items-center justify-between mt-1">
-                                        <label class="text-[9px] font-bold text-indigo-500 cursor-pointer flex items-center gap-1">
-                                            <input type="file" class="hidden" onchange="handleImageUpload(this, 'A')" />
-                                            <i data-lucide="image-plus" class="w-3 h-3"></i> Image
-                                        </label>
-                                        <div id="img-indicator-A" class="hidden flex items-center gap-1 text-[9px] text-emerald-600 font-bold">
-                                            <i data-lucide="check" class="w-3 h-3"></i> Added
-                                            <button type="button" onclick="removeImage('A')" class="text-rose-500 hover:underline ml-1">x</button>
-                                        </div>
-                                    </div>
                                     <input type="hidden" id="q-img-A">
                                 </div>
                             </div>
-                            <!-- Opt B -->
                             <div class="flex gap-2">
                                 <div class="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center font-black text-slate-500 text-xs flex-shrink-0">B</div>
                                 <div class="flex-1 space-y-1">
                                     <input id="q-opt-B" required class="w-full p-2 bg-slate-50 border border-slate-200 rounded-lg text-xs focus:ring-2 focus:ring-indigo-500 outline-none editor-box h-10 overflow-hidden" placeholder="Option B">
-                                    <div class="flex items-center justify-between mt-1">
-                                        <label class="text-[9px] font-bold text-indigo-500 cursor-pointer flex items-center gap-1">
-                                            <input type="file" class="hidden" onchange="handleImageUpload(this, 'B')" />
-                                            <i data-lucide="image-plus" class="w-3 h-3"></i> Image
-                                        </label>
-                                        <div id="img-indicator-B" class="hidden flex items-center gap-1 text-[9px] text-emerald-600 font-bold">
-                                            <i data-lucide="check" class="w-3 h-3"></i> Added
-                                            <button type="button" onclick="removeImage('B')" class="text-rose-500 hover:underline ml-1">x</button>
-                                        </div>
-                                    </div>
                                     <input type="hidden" id="q-img-B">
                                 </div>
                             </div>
-                            <!-- Opt C -->
                             <div class="flex gap-2">
                                 <div class="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center font-black text-slate-500 text-xs flex-shrink-0">C</div>
                                 <div class="flex-1 space-y-1">
                                     <input id="q-opt-C" required class="w-full p-2 bg-slate-50 border border-slate-200 rounded-lg text-xs focus:ring-2 focus:ring-indigo-500 outline-none editor-box h-10 overflow-hidden" placeholder="Option C">
-                                    <div class="flex items-center justify-between mt-1">
-                                        <label class="text-[9px] font-bold text-indigo-500 cursor-pointer flex items-center gap-1">
-                                            <input type="file" class="hidden" onchange="handleImageUpload(this, 'C')" />
-                                            <i data-lucide="image-plus" class="w-3 h-3"></i> Image
-                                        </label>
-                                        <div id="img-indicator-C" class="hidden flex items-center gap-1 text-[9px] text-emerald-600 font-bold">
-                                            <i data-lucide="check" class="w-3 h-3"></i> Added
-                                            <button type="button" onclick="removeImage('C')" class="text-rose-500 hover:underline ml-1">x</button>
-                                        </div>
-                                    </div>
                                     <input type="hidden" id="q-img-C">
                                 </div>
                             </div>
-                            <!-- Opt D -->
                             <div class="flex gap-2">
                                 <div class="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center font-black text-slate-500 text-xs flex-shrink-0">D</div>
                                 <div class="flex-1 space-y-1">
                                     <input id="q-opt-D" required class="w-full p-2 bg-slate-50 border border-slate-200 rounded-lg text-xs focus:ring-2 focus:ring-indigo-500 outline-none editor-box h-10 overflow-hidden" placeholder="Option D">
-                                    <div class="flex items-center justify-between mt-1">
-                                        <label class="text-[9px] font-bold text-indigo-500 cursor-pointer flex items-center gap-1">
-                                            <input type="file" class="hidden" onchange="handleImageUpload(this, 'D')" />
-                                            <i data-lucide="image-plus" class="w-3 h-3"></i> Image
-                                        </label>
-                                        <div id="img-indicator-D" class="hidden flex items-center gap-1 text-[9px] text-emerald-600 font-bold">
-                                            <i data-lucide="check" class="w-3 h-3"></i> Added
-                                            <button type="button" onclick="removeImage('D')" class="text-rose-500 hover:underline ml-1">x</button>
-                                        </div>
-                                    </div>
                                     <input type="hidden" id="q-img-D">
                                 </div>
                             </div>
                         </div>
 
-                        <!-- Ans & Exp with Image Support -->
                         <div class="grid grid-cols-1 gap-3 pt-2">
-                            <div class="space-y-1">
-                                <span class="text-[10px] font-bold text-slate-400 uppercase">Correct Answer</span>
-                                <select id="q-correct" class="w-full p-2 bg-slate-50 border border-slate-200 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none font-bold text-indigo-600 text-xs h-10">
-                                    <option value="A">Option A</option>
-                                    <option value="B">Option B</option>
-                                    <option value="C">Option C</option>
-                                    <option value="D">Option D</option>
-                                </select>
-                            </div>
-                            <div class="space-y-1">
-                                <div class="flex justify-between items-center">
-                                    <span class="text-[10px] font-bold text-slate-400 uppercase">Explanation (Optional)</span>
-                                    <label class="text-[9px] font-bold text-indigo-500 cursor-pointer flex items-center gap-1">
-                                        <input type="file" class="hidden" onchange="handleImageUpload(this, 'exp')" />
-                                        <i data-lucide="image-plus" class="w-3 h-3"></i> Image
-                                    </label>
-                                </div>
-                                <textarea id="q-explanation" class="w-full p-2 bg-slate-50 border border-slate-200 rounded-lg text-xs h-14 focus:ring-2 focus:ring-indigo-500 outline-none editor-box" placeholder="Write explanation..."></textarea>
-                                <div id="img-indicator-exp" class="hidden flex items-center gap-1 text-[9px] text-emerald-600 font-bold bg-emerald-50 px-2 py-1 rounded w-fit">
-                                    <i data-lucide="check" class="w-3 h-3"></i> Explanation Image Added
-                                    <button type="button" onclick="removeImage('exp')" class="text-rose-500 hover:underline ml-2 font-bold">x</button>
-                                </div>
-                                <input type="hidden" id="q-img-exp">
-                            </div>
+                            <select id="q-correct" class="w-full p-2 bg-slate-50 border border-slate-200 rounded-lg text-xs font-bold">
+                                <option value="A">Answer A</option>
+                                <option value="B">Answer B</option>
+                                <option value="C">Answer C</option>
+                                <option value="D">Answer D</option>
+                            </select>
+                            <textarea id="q-explanation" class="w-full p-2 bg-slate-50 border border-slate-200 rounded-lg text-xs h-14 editor-box" placeholder="Explanation..."></textarea>
+                            <input type="hidden" id="q-img-exp">
                         </div>
 
-                        <button type="submit" class="w-full py-3 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg flex items-center justify-center gap-2 font-bold text-sm shadow-indigo-200 shadow-lg active:scale-95 transition-all">
+                        <button type="submit" class="w-full py-3 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg flex items-center justify-center gap-2 font-bold text-sm shadow-lg active:scale-95 transition-all">
                             <i id="submit-icon" data-lucide="plus-circle" class="w-4 h-4"></i>
                             <span id="submit-text">Add Question</span>
                         </button>
@@ -548,7 +447,7 @@
             </div>
         </div>
 
-        <!-- RIGHT PANEL / PREVIEW -->
+        <!-- PREVIEW -->
         <div id="preview-panel-container" class="flex-1 overflow-y-auto bg-slate-200 flex justify-center items-start hidden md:flex h-full">
             <div class="preview-scroll-wrapper min-h-full">
                 <div class="print-container drop-shadow-xl">
@@ -559,251 +458,104 @@
     </main>
 
     <!-- Bottom Nav -->
-    <nav class="fixed bottom-0 left-0 w-full z-40 bg-white border-t border-slate-200 no-print pb-safe shadow-[0_-2px_10px_rgba(0,0,0,0.02)]">
+    <nav class="fixed bottom-0 left-0 w-full z-40 bg-white border-t border-slate-200 no-print pb-safe shadow">
         <div class="flex justify-around items-center h-14 max-w-lg mx-auto">
-            <button onclick="switchMode('settings')" id="nav-settings" class="nav-item flex flex-col items-center justify-center w-full h-full gap-0.5 active:bg-slate-50">
-                <div class="nav-icon p-1.5 rounded-lg"><i data-lucide="settings-2" class="w-5 h-5"></i></div>
-                <span class="text-[10px] font-bold tracking-wide">Settings</span>
-            </button>
-            <button onclick="switchMode('questions')" id="nav-questions" class="nav-item flex flex-col items-center justify-center w-full h-full gap-0.5 active:bg-slate-50">
-                <div class="nav-icon p-1.5 rounded-lg"><i data-lucide="list-plus" class="w-5 h-5"></i></div>
-                <span class="text-[10px] font-bold tracking-wide">Questions</span>
-            </button>
-            <button onclick="switchMode('preview')" id="nav-preview" class="nav-item flex flex-col items-center justify-center w-full h-full gap-0.5 active:bg-slate-50 md:hidden">
-                <div class="nav-icon p-1.5 rounded-lg"><i data-lucide="eye" class="w-5 h-5"></i></div>
-                <span class="text-[10px] font-bold tracking-wide">Preview</span>
-            </button>
+            <button onclick="switchMode('settings')" id="nav-settings" class="nav-item flex flex-col items-center justify-center w-full h-full gap-0.5"><div class="nav-icon p-1.5 rounded-lg"><i data-lucide="settings-2" class="w-5 h-5"></i></div><span class="text-[10px] font-bold">Settings</span></button>
+            <button onclick="switchMode('questions')" id="nav-questions" class="nav-item flex flex-col items-center justify-center w-full h-full gap-0.5"><div class="nav-icon p-1.5 rounded-lg"><i data-lucide="list-plus" class="w-5 h-5"></i></div><span class="text-[10px] font-bold">Questions</span></button>
+            <button onclick="switchMode('preview')" id="nav-preview" class="nav-item flex flex-col items-center justify-center w-full h-full gap-0.5 md:hidden"><div class="nav-icon p-1.5 rounded-lg"><i data-lucide="eye" class="w-5 h-5"></i></div><span class="text-[10px] font-bold">Preview</span></button>
         </div>
     </nav>
 
     <script>
-        const STORAGE_KEY = 'exam_master_db_v6_english';
+        const STORAGE_KEY = 'exam_master_db_v7_realpdf';
 
         let state = {
             questions: [],
-            header: {
-                text: 'বার্ষিক পরীক্ষা ২০২৪\nবিষয়: সাধারণ বিজ্ঞান\nসময়: ২ ঘণ্টা | পূর্ণমান: ১০০',
-                show: true,
-                fontSize: '18px',
-                color: '#000000'
-            },
+            header: { text: 'বার্ষিক পরীক্ষা ২০২৪\nবিষয়: সাধারণ বিজ্ঞান\nসময়: ২ ঘণ্টা | পূর্ণমান: ১০০', show: true, fontSize: '18px', color: '#000000' },
             questionConfig: { fontSize: '12px', gapY: '1.5rem' },
             pageConfig: { padding: '12mm', gap: '12mm' },
             borderConfig: { show: false, width: '2px', padding: '8mm' },
-            visibility: {
-                showQuestions: true,
-                showAns: true,
-                showExp: true,
-                showAnsTable: false,
-                showExpBottom: false
-            },
-            watermark: null,
-            watermarkSize: '60%',
-            activeMode: 'questions',
-            editingQuestionId: null,
-            listCollapsed: false
+            visibility: { showQuestions: true, showAns: true, showExp: true, showAnsTable: false, showExpBottom: false },
+            watermark: null, watermarkSize: '60%',
+            activeMode: 'questions', editingQuestionId: null
         };
 
-        // --- Rich Text Logic ---
-        let currentEditor = null;
-
-        document.addEventListener('focusin', function(e) {
-            if (e.target.isContentEditable) {
-                currentEditor = e.target;
-                document.querySelectorAll('.editor-box').forEach(el => el.classList.remove('editor-active'));
-                e.target.classList.add('editor-active');
-                updateToolbarState();
-            }
-        });
-
-        document.addEventListener('keyup', updateToolbarState);
-        document.addEventListener('mouseup', updateToolbarState);
-        document.addEventListener('selectionchange', updateToolbarState);
-
-        function updateToolbarState() {
-            if (!currentEditor) return;
-            const commands = ['bold', 'italic', 'underline', 'superscript', 'subscript'];
-            commands.forEach(cmd => {
-                const isActive = document.queryCommandState(cmd);
-                const btn = document.getElementById('btn-' + cmd);
-                if (btn) {
-                    if (isActive) btn.classList.add('active');
-                    else btn.classList.remove('active');
-                }
-            });
-        }
-
-        function formatDoc(cmd, value) {
-            if (!currentEditor) return;
-            document.execCommand(cmd, false, value);
-            currentEditor.focus();
-            updateToolbarState();
-        }
-
-        function insertFraction() {
-            if (!currentEditor) return;
-            const html = `<span class="math-fraction" contenteditable="false"><span class="math-fraction-top" contenteditable="true"> </span><span class="math-fraction-bottom" contenteditable="true"> </span></span>&nbsp;`;
-            insertHtmlAtCursor(html);
-        }
-
-        function insertRoot() {
-            if (!currentEditor) return;
-            const html = `<span class="math-sqrt" contenteditable="false"><span class="math-sqrt-symbol">√</span><span class="math-sqrt-content" contenteditable="true"> </span></span>&nbsp;`;
-            insertHtmlAtCursor(html);
-        }
-
-        function insertHtmlAtCursor(html) {
-            const sel = window.getSelection();
-            if (sel.getRangeAt && sel.rangeCount) {
-                let range = sel.getRangeAt(0);
-                if (!currentEditor.contains(range.commonAncestorContainer)) return;
-                range.deleteContents();
-                const el = document.createElement("div");
-                el.innerHTML = html;
-                let frag = document.createDocumentFragment(), node, lastNode;
-                while ( (node = el.firstChild) ) { lastNode = frag.appendChild(node); }
-                range.insertNode(frag);
-                if (lastNode) {
-                    range = range.cloneRange();
-                    range.setStartAfter(lastNode);
-                    range.collapse(true);
-                    sel.removeAllRanges();
-                    sel.addRange(range);
-                }
-                currentEditor.focus();
-            }
-        }
-
+        // --- Core Functions ---
         function init() {
             loadData();
+            // UI Init logic same as before...
+            updateUI(); 
+            lucide.createIcons();
+        }
+
+        function updateUI() {
+            // Restore values to inputs
             document.getElementById('header-text').value = state.header.text;
             document.getElementById('header-show').checked = state.header.show;
             document.getElementById('header-font-size').value = parseInt(state.header.fontSize);
-            document.getElementById('header-font-size-display').innerText = state.header.fontSize;
             document.getElementById('header-color').value = state.header.color;
-            document.getElementById('header-color-val').innerText = state.header.color.toUpperCase();
             
-            document.getElementById('page-margin').value = parseInt(state.pageConfig.padding);
-            document.getElementById('page-margin-display').innerText = state.pageConfig.padding;
-            document.getElementById('page-gap').value = parseInt(state.pageConfig.gap);
-            document.getElementById('page-gap-display').innerText = state.pageConfig.gap;
-
-            // Border Config Init
-            document.getElementById('border-show').checked = state.borderConfig?.show || false;
-            document.getElementById('border-width').value = parseFloat(state.borderConfig?.width) || 2;
-            document.getElementById('border-width-display').innerText = state.borderConfig?.width || '2px';
-
-            // Visibility Config
-            document.getElementById('questions-show').checked = state.visibility.showQuestions !== false;
+            document.getElementById('border-show').checked = state.borderConfig.show;
+            document.getElementById('border-width').value = parseFloat(state.borderConfig.width);
+            
+            document.getElementById('questions-show').checked = state.visibility.showQuestions;
             document.getElementById('ans-show').checked = state.visibility.showAns;
             document.getElementById('exp-show').checked = state.visibility.showExp;
-            document.getElementById('ans-table-show').checked = state.visibility.showAnsTable || false;
-            document.getElementById('exp-bottom-show').checked = state.visibility.showExpBottom || false;
+            document.getElementById('ans-table-show').checked = state.visibility.showAnsTable;
+            document.getElementById('exp-bottom-show').checked = state.visibility.showExpBottom;
 
-            // Question & Watermark Config
+            document.getElementById('page-margin').value = parseInt(state.pageConfig.padding);
+            document.getElementById('page-gap').value = parseInt(state.pageConfig.gap);
+            
             document.getElementById('question-font-size').value = parseInt(state.questionConfig.fontSize);
-            document.getElementById('question-font-size-display').innerText = state.questionConfig.fontSize;
-            
-            const gapYVal = state.questionConfig.gapY ? parseFloat(state.questionConfig.gapY) : 1.5;
-            document.getElementById('question-gap-y').value = gapYVal;
-            document.getElementById('question-gap-y-display').innerText = gapYVal + 'r';
+            document.getElementById('question-gap-y').value = parseFloat(state.questionConfig.gapY);
+            document.getElementById('watermark-size').value = parseInt(state.watermarkSize);
 
-            const wSize = state.watermarkSize ? parseInt(state.watermarkSize) : 60;
-            document.getElementById('watermark-size').value = wSize;
-            document.getElementById('watermark-size-display').innerText = wSize + '%';
-            
-            updateUIHeaderToggle();
-            updateUIBorderToggle();
-            lucide.createIcons();
             updateList();
             updatePreview();
             switchMode(state.activeMode);
         }
 
-        function switchMode(mode) {
-            state.activeMode = mode;
-            saveData();
-            const leftPanel = document.getElementById('left-panel');
-            const previewPanel = document.getElementById('preview-panel-container');
-            const settingsTab = document.getElementById('tab-content-settings');
-            const questionsTab = document.getElementById('tab-content-questions');
-            
-            document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
-            document.getElementById(`nav-${mode}`)?.classList.add('active');
+        // --- PDF Generation ---
+        function downloadPDF() {
+            // 1. Set document title to exam name (for filename)
+            const headerLine = state.header.text.split('\n')[0] || 'Exam_Paper';
+            const safeName = headerLine.replace(/[^a-z0-9\u0980-\u09FF\s]/gi, '_').trim();
+            const originalTitle = document.title;
+            document.title = safeName || "Exam_Paper";
 
-            if (mode === 'preview') {
-                if (window.innerWidth < 768) {
-                    leftPanel.classList.add('hidden');
-                    previewPanel.classList.remove('hidden');
-                }
-            } else {
-                if (window.innerWidth < 768) {
-                    leftPanel.classList.remove('hidden');
-                    previewPanel.classList.add('hidden');
-                }
-                if (mode === 'settings') {
-                    settingsTab.classList.remove('hidden');
-                    questionsTab.classList.add('hidden');
-                } else {
-                    settingsTab.classList.add('hidden');
-                    questionsTab.classList.remove('hidden');
-                }
-            }
+            // 2. Trigger Print
+            window.print();
+
+            // 3. Restore Title
+            document.title = originalTitle;
         }
 
+        // --- Data Logic ---
         function saveData() { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); }
         function loadData() {
             try {
                 const saved = localStorage.getItem(STORAGE_KEY);
-                if (saved) {
-                    const parsed = JSON.parse(saved);
-                    state = { 
-                        ...state, 
-                        ...parsed,
-                        visibility: { ...state.visibility, ...(parsed.visibility || {}) },
-                        questionConfig: { ...state.questionConfig, ...(parsed.questionConfig || {}) },
-                        borderConfig: { ...state.borderConfig, ...(parsed.borderConfig || {}) }
-                    };
-                }
+                if (saved) state = { ...state, ...JSON.parse(saved) };
             } catch (e) { console.error(e); }
         }
         function resetAllData() {
-            if (confirm('Everything will be reset. Are you sure?')) {
-                localStorage.removeItem(STORAGE_KEY);
-                location.reload();
-            }
+            if(confirm('Are you sure?')) { localStorage.removeItem(STORAGE_KEY); location.reload(); }
         }
 
+        // --- Config Updaters ---
         function updateHeaderConfig() {
             state.header.text = document.getElementById('header-text').value;
             state.header.show = document.getElementById('header-show').checked;
             state.header.fontSize = document.getElementById('header-font-size').value + 'px';
-            document.getElementById('header-font-size-display').innerText = state.header.fontSize;
             state.header.color = document.getElementById('header-color').value;
-            document.getElementById('header-color-val').innerText = state.header.color.toUpperCase();
-            updateUIHeaderToggle(); updatePreview(); saveData();
+            updatePreview(); saveData();
         }
-        function updateUIHeaderToggle() {
-            const t = document.getElementById('header-show-toggle-bg'), d = document.getElementById('header-show-toggle-dot');
-            if (state.header.show) { t.classList.replace('bg-slate-300', 'bg-indigo-600'); d.classList.replace('translate-x-0', 'translate-x-4'); } 
-            else { t.classList.replace('bg-indigo-600', 'bg-slate-300'); d.classList.replace('translate-x-4', 'translate-x-0'); }
-        }
-
         function updateBorderConfig() {
-            state.borderConfig = {
-                show: document.getElementById('border-show').checked,
-                width: document.getElementById('border-width').value + 'px',
-                padding: '8mm' // Fixed padding
-            };
-            document.getElementById('border-width-display').innerText = state.borderConfig.width;
-            updateUIBorderToggle(); updatePreview(); saveData();
+            state.borderConfig.show = document.getElementById('border-show').checked;
+            state.borderConfig.width = document.getElementById('border-width').value + 'px';
+            updatePreview(); saveData();
         }
-        function updateUIBorderToggle() {
-            const t = document.getElementById('border-show-toggle-bg'), d = document.getElementById('border-show-toggle-dot');
-            if (state.borderConfig?.show) { t.classList.replace('bg-slate-300', 'bg-indigo-600'); d.classList.replace('translate-x-0', 'translate-x-4'); } 
-            else { t.classList.replace('bg-indigo-600', 'bg-slate-300'); d.classList.replace('translate-x-4', 'translate-x-0'); }
-        }
-
         function updateVisibilityConfig() {
             state.visibility.showQuestions = document.getElementById('questions-show').checked;
             state.visibility.showAns = document.getElementById('ans-show').checked;
@@ -812,335 +564,168 @@
             state.visibility.showExpBottom = document.getElementById('exp-bottom-show').checked;
             updatePreview(); saveData();
         }
-
         function updatePageConfig() {
             state.pageConfig.padding = document.getElementById('page-margin').value + 'mm';
-            document.getElementById('page-margin-display').innerText = state.pageConfig.padding;
             state.pageConfig.gap = document.getElementById('page-gap').value + 'mm';
-            document.getElementById('page-gap-display').innerText = state.pageConfig.gap;
             updatePreview(); saveData();
         }
         function updateQuestionConfig() {
             state.questionConfig.fontSize = document.getElementById('question-font-size').value + 'px';
-            document.getElementById('question-font-size-display').innerText = state.questionConfig.fontSize;
             state.questionConfig.gapY = document.getElementById('question-gap-y').value + 'rem';
-            document.getElementById('question-gap-y-display').innerText = document.getElementById('question-gap-y').value + 'r';
             updatePreview(); saveData();
         }
         function updateWatermarkConfig() {
             state.watermarkSize = document.getElementById('watermark-size').value + '%';
-            document.getElementById('watermark-size-display').innerText = state.watermarkSize;
             updatePreview(); saveData();
         }
 
-        function handleWatermarkUpload(input) {
-            const file = input.files[0];
-            if (file) {
-                const r = new FileReader();
-                r.onload = (e) => { state.watermark = e.target.result; document.getElementById('watermark-label').innerText='Change'; document.getElementById('watermark-remove').classList.remove('hidden'); updatePreview(); saveData(); };
-                r.readAsDataURL(file);
+        // --- Editor Logic ---
+        let currentEditor = null;
+        document.addEventListener('focusin', e => { if(e.target.isContentEditable) currentEditor = e.target; });
+        function formatDoc(cmd) { if(currentEditor) document.execCommand(cmd, false, null); }
+        function insertFraction() { if(currentEditor) insertHtmlAtCursor(`<span class="math-fraction" contenteditable="false"><span class="math-fraction-top" contenteditable="true"> </span><span class="math-fraction-bottom" contenteditable="true"> </span></span>&nbsp;`); }
+        function insertRoot() { if(currentEditor) insertHtmlAtCursor(`<span class="math-sqrt" contenteditable="false"><span class="math-sqrt-symbol">√</span><span class="math-sqrt-content" contenteditable="true"> </span></span>&nbsp;`); }
+        function insertHtmlAtCursor(html) {
+            if(!currentEditor) return;
+            const sel = window.getSelection();
+            if(sel.rangeCount) {
+                const range = sel.getRangeAt(0);
+                if(currentEditor.contains(range.commonAncestorContainer)) {
+                    range.deleteContents();
+                    const el = document.createElement("div"); el.innerHTML = html;
+                    let frag = document.createDocumentFragment(), node, lastNode;
+                    while((node = el.firstChild)) lastNode = frag.appendChild(node);
+                    range.insertNode(frag);
+                    if(lastNode) { range.setStartAfter(lastNode); range.collapse(true); sel.removeAllRanges(); sel.addRange(range); }
+                }
             }
         }
-        function removeWatermark() { state.watermark = null; document.getElementById('watermark-upload').value=''; document.getElementById('watermark-label').innerText='Upload'; document.getElementById('watermark-remove').classList.add('hidden'); updatePreview(); saveData(); }
 
-        function handleImageUpload(input, target) {
-            const file = input.files[0];
-            if (file) {
-                const r = new FileReader();
-                r.onload = (e) => {
-                    if (target === 'main') { document.getElementById('q-image-data').value = e.target.result; document.getElementById('btn-remove-main-img').classList.remove('hidden'); }
-                    else if (target === 'exp') { document.getElementById('q-img-exp').value = e.target.result; document.getElementById('img-indicator-exp').classList.remove('hidden'); }
-                    else { document.getElementById(`q-img-${target}`).value = e.target.result; document.getElementById(`img-indicator-${target}`).classList.remove('hidden'); }
-                };
-                r.readAsDataURL(file);
+        // --- Render ---
+        function updatePreview() {
+            const container = document.getElementById('a4-page');
+            container.style.padding = state.pageConfig.padding;
+            
+            let html = '';
+            if(state.watermark) html += `<img src="${state.watermark}" class="watermark" style="width: ${state.watermarkSize};" />`;
+            if(state.header.show) html += `<header class="text-center mb-6 pb-4 border-b-[1.5px] border-slate-800" style="color: ${state.header.color};"><div style="font-size: ${state.header.fontSize}; line-height: 1.4; white-space: pre-wrap; font-weight: 700;">${state.header.text}</div></header>`;
+
+            // Questions
+            if(state.visibility.showQuestions) {
+                html += `<div class="columns-container leading-snug text-black" style="font-size: ${state.questionConfig.fontSize}; column-gap: ${state.pageConfig.gap};">` +
+                state.questions.map((q, i) => `
+                    <div class="break-inside-avoid" style="margin-bottom: ${state.questionConfig.gapY};">
+                        <div class="flex gap-2 mb-2">
+                            <span class="whitespace-nowrap font-bold" style="font-size: inherit;">${i+1}.</span>
+                            <div class="flex-1"><div class="mb-1 leading-relaxed question-text">${q.text}</div>${q.image?`<img src="${q.image}" class="q-img"/>`:''}</div>
+                        </div>
+                        <div class="grid grid-cols-2 gap-x-4 gap-y-2 ml-5 mb-2">
+                            ${['A','B','C','D'].map(o => `<div class="flex items-start gap-1"><span class="omr-option">${o}.</span><div class="flex-1"><div>${q.options[o]}</div>${q.optionImages?.[o]?`<img src="${q.optionImages[o]}" class="opt-img"/>`:''}</div></div>`).join('')}
+                        </div>
+                        <div class="ml-5 space-y-2">
+                            ${state.visibility.showAns ? `<div><span class="inline-block border border-black px-2 py-1 font-bold text-black" style="font-size: 0.85em;">সঠিক উত্তর: ${q.correctAnswer}</span></div>`:''}
+                            ${state.visibility.showExp && (q.explanation||q.expImage) ? `<div class="border border-black p-2 text-black leading-normal" style="font-size: 0.85em;"><span class="font-bold mr-1 underline">ব্যাখ্যা:</span><div>${q.explanation||''}</div>${q.expImage?`<img src="${q.expImage}" class="exp-img"/>`:''}</div>`:''}
+                        </div>
+                    </div>`).join('') + `</div>`;
             }
-        }
-        function removeImage(target) {
-            if (target === 'main') { document.getElementById('q-image-data').value = ''; document.getElementById('btn-remove-main-img').classList.add('hidden'); }
-            else if (target === 'exp') { document.getElementById('q-img-exp').value = ''; document.getElementById('img-indicator-exp').classList.add('hidden'); }
-            else { document.getElementById(`q-img-${target}`).value = ''; document.getElementById(`img-indicator-${target}`).classList.add('hidden'); }
+
+            // Bottom Section (Table or Grid)
+            if(state.visibility.showAnsTable && state.visibility.showExpBottom && state.questions.length > 0) {
+                const rows = state.questions.map((q,i) => `<tr><td class="col-q-no">${i+1}</td><td class="col-ans">${q.correctAnswer}</td><td class="col-exp"><div>${q.explanation||''}</div>${q.expImage?`<img src="${q.expImage}" class="exp-img mt-1"/>`:''}</td></tr>`).join('');
+                html += `<div class="mt-8 break-inside-avoid"><h3 class="font-bold border-b border-black mb-2 inline-block">উত্তর ও ব্যাখ্যা</h3><table class="combined-ans-exp-table"><thead><tr><th class="col-q-no">প্রশ্ন নং</th><th class="col-ans">উত্তর</th><th class="col-exp">ব্যাখ্যা</th></tr></thead><tbody>${rows}</tbody></table></div>`;
+            } else if(state.visibility.showAnsTable && state.questions.length > 0) {
+                const chunk=15; let tables='';
+                for(let i=0; i<state.questions.length; i+=chunk) {
+                    const slice = state.questions.slice(i, i+chunk);
+                    tables += `<table class="ans-table-grid"><tr>${slice.map((_,idx)=>`<td class="ans-table-header">${i+idx+1}</td>`).join('')}</tr><tr>${slice.map(q=>`<td class="ans-table-data">${q.correctAnswer}</td>`).join('')}</tr></table>`;
+                }
+                html += `<div class="mt-8 break-inside-avoid"><h3 class="font-bold border-b border-black mb-2 inline-block">উত্তরমালা</h3><div class="flex flex-wrap gap-x-4">${tables}</div></div>`;
+            } else if(state.visibility.showExpBottom && state.questions.length > 0) {
+                const exps = state.questions.map((q,i) => (q.explanation||q.expImage)?`<div class="mb-3"><span class="font-bold mr-1">${i+1}.</span><div class="inline">${q.explanation||''}</div>${q.expImage?`<img src="${q.expImage}" class="exp-img mt-1"/>`:''}</div>`:'').join('');
+                html += `<div class="mt-8"><h3 class="font-bold border-b border-black mb-4 inline-block">ব্যাখ্যা ও সমাধান</h3><div class="space-y-1 text-sm">${exps}</div></div>`;
+            }
+
+            if(state.borderConfig.show) {
+                html = `<div class="border-frame" style="border-width: ${state.borderConfig.width}; padding: ${state.borderConfig.padding};">${html}</div>`;
+            }
+            container.innerHTML = html;
         }
 
-        function handleFormSubmit(e) {
-            e.preventDefault();
+        // Helpers
+        function handleWatermarkUpload(i){ const f=i.files[0]; if(f){ const r=new FileReader(); r.onload=e=>{state.watermark=e.target.result; document.getElementById('watermark-remove').classList.remove('hidden'); updatePreview(); saveData();}; r.readAsDataURL(f); }}
+        function removeWatermark(){ state.watermark=null; document.getElementById('watermark-remove').classList.add('hidden'); updatePreview(); saveData(); }
+        function handleImageUpload(i,t){ const f=i.files[0]; if(f){ const r=new FileReader(); r.onload=e=>{ if(t==='main') document.getElementById('q-image-data').value=e.target.result; else if(t==='exp') document.getElementById('q-img-exp').value=e.target.result; else document.getElementById(`q-img-${t}`).value=e.target.result; }; r.readAsDataURL(f); }}
+        function removeImage(t){ if(t==='main') document.getElementById('q-image-data').value=''; else if(t==='exp') document.getElementById('q-img-exp').value=''; else document.getElementById(`q-img-${t}`).value=''; }
+        
+        function handleFormSubmit(e){ 
+            e.preventDefault(); 
             const newQ = {
                 id: state.editingQuestionId || Date.now().toString(),
                 text: document.getElementById('q-text').innerHTML,
-                image: document.getElementById('q-image-data').value || undefined,
-                options: { 
-                    A: document.getElementById('q-opt-A').value, 
-                    B: document.getElementById('q-opt-B').value, 
-                    C: document.getElementById('q-opt-C').value, 
-                    D: document.getElementById('q-opt-D').value 
-                },
-                optionImages: {
-                    A: document.getElementById('q-img-A').value || undefined, B: document.getElementById('q-img-B').value || undefined,
-                    C: document.getElementById('q-img-C').value || undefined, D: document.getElementById('q-img-D').value || undefined
-                },
+                image: document.getElementById('q-image-data').value,
+                options: {A:document.getElementById('q-opt-A').value, B:document.getElementById('q-opt-B').value, C:document.getElementById('q-opt-C').value, D:document.getElementById('q-opt-D').value},
+                optionImages: {A:document.getElementById('q-img-A').value, B:document.getElementById('q-img-B').value, C:document.getElementById('q-img-C').value, D:document.getElementById('q-img-D').value},
                 correctAnswer: document.getElementById('q-correct').value,
                 explanation: document.getElementById('q-explanation').value,
-                expImage: document.getElementById('q-img-exp').value || undefined
+                expImage: document.getElementById('q-img-exp').value
             };
-            
-            if(document.getElementById('q-text').innerText.trim() === '' && !newQ.image) {
-                alert('Please enter a question or image');
-                return;
-            }
-
-            if (state.editingQuestionId) state.questions = state.questions.map(q => q.id === state.editingQuestionId ? newQ : q);
+            if(!newQ.text && !newQ.image) return alert('Input required');
+            if(state.editingQuestionId) state.questions = state.questions.map(q=>q.id===state.editingQuestionId?newQ:q);
             else state.questions.push(newQ);
             resetForm(); updateList(); updatePreview(); saveData();
         }
 
         function resetForm() {
             document.getElementById('question-form').reset();
-            document.getElementById('q-text').innerHTML = '';
-            document.getElementById('q-image-data').value = '';
-            
-            ['A','B','C','D'].forEach(o => { 
-                document.getElementById(`q-opt-${o}`).value = ''; 
-                document.getElementById(`q-img-${o}`).value=''; 
-                document.getElementById(`img-indicator-${o}`).classList.add('hidden'); 
-            });
-            
-            document.getElementById('q-explanation').value = '';
-            document.getElementById('q-img-exp').value = '';
-            document.getElementById('btn-remove-main-img').classList.add('hidden'); 
-            document.getElementById('img-indicator-exp').classList.add('hidden');
-            
-            state.editingQuestionId = null;
-            document.getElementById('form-mode-text').innerText='New Question'; 
+            document.getElementById('q-text').innerHTML='';
+            ['A','B','C','D'].forEach(o=>document.getElementById(`q-img-${o}`).value='');
+            document.getElementById('q-image-data').value=''; document.getElementById('q-img-exp').value='';
+            state.editingQuestionId=null;
+            document.getElementById('form-mode-text').innerText='New Question';
             document.getElementById('submit-text').innerText='Add Question';
-            document.getElementById('btn-cancel-edit').classList.add('hidden'); 
-            document.getElementById('submit-icon').setAttribute('data-lucide', 'plus-circle');
-            lucide.createIcons();
-            document.getElementById('q-text').focus();
+            document.getElementById('btn-cancel-edit').classList.add('hidden');
         }
 
         function editQuestion(id) {
-            const q = state.questions.find(i => i.id === id); if(!q) return;
-            state.editingQuestionId = id;
-            
-            // Rich Text HTML
-            document.getElementById('q-text').innerHTML = q.text;
-            
-            document.getElementById('q-image-data').value = q.image || '';
-            if(q.image) document.getElementById('btn-remove-main-img').classList.remove('hidden'); else document.getElementById('btn-remove-main-img').classList.add('hidden');
-            
-            ['A','B','C','D'].forEach(o => {
-                document.getElementById(`q-opt-${o}`).value = q.options[o];
-                document.getElementById(`q-img-${o}`).value = q.optionImages?.[o] || '';
-                if(q.optionImages?.[o]) document.getElementById(`img-indicator-${o}`).classList.remove('hidden'); else document.getElementById(`img-indicator-${o}`).classList.add('hidden');
-            });
-
-            document.getElementById('q-correct').value = q.correctAnswer;
-            document.getElementById('q-explanation').value = q.explanation || '';
-            document.getElementById('q-img-exp').value = q.expImage || '';
-            if(q.expImage) document.getElementById('img-indicator-exp').classList.remove('hidden'); else document.getElementById('img-indicator-exp').classList.add('hidden');
-
-            document.getElementById('form-mode-text').innerText='Edit Mode'; 
+            const q = state.questions.find(i=>i.id===id); if(!q) return;
+            state.editingQuestionId=id;
+            document.getElementById('q-text').innerHTML=q.text;
+            document.getElementById('q-image-data').value=q.image||'';
+            ['A','B','C','D'].forEach(o=>{ document.getElementById(`q-opt-${o}`).value=q.options[o]; document.getElementById(`q-img-${o}`).value=q.optionImages?.[o]||''; });
+            document.getElementById('q-correct').value=q.correctAnswer;
+            document.getElementById('q-explanation').value=q.explanation||'';
+            document.getElementById('q-img-exp').value=q.expImage||'';
+            document.getElementById('form-mode-text').innerText='Edit Mode';
             document.getElementById('submit-text').innerText='Update';
-            document.getElementById('btn-cancel-edit').classList.remove('hidden'); 
-            document.getElementById('submit-icon').setAttribute('data-lucide', 'save');
-            lucide.createIcons(); 
-            document.getElementById('left-panel').scrollTo({top:0,behavior:'smooth'});
+            document.getElementById('btn-cancel-edit').classList.remove('hidden');
         }
 
-        function cancelEdit() { resetForm(); }
-        function deleteQuestion(id) { if(confirm('Are you sure you want to delete?')) { state.questions = state.questions.filter(q=>q.id!==id); if(state.editingQuestionId===id) resetForm(); updateList(); updatePreview(); saveData(); } }
-        function toggleList() { state.listCollapsed = !state.listCollapsed; updateList(); saveData(); }
-
-        function updateList() {
-            const container = document.getElementById('question-list-section');
-            const count = state.questions.length;
-            const headerHtml = `
-                <div class="flex items-center justify-between px-1 select-none mb-4">
-                    <div class="flex items-center gap-4 cursor-pointer" onclick="toggleList()">
-                        <h3 class="text-xs font-bold text-slate-500 uppercase tracking-widest flex items-center gap-2">Question List (${count}) <i data-lucide="${state.listCollapsed?'chevron-down':'chevron-up'}" class="w-4 h-4"></i></h3>
-                        <div class="h-px w-8 bg-slate-200"></div>
-                    </div>
-                </div>`;
-            if(count===0) { container.innerHTML = headerHtml + `<div class="text-center text-slate-400 text-xs py-8 border border-dashed border-slate-200 rounded-lg">No questions found</div>`; lucide.createIcons(); return; }
-            if(!state.listCollapsed) {
-                container.innerHTML = headerHtml + `<div class="space-y-3 pt-2">` + state.questions.map((q,i) => `
-                    <div class="bg-white p-4 rounded-xl border border-slate-100 shadow-sm hover:shadow-md transition-all">
-                        <div class="flex justify-between items-start mb-2">
-                            <span class="flex items-center justify-center w-6 h-6 bg-slate-800 text-white text-[10px] font-black rounded-md">${i+1}</span>
-                            <div class="flex gap-1">
-                                <button onclick="editQuestion('${q.id}')" class="p-1.5 text-indigo-600 hover:bg-indigo-50 rounded-lg"><i data-lucide="edit-3" class="w-3.5 h-3.5"></i></button>
-                                <button onclick="deleteQuestion('${q.id}')" class="p-1.5 text-rose-500 hover:bg-rose-50 rounded-lg"><i data-lucide="trash-2" class="w-3.5 h-3.5"></i></button>
-                            </div>
-                        </div>
-                        <div class="text-xs text-slate-700 font-medium line-clamp-2 rich-text-content" style="font-family: 'SutonnyMJ', sans-serif;">${q.text}</div>
-                    </div>`).join('') + `</div>`;
-            } else { container.innerHTML = headerHtml; }
+        function deleteQuestion(id) { if(confirm('Delete?')) { state.questions=state.questions.filter(q=>q.id!==id); resetForm(); updateList(); updatePreview(); saveData(); } }
+        function toggleList() { state.listCollapsed=!state.listCollapsed; updateList(); }
+        function updateList() { /* Simple list render */ 
+            const c = document.getElementById('question-list-section');
+            if(!state.questions.length) { c.innerHTML='<div class="text-center text-xs text-gray-400 py-4">No questions</div>'; return; }
+            c.innerHTML = state.listCollapsed ? `<div onclick="toggleList()" class="cursor-pointer text-xs font-bold text-gray-500">Show List (${state.questions.length})</div>` : 
+            `<div class="flex justify-between items-center mb-2"><span class="text-xs font-bold text-gray-500">List (${state.questions.length})</span><button onclick="toggleList()" class="text-xs text-indigo-600">Hide</button></div>` + 
+            `<div class="space-y-2">` + state.questions.map((q,i)=>`<div class="bg-white p-3 rounded shadow-sm flex justify-between items-center"><span class="text-xs font-bold mr-2">${i+1}.</span><div class="flex-1 text-xs truncate" style="font-family:'SutonnyMJ'">${q.text}</div><div class="flex gap-1"><button onclick="editQuestion('${q.id}')" class="text-indigo-600"><i data-lucide="edit-3" class="w-3 h-3"></i></button><button onclick="deleteQuestion('${q.id}')" class="text-rose-500"><i data-lucide="trash-2" class="w-3 h-3"></i></button></div></div>`).join('') + `</div>`;
             lucide.createIcons();
         }
 
-        function updatePreview() {
-            const container = document.getElementById('a4-page');
+        function switchMode(m) {
+            state.activeMode=m; saveData();
+            document.querySelectorAll('.nav-item').forEach(e=>e.classList.remove('active'));
+            document.getElementById(`nav-${m}`).classList.add('active');
+            const left = document.getElementById('left-panel');
+            const prev = document.getElementById('preview-panel-container');
+            const setTab = document.getElementById('tab-content-settings');
+            const qTab = document.getElementById('tab-content-questions');
             
-            const bShow = state.borderConfig?.show;
-            const bWidth = state.borderConfig?.width || '2px';
-            const pagePad = state.pageConfig.padding;
-
-            container.style.padding = pagePad;
-            
-            let watermarkHtml = state.watermark ? `<img src="${state.watermark}" alt="Watermark" class="watermark" style="width: ${state.watermarkSize};" />` : '';
-            let headerHtml = state.header.show ? `<header class="text-center mb-6 pb-4 border-b-[1.5px] border-slate-800" style="color: ${state.header.color};"><div style="font-size: ${state.header.fontSize}; line-height: 1.4; white-space: pre-wrap; font-weight: 700;">${state.header.text}</div></header>` : '';
-
-            // Generate Questions
-            let questionsHtml = '';
-            if (state.visibility.showQuestions !== false) {
-                questionsHtml = `<div class="columns-container leading-snug text-black" style="font-size: ${state.questionConfig.fontSize}; column-gap: ${state.pageConfig.gap};">` +
-                state.questions.map((q, idx) => `
-                    <div class="break-inside-avoid" style="margin-bottom: ${state.questionConfig.gapY};">
-                        <div class="flex gap-2 mb-2">
-                          <span class="whitespace-nowrap font-bold" style="font-size: inherit;">${idx + 1}.</span>
-                          <div class="flex-1">
-                            <div class="mb-1 leading-relaxed rich-text-content question-text">${q.text}</div>
-                            ${q.image ? `<img src="${q.image}" class="q-img" />` : ''}
-                          </div>
-                        </div>
-                        <div class="grid grid-cols-2 gap-x-4 gap-y-2 ml-5 mb-2">
-                          ${['A', 'B', 'C', 'D'].map(opt => `
-                            <div class="flex items-start gap-1">
-                              <span class="omr-option flex-shrink-0">${opt}.</span>
-                              <div class="flex-1">
-                                <div class="rich-text-content inline-block">${q.options[opt]}</div>
-                                ${q.optionImages?.[opt] ? `<img src="${q.optionImages[opt]}" class="opt-img" />` : ''}
-                              </div>
-                            </div>
-                          `).join('')}
-                        </div>
-                        <div class="ml-5 space-y-2">
-                          ${state.visibility.showAns ? `
-                            <div>
-                                <span class="inline-block border border-black px-2 py-1 font-bold text-black" style="font-size: 0.85em;">সঠিক উত্তর: ${q.correctAnswer}</span>
-                            </div>
-                          ` : ''}
-                          ${state.visibility.showExp && (q.explanation || q.expImage) ? `
-                            <div class="border border-black p-2 text-black leading-normal" style="font-size: 0.85em;">
-                              <span class="font-bold mr-1 underline">ব্যাখ্যা:</span>
-                              <div class="rich-text-content inline">${q.explanation || ''}</div>
-                              ${q.expImage ? `<img src="${q.expImage}" class="exp-img" />` : ''}
-                            </div>
-                          ` : ''}
-                        </div>
-                    </div>
-                `).join('') + `</div>`;
+            if(window.innerWidth<768) {
+                if(m==='preview') { left.classList.add('hidden'); prev.classList.remove('hidden'); }
+                else { left.classList.remove('hidden'); prev.classList.add('hidden'); }
             }
-
-            // Bottom Section Logic
-            let bottomSectionHtml = '';
-
-            if (state.visibility.showAnsTable && state.visibility.showExpBottom && state.questions.length > 0) {
-                let rows = state.questions.map((q, idx) => `
-                    <tr>
-                        <td class="col-q-no">${idx + 1}</td>
-                        <td class="col-ans">${q.correctAnswer}</td>
-                        <td class="col-exp">
-                            <div class="rich-text-content">${q.explanation || ''}</div>
-                            ${q.expImage ? `<img src="${q.expImage}" class="exp-img mt-1" />` : ''}
-                        </td>
-                    </tr>
-                `).join('');
-
-                bottomSectionHtml = `
-                    <div class="mt-8 break-inside-avoid">
-                        <h3 class="font-bold border-b border-black mb-2 inline-block">উত্তর ও ব্যাখ্যা</h3>
-                        <table class="combined-ans-exp-table">
-                            <thead>
-                                <tr>
-                                    <th class="col-q-no">প্রশ্ন নং</th>
-                                    <th class="col-ans">উত্তর</th>
-                                    <th class="col-exp">ব্যাখ্যা</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                ${rows}
-                            </tbody>
-                        </table>
-                    </div>
-                `;
-            }
-            else if (state.visibility.showAnsTable && !state.visibility.showExpBottom && state.questions.length > 0) {
-                const chunkSize = 15;
-                let tables = [];
-                for (let i = 0; i < state.questions.length; i += chunkSize) {
-                    const chunk = state.questions.slice(i, i + chunkSize);
-                    let headerRow = '';
-                    let dataRow = '';
-                    chunk.forEach((q, cIdx) => {
-                        const qNum = i + cIdx + 1;
-                        headerRow += `<td class="ans-table-header">${qNum}</td>`;
-                        dataRow += `<td class="ans-table-data">${q.correctAnswer}</td>`;
-                    });
-                    tables.push(`
-                        <table class="ans-table-grid">
-                            <tr>${headerRow}</tr>
-                            <tr>${dataRow}</tr>
-                        </table>
-                    `);
-                }
-                
-                bottomSectionHtml = `
-                    <div class="mt-8 break-inside-avoid">
-                        <h3 class="font-bold border-b border-black mb-2 inline-block">উত্তরমালা</h3>
-                        <div class="flex flex-wrap gap-x-4">
-                            ${tables.join('')}
-                        </div>
-                    </div>
-                `;
-            }
-            else if (!state.visibility.showAnsTable && state.visibility.showExpBottom && state.questions.length > 0) {
-                 const exps = state.questions.map((q, idx) => {
-                    if (!q.explanation && !q.expImage) return '';
-                    return `
-                        <div class="mb-3">
-                            <span class="font-bold mr-1">${idx + 1}.</span>
-                            <div class="inline rich-text-content">${q.explanation || ''}</div>
-                            ${q.expImage ? `<img src="${q.expImage}" class="exp-img mt-1" />` : ''}
-                        </div>
-                    `;
-                }).join('');
-                
-                bottomSectionHtml = `
-                    <div class="mt-8">
-                        <h3 class="font-bold border-b border-black mb-4 inline-block">ব্যাখ্যা ও সমাধান</h3>
-                        <div class="space-y-1 text-sm">
-                            ${exps}
-                        </div>
-                    </div>
-                `;
-            }
-
-            let contentHtml = `
-                ${watermarkHtml}
-                ${headerHtml}
-                ${questionsHtml}
-                ${bottomSectionHtml}
-            `;
-
-            if (bShow) {
-                contentHtml = `<div class="border-frame" style="border-width: ${bWidth}; padding: 8mm;">${contentHtml}</div>`;
-            }
-
-            container.innerHTML = contentHtml;
-        }
-
-        // New PDF Download Function
-        function downloadPDF() {
-            const originalTitle = document.title;
-            const headerText = state.header.text.split('\n')[0] || 'Question_Paper';
-            // Sanitize filename
-            document.title = headerText.replace(/[^a-z0-9\u0980-\u09FF\s]/gi, '_').trim() || 'Exam_Paper';
-            
-            // Trigger native print dialog which allows "Save as PDF"
-            window.print();
-            
-            // Restore title
-            document.title = originalTitle;
+            if(m==='settings') { setTab.classList.remove('hidden'); qTab.classList.add('hidden'); }
+            else if(m==='questions') { setTab.classList.add('hidden'); qTab.classList.remove('hidden'); }
         }
 
         window.addEventListener('DOMContentLoaded', init);
