@@ -8,6 +8,11 @@
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     
+    <!-- Google Fonts: Hind Siliguri for UI/Inputs -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
     <!-- Lucide Icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
     
@@ -21,15 +26,20 @@
         }
 
         body {
-            /* UI Font: English Sans-Serif */
-            font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            /* UI Font: Hind Siliguri for readable Bangla in inputs */
+            font-family: 'Hind Siliguri', ui-sans-serif, system-ui, -apple-system, sans-serif;
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
             overflow-x: hidden;
             background-color: #f8fafc;
         }
 
-        /* --- WYSIWYG Editor Styles --- */
+        /* --- WYSIWYG Editor & Input Styles --- */
+        /* Force Hind Siliguri on all inputs for better editing experience */
+        .editor-box, input, textarea, select, button {
+            font-family: 'Hind Siliguri', sans-serif !important;
+        }
+
         .editor-box {
             min-height: 40px;
             max-height: 300px;
@@ -43,7 +53,6 @@
             font-size: 1.1rem;
             line-height: 1.5;
             color: #1e293b;
-            font-family: 'SutonnyMJ', sans-serif; /* Input in Bangla */
         }
         
         .editor-box:focus {
@@ -57,8 +66,52 @@
             content: attr(placeholder);
             color: #94a3b8;
             pointer-events: none;
-            font-family: ui-sans-serif, system-ui;
             font-size: 0.875rem;
+        }
+
+        /* --- MATH STYLES (PRESERVED) --- */
+        
+        /* Fraction Styles */
+        .math-fraction {
+            display: inline-block;
+            vertical-align: middle;
+            text-align: center;
+            font-size: 0.9em;
+            margin: 0 2px;
+            line-height: 1; 
+        }
+        .math-fraction-top {
+            display: block;
+            border-bottom: 1.5px solid #000; 
+            padding: 1px 2px;
+        }
+        .math-fraction-bottom {
+            display: block;
+            padding: 1px 2px;
+        }
+
+        /* Square Root Styles - FIXED ALIGNMENT (Right & Up) */
+        .math-sqrt {
+            display: inline-flex; 
+            align-items: flex-start;
+            vertical-align: middle;
+            margin: 0 2px;
+        }
+        .math-sqrt-symbol {
+            font-size: 1.3em;
+            line-height: 0.8;
+            margin-right: 0px; 
+            font-family: 'Times New Roman', serif; 
+            position: relative;
+            top: 1px; 
+        }
+        .math-sqrt-content {
+            border-top: 1.5px solid #000; 
+            padding-top: 1px;
+            padding-left: 2px;
+            padding-right: 2px;
+            line-height: 1.2;
+            margin-top: -5px; 
         }
 
         /* Rich Text Internal Styles */
@@ -88,11 +141,20 @@
             transform-origin: top center;
             margin-bottom: 2rem;
             box-sizing: border-box;
-            font-family: 'SutonnyMJ', sans-serif;
+            font-family: 'SutonnyMJ', sans-serif !important; 
             display: flex;
             flex-direction: column;
         }
 
+        .a4-page * {
+            font-family: 'SutonnyMJ', sans-serif !important;
+        }
+        
+        /* Math in Preview needs to inherit font properly but keep structure */
+        .a4-page .math-sqrt-symbol {
+            font-family: 'Times New Roman', serif !important; 
+        }
+        
         .border-frame {
             border: 1px solid #000;
             flex: 1;
@@ -102,11 +164,11 @@
             box-sizing: border-box;
         }
 
-        /* Question Layout - Force Block to prevent wrapping issues */
+        /* Question Layout */
         .mcq-item {
             break-inside: avoid; 
             page-break-inside: avoid;
-            display: block; /* Ensure it takes full width */
+            display: block; 
             position: relative;
         }
 
@@ -115,16 +177,15 @@
         /* Option Styling */
         .option-container {
             display: flex;
-            align-items: flex-start; /* Aligns A. with the first line of text */
+            align-items: flex-start;
             gap: 4px;
         }
         
         .omr-option {
-            font-family: 'Times New Roman', serif; 
             display: inline-block;
-            font-weight: normal; /* No Bold */
+            font-weight: normal;
             flex-shrink: 0;
-            margin-top: 1px; /* Fine-tune vertical alignment with SutonnyMJ */
+            margin-top: 1px;
         }
 
         /* Images */
@@ -136,14 +197,14 @@
         .combined-ans-exp-table { width: 100%; border-collapse: collapse; font-size: 0.9em; margin-top: 1.5rem; break-inside: avoid; }
         .combined-ans-exp-table th, .combined-ans-exp-table td { border: 1px solid #000; padding: 6px; vertical-align: top; }
         .combined-ans-exp-table th { background-color: #f3f4f6; font-weight: bold; text-align: center; }
-        .col-q-no { width: 8%; text-align: center; font-family: 'Times New Roman', serif; font-weight: bold; }
-        .col-ans { width: 8%; text-align: center; font-family: 'Times New Roman', serif; font-weight: bold; }
+        .col-q-no { width: 8%; text-align: center; font-weight: bold; }
+        .col-ans { width: 8%; text-align: center; font-weight: bold; }
         .col-exp { text-align: left; }
 
         .ans-table-grid { border-collapse: collapse; font-size: 0.9em; margin-bottom: 1rem; break-inside: avoid; background: white; }
         .ans-table-grid td { border: 1px solid #000; text-align: center; padding: 4px 8px; min-width: 28px; }
-        .ans-table-header { background-color: #f3f4f6; font-weight: bold; font-family: 'Times New Roman', serif; } 
-        .ans-table-data { font-family: 'Times New Roman', serif; font-weight: bold; } 
+        .ans-table-header { background-color: #f3f4f6; font-weight: bold; } 
+        .ans-table-data { font-weight: bold; } 
 
         .watermark { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-45deg); opacity: 0.08; z-index: 0; pointer-events: none; max-width: 90%; }
         
@@ -155,14 +216,14 @@
             position: relative; 
             z-index: 1; 
             height: auto; 
-            column-fill: auto; /* Balances columns */
+            column-fill: auto; 
         }
 
         .preview-scroll-wrapper { width: 100%; display: flex; justify-content: center; align-items: flex-start; padding: 2rem 1rem; overflow-x: auto; -webkit-overflow-scrolling: touch; }
         @media screen and (max-width: 768px) { .a4-page { transform: scale(0.45); margin-bottom: -160mm; } }
         @media screen and (max-width: 480px) { .a4-page { transform: scale(0.38); margin-bottom: -185mm; } }
 
-        /* --- PDF PRINT OPTIMIZATION --- */
+        /* --- PDF PRINT OPTIMIZATION (Searchable PDF) --- */
         @media print {
             @page { 
                 size: A4; 
@@ -193,7 +254,17 @@
                 min-height: 297mm !important; 
                 page-break-after: always; 
                 background: white !important;
+                font-family: 'SutonnyMJ', sans-serif !important;
             }
+            
+            .a4-page * {
+                color: #000 !important;
+                font-family: 'SutonnyMJ', sans-serif !important;
+            }
+            .a4-page .math-sqrt-symbol {
+                font-family: 'Times New Roman', serif !important;
+            }
+
             .columns-container { 
                 column-fill: auto; 
                 orphans: 4; 
@@ -202,6 +273,13 @@
             .break-inside-avoid { 
                 break-inside: avoid; 
                 page-break-inside: avoid; 
+            }
+            
+            /* Print Specific Math Fixes */
+            .math-fraction-top { border-color: #000 !important; }
+            .math-sqrt-content { 
+                border-color: #000 !important;
+                margin-top: -5px !important; 
             }
         }
     </style>
@@ -219,7 +297,7 @@
             </h1>
         </div>
         <button onclick="downloadPDF()" class="bg-indigo-700 hover:bg-indigo-800 text-white px-4 py-2 rounded-lg flex items-center gap-2 font-bold transition-all text-sm shadow-md active:scale-95">
-            <i data-lucide="file-down" class="w-4 h-4"></i> <span class="hidden sm:inline">Save PDF (Vector)</span>
+            <i data-lucide="file-down" class="w-4 h-4"></i> <span class="hidden sm:inline">Save as PDF</span>
         </button>
     </header>
 
@@ -245,7 +323,7 @@
                         </label>
                         <div class="space-y-1">
                             <span class="text-[10px] font-bold text-slate-400 uppercase">Header Text</span>
-                            <textarea id="header-text" oninput="updateHeaderConfig()" class="w-full p-3 bg-slate-50 border border-slate-200 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none text-sm min-h-[100px] leading-relaxed resize-none font-[SutonnyMJ]" placeholder="Write header text...">বার্ষিক পরীক্ষা ২০২৪
+                            <textarea id="header-text" oninput="updateHeaderConfig()" class="w-full p-3 bg-slate-50 border border-slate-200 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none text-sm min-h-[100px] leading-relaxed resize-none" placeholder="Write header text...">বার্ষিক পরীক্ষা ২০২৪
 বিষয়: সাধারণ বিজ্ঞান
 সময়: ২ ঘণ্টা | পূর্ণমান: ১০০</textarea>
                         </div>
@@ -983,7 +1061,7 @@
                                 <button onclick="deleteQuestion('${q.id}')" class="p-1.5 text-rose-500 hover:bg-rose-50 rounded-lg"><i data-lucide="trash-2" class="w-3.5 h-3.5"></i></button>
                             </div>
                         </div>
-                        <div class="text-xs text-slate-700 font-medium line-clamp-2 rich-text-content" style="font-family: 'SutonnyMJ', sans-serif;">${q.text}</div>
+                        <div class="text-xs text-slate-700 font-medium line-clamp-2 rich-text-content" style="font-family: 'Hind Siliguri', sans-serif;">${q.text}</div>
                     </div>`).join('') + `</div>`;
             } else { container.innerHTML = headerHtml; }
             lucide.createIcons();
@@ -1005,7 +1083,35 @@
             let questionsHtml = '';
             if (state.visibility.showQuestions !== false) {
                 questionsHtml = `<div class="columns-container leading-snug text-black" style="font-size: ${state.questionConfig.fontSize}; column-gap: ${state.pageConfig.gap};">` +
-                state.questions.map((q, idx) => `
+                state.questions.map((q, idx) => {
+                    // Logic for Option Layout
+                    const plainA = q.options.A.replace(/<[^>]*>/g, '');
+                    const plainB = q.options.B.replace(/<[^>]*>/g, '');
+                    const plainC = q.options.C.replace(/<[^>]*>/g, '');
+                    const plainD = q.options.D.replace(/<[^>]*>/g, '');
+                    
+                    const maxLen = Math.max(plainA.length, plainB.length, plainC.length, plainD.length);
+                    const totalLen = plainA.length + plainB.length + plainC.length + plainD.length;
+                    const hasImages = q.optionImages.A || q.optionImages.B || q.optionImages.C || q.optionImages.D;
+                    
+                    let gridClass = 'grid-cols-1 gap-y-2'; 
+                    
+                    // Case 1: 4 columns (All in one line)
+                    if (!hasImages && maxLen < 12 && totalLen < 50) {
+                        gridClass = 'grid-cols-4 gap-2'; 
+                    } 
+                    // Case 2: 2 columns (2 per line)
+                    else if (!hasImages && maxLen < 35) {
+                        gridClass = 'grid-cols-2 gap-x-4 gap-y-2';
+                    }
+                    // Case 3: 2 columns for small images (Optional logic, sticking to safest)
+                    // If images are present, usually 2x2 is better than 4x1 unless text is huge
+                    else if (hasImages && maxLen < 30) {
+                         gridClass = 'grid-cols-2 gap-x-4 gap-y-2';
+                    }
+                    // Default: 1 column (Vertical stack) if text is long or large images
+                    
+                    return `
                     <div class="mcq-item" style="margin-bottom: ${state.questionConfig.gapY};">
                         <div class="flex gap-2 mb-2">
                           <span class="whitespace-nowrap font-bold" style="font-size: inherit;">${idx + 1}.</span>
@@ -1014,7 +1120,7 @@
                             ${q.image ? `<img src="${q.image}" class="q-img" />` : ''}
                           </div>
                         </div>
-                        <div class="grid grid-cols-2 gap-x-4 gap-y-2 ml-5 mb-2">
+                        <div class="grid ${gridClass} ml-5 mb-2">
                           ${['A', 'B', 'C', 'D'].map(opt => `
                             <div class="option-container">
                               <span class="omr-option">${opt}.</span>
@@ -1040,7 +1146,7 @@
                           ` : ''}
                         </div>
                     </div>
-                `).join('') + `</div>`;
+                `}).join('') + `</div>`;
             }
 
             // Bottom Section Logic
@@ -1145,6 +1251,7 @@
         function downloadPDF() {
             const originalTitle = document.title;
             const headerText = state.header.text.split('\n')[0] || 'Question_Paper';
+            // Sanitize filename
             document.title = headerText.replace(/[^a-z0-9\u0980-\u09FF\s]/gi, '_').trim() || 'Exam_Paper';
             window.print();
             document.title = originalTitle;
