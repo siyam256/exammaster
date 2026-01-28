@@ -70,8 +70,6 @@
         }
 
         /* --- MATH STYLES --- */
-        
-        /* Fraction Styles */
         .math-fraction {
             display: inline-block;
             vertical-align: middle;
@@ -90,7 +88,6 @@
             padding: 1px 2px;
         }
 
-        /* Square Root Styles */
         .math-sqrt {
             display: inline-flex; 
             align-items: flex-start;
@@ -150,11 +147,9 @@
         }
 
         /* --- FONT OVERRIDES FOR NUMBERS/ENGLISH --- */
-        /* Forces English Font (Times New Roman) for Numbers & Options inside A4 Page */
         .a4-page .font-english {
             font-family: 'Times New Roman', Times, serif !important;
         }
-        
         .a4-page .math-sqrt-symbol {
             font-family: 'Times New Roman', serif !important; 
         }
@@ -177,17 +172,28 @@
 
         .question-text { font-weight: normal; }
         
+        /* Option Styling - Updated for strict single-line */
         .option-container {
             display: flex;
-            align-items: flex-start;
+            align-items: baseline; /* Aligns text baseline with A. */
             gap: 4px;
+            white-space: nowrap; /* Tries to keep A. and first word together */
+        }
+        
+        /* Forces all content inside option text to be inline */
+        .option-container .rich-text-content,
+        .option-container .rich-text-content * {
+            display: inline !important;
+            margin: 0 !important;
+            padding: 0 !important;
+            white-space: normal; /* Allows text wrapping if really long, but starts on same line */
         }
         
         .omr-option {
             display: inline-block;
             font-weight: normal;
             flex-shrink: 0;
-            margin-top: 1px;
+            margin-right: 2px;
         }
 
         .q-img { max-height: 150px; width: auto; max-width: 100%; display: block; margin: 4px auto; border: 1px solid #e2e8f0; border-radius: 4px; padding: 2px; }
@@ -244,7 +250,6 @@
             }
             
             .a4-page * { color: #000 !important; font-family: 'SutonnyMJ', sans-serif !important; }
-            /* English Font Override for Print */
             .a4-page .font-english { font-family: 'Times New Roman', Times, serif !important; }
             .a4-page .math-sqrt-symbol { font-family: 'Times New Roman', serif !important; }
 
@@ -252,6 +257,9 @@
             .break-inside-avoid { break-inside: avoid; page-break-inside: avoid; }
             .math-fraction-top { border-color: #000 !important; }
             .math-sqrt-content { border-color: #000 !important; margin-top: -5px !important; }
+            
+            /* Print fixes for inline options */
+            .option-container .rich-text-content, .option-container .rich-text-content * { display: inline !important; }
         }
     </style>
 </head>
