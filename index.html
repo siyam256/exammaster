@@ -35,7 +35,6 @@
         }
 
         /* --- WYSIWYG Editor & Input Styles --- */
-        /* Force Hind Siliguri on all inputs for better editing experience */
         .editor-box, input, textarea, select, button {
             font-family: 'Hind Siliguri', sans-serif !important;
         }
@@ -72,7 +71,7 @@
         /* --- MATH STYLES --- */
         .math-fraction {
             display: inline-block;
-            vertical-align: middle;
+            vertical-align: middle; 
             text-align: center;
             font-size: 0.9em;
             margin: 0 2px;
@@ -117,8 +116,6 @@
         .editor-box u { text-decoration: underline; text-underline-offset: 2px; }
         .editor-box sub, .rich-text-content sub { vertical-align: sub; font-size: 0.75em; line-height: 0; position: relative; bottom: -0.25em; }
         .editor-box sup, .rich-text-content sup { vertical-align: super; font-size: 0.75em; line-height: 0; position: relative; top: -0.5em; }
-
-        .rich-text-content p { margin: 0; padding: 0; display: inline; }
 
         .editor-active { border-color: #6366f1 !important; background-color: #fff !important; }
         .toolbar-btn { transition: all 0.1s; outline: none !important; }
@@ -170,23 +167,29 @@
             position: relative;
         }
 
-        .question-text { font-weight: normal; }
-        
-        /* Option Styling - Updated for strict single-line */
-        .option-container {
-            display: flex;
-            align-items: baseline; /* Aligns text baseline with A. */
-            gap: 4px;
-            white-space: nowrap; /* Tries to keep A. and first word together */
+        /* --- STRICT INLINE FIX FOR QUESTION & OPTIONS --- */
+        /* Forces question text to flow inline, preventing drops */
+        .question-text, .question-text * {
+            display: inline !important;
+            margin: 0 !important;
+            padding: 0 !important;
+            line-height: inherit !important;
         }
         
-        /* Forces all content inside option text to be inline */
+        /* Forces option text to flow inline */
         .option-container .rich-text-content,
         .option-container .rich-text-content * {
             display: inline !important;
             margin: 0 !important;
             padding: 0 !important;
-            white-space: normal; /* Allows text wrapping if really long, but starts on same line */
+            white-space: normal; 
+        }
+        
+        .option-container {
+            display: flex;
+            align-items: baseline; 
+            gap: 4px;
+            white-space: nowrap; 
         }
         
         .omr-option {
@@ -258,7 +261,8 @@
             .math-fraction-top { border-color: #000 !important; }
             .math-sqrt-content { border-color: #000 !important; margin-top: -5px !important; }
             
-            /* Print fixes for inline options */
+            /* Print fixes */
+            .question-text, .question-text * { display: inline !important; }
             .option-container .rich-text-content, .option-container .rich-text-content * { display: inline !important; }
         }
     </style>
@@ -284,8 +288,9 @@
         <!-- LEFT PANEL -->
         <div id="left-panel" class="w-full md:w-[450px] lg:w-[500px] flex-shrink-0 bg-white border-r border-slate-200 overflow-y-auto pb-20 md:pb-10 transition-all">
             <div class="p-4 md:p-6 space-y-6">
-                <!-- SETTINGS TAB (Same as before) -->
+                <!-- SETTINGS TAB (Content preserved) -->
                 <div id="tab-content-settings" class="hidden animate-in slide-in-from-left-2 duration-300">
+                    <!-- ... Settings ... -->
                     <div class="flex items-center gap-2 mb-4 text-slate-800 font-bold border-b border-slate-200 pb-2">
                         <i data-lucide="settings-2" class="w-5 h-5 text-indigo-600"></i>
                         <h2>Settings Configuration</h2>
@@ -372,7 +377,7 @@
                         </div>
                     </section>
 
-                    <!-- Page/Question/Watermark Config (Same) -->
+                    <!-- Page Config -->
                     <section class="bg-white p-4 rounded-xl shadow-sm border border-slate-200 space-y-4">
                         <span class="text-[10px] font-bold text-slate-400 uppercase block">Page Configuration</span>
                         <div class="space-y-2">
@@ -392,6 +397,8 @@
                             </div>
                         </div>
                     </section>
+
+                    <!-- Question Config -->
                     <section class="bg-white p-4 rounded-xl shadow-sm border border-slate-200 space-y-4">
                         <span class="text-[10px] font-bold text-slate-400 uppercase block">Question Configuration</span>
                         <div class="space-y-2">
@@ -411,6 +418,8 @@
                             </div>
                         </div>
                     </section>
+
+                    <!-- Watermark -->
                     <section class="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
                         <span class="text-[10px] font-bold text-slate-400 uppercase block mb-2">Watermark</span>
                         <div class="flex items-center gap-3 mb-3">
@@ -436,8 +445,9 @@
                     </section>
                 </div>
 
-                <!-- QUESTIONS TAB (Same as before) -->
+                <!-- QUESTIONS TAB (Form preserved) -->
                 <div id="tab-content-questions" class="hidden animate-in slide-in-from-left-2 duration-300">
+                    <!-- ... -->
                     <div class="flex items-center justify-between mb-4 border-b border-slate-200 pb-2">
                         <div class="flex items-center gap-2 text-slate-800 font-bold">
                             <i data-lucide="list-plus" class="w-5 h-5 text-indigo-600"></i>
@@ -506,6 +516,7 @@
                                     <input type="hidden" id="q-img-A">
                                 </div>
                             </div>
+                            <!-- ... other options ... -->
                             <div class="flex gap-2">
                                 <div class="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center font-black text-slate-500 text-xs flex-shrink-0">B</div>
                                 <div class="flex-1 space-y-1">
@@ -1077,8 +1088,8 @@
                     
                     return `
                     <div class="mcq-item" style="margin-bottom: ${state.questionConfig.gapY};">
-                        <div class="flex gap-2 mb-2">
-                          <span class="whitespace-nowrap font-bold font-english" style="font-size: inherit;">${idx + 1}.</span>
+                        <div class="flex gap-2 mb-2 items-start">
+                          <span class="whitespace-nowrap font-bold font-english pt-1" style="font-size: inherit;">${idx + 1}.</span>
                           <div class="flex-1">
                             <div class="mb-1 leading-relaxed rich-text-content question-text">${q.text}</div>
                             ${q.image ? `<img src="${q.image}" class="q-img" />` : ''}
