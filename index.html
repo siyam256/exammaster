@@ -69,7 +69,7 @@
             font-size: 0.875rem;
         }
 
-        /* --- MATH STYLES (PRESERVED) --- */
+        /* --- MATH STYLES --- */
         
         /* Fraction Styles */
         .math-fraction {
@@ -90,7 +90,7 @@
             padding: 1px 2px;
         }
 
-        /* Square Root Styles - FIXED ALIGNMENT (Right & Up) */
+        /* Square Root Styles */
         .math-sqrt {
             display: inline-flex; 
             align-items: flex-start;
@@ -121,7 +121,6 @@
         .editor-box sub, .rich-text-content sub { vertical-align: sub; font-size: 0.75em; line-height: 0; position: relative; bottom: -0.25em; }
         .editor-box sup, .rich-text-content sup { vertical-align: super; font-size: 0.75em; line-height: 0; position: relative; top: -0.5em; }
 
-        /* Remove default margins from paragraphs inside editor */
         .rich-text-content p { margin: 0; padding: 0; display: inline; }
 
         .editor-active { border-color: #6366f1 !important; background-color: #fff !important; }
@@ -149,8 +148,13 @@
         .a4-page * {
             font-family: 'SutonnyMJ', sans-serif !important;
         }
+
+        /* --- FONT OVERRIDES FOR NUMBERS/ENGLISH --- */
+        /* Forces English Font (Times New Roman) for Numbers & Options inside A4 Page */
+        .a4-page .font-english {
+            font-family: 'Times New Roman', Times, serif !important;
+        }
         
-        /* Math in Preview needs to inherit font properly but keep structure */
         .a4-page .math-sqrt-symbol {
             font-family: 'Times New Roman', serif !important; 
         }
@@ -164,7 +168,6 @@
             box-sizing: border-box;
         }
 
-        /* Question Layout */
         .mcq-item {
             break-inside: avoid; 
             page-break-inside: avoid;
@@ -174,7 +177,6 @@
 
         .question-text { font-weight: normal; }
         
-        /* Option Styling */
         .option-container {
             display: flex;
             align-items: flex-start;
@@ -188,12 +190,10 @@
             margin-top: 1px;
         }
 
-        /* Images */
         .q-img { max-height: 150px; width: auto; max-width: 100%; display: block; margin: 4px auto; border: 1px solid #e2e8f0; border-radius: 4px; padding: 2px; }
         .opt-img { max-height: 80px; width: auto; max-width: 100%; display: block; margin-top: 4px; border: 1px solid #e2e8f0; border-radius: 2px; }
         .exp-img { max-height: 120px; width: auto; max-width: 100%; display: block; margin: 4px 0; border: 1px solid #cbd5e1; border-radius: 2px; }
 
-        /* Tables */
         .combined-ans-exp-table { width: 100%; border-collapse: collapse; font-size: 0.9em; margin-top: 1.5rem; break-inside: avoid; }
         .combined-ans-exp-table th, .combined-ans-exp-table td { border: 1px solid #000; padding: 6px; vertical-align: top; }
         .combined-ans-exp-table th { background-color: #f3f4f6; font-weight: bold; text-align: center; }
@@ -208,7 +208,6 @@
 
         .watermark { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-45deg); opacity: 0.08; z-index: 0; pointer-events: none; max-width: 90%; }
         
-        /* Multi-column Layout */
         .columns-container { 
             column-count: 2; 
             column-gap: 12mm; 
@@ -223,28 +222,15 @@
         @media screen and (max-width: 768px) { .a4-page { transform: scale(0.45); margin-bottom: -160mm; } }
         @media screen and (max-width: 480px) { .a4-page { transform: scale(0.38); margin-bottom: -185mm; } }
 
-        /* --- PDF PRINT OPTIMIZATION (Searchable PDF) --- */
         @media print {
-            @page { 
-                size: A4; 
-                margin: 0; 
-            }
-            body, html { 
-                background: white !important; 
-                margin: 0 !important; 
-                padding: 0 !important;
-                -webkit-print-color-adjust: exact; 
-                print-color-adjust: exact;
-            }
+            @page { size: A4; margin: 0; }
+            body, html { background: white !important; margin: 0 !important; padding: 0 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
             body > header, nav, #left-panel, .no-print { display: none !important; }
             main { display: block !important; height: auto !important; overflow: visible !important; }
-            #preview-panel-container { 
-                display: block !important; position: static !important; width: 100% !important; 
-                height: auto !important; margin: 0 !important; padding: 0 !important; 
-                background: white !important; overflow: visible !important; 
-            }
+            #preview-panel-container { display: block !important; position: static !important; width: 100% !important; height: auto !important; margin: 0 !important; padding: 0 !important; background: white !important; overflow: visible !important; }
             .preview-scroll-wrapper { display: block !important; padding: 0 !important; width: 100% !important; overflow: visible !important; }
             .print-container { display: block !important; box-shadow: none !important; margin: 0 !important; }
+            
             .a4-page { 
                 margin: 0 auto !important; 
                 box-shadow: none !important; 
@@ -257,30 +243,15 @@
                 font-family: 'SutonnyMJ', sans-serif !important;
             }
             
-            .a4-page * {
-                color: #000 !important;
-                font-family: 'SutonnyMJ', sans-serif !important;
-            }
-            .a4-page .math-sqrt-symbol {
-                font-family: 'Times New Roman', serif !important;
-            }
+            .a4-page * { color: #000 !important; font-family: 'SutonnyMJ', sans-serif !important; }
+            /* English Font Override for Print */
+            .a4-page .font-english { font-family: 'Times New Roman', Times, serif !important; }
+            .a4-page .math-sqrt-symbol { font-family: 'Times New Roman', serif !important; }
 
-            .columns-container { 
-                column-fill: auto; 
-                orphans: 4; 
-                widows: 4; 
-            }
-            .break-inside-avoid { 
-                break-inside: avoid; 
-                page-break-inside: avoid; 
-            }
-            
-            /* Print Specific Math Fixes */
+            .columns-container { column-fill: auto; orphans: 4; widows: 4; }
+            .break-inside-avoid { break-inside: avoid; page-break-inside: avoid; }
             .math-fraction-top { border-color: #000 !important; }
-            .math-sqrt-content { 
-                border-color: #000 !important;
-                margin-top: -5px !important; 
-            }
+            .math-sqrt-content { border-color: #000 !important; margin-top: -5px !important; }
         }
     </style>
 </head>
@@ -305,8 +276,7 @@
         <!-- LEFT PANEL -->
         <div id="left-panel" class="w-full md:w-[450px] lg:w-[500px] flex-shrink-0 bg-white border-r border-slate-200 overflow-y-auto pb-20 md:pb-10 transition-all">
             <div class="p-4 md:p-6 space-y-6">
-                
-                <!-- SETTINGS TAB -->
+                <!-- SETTINGS TAB (Same as before) -->
                 <div id="tab-content-settings" class="hidden animate-in slide-in-from-left-2 duration-300">
                     <div class="flex items-center gap-2 mb-4 text-slate-800 font-bold border-b border-slate-200 pb-2">
                         <i data-lucide="settings-2" class="w-5 h-5 text-indigo-600"></i>
@@ -368,15 +338,12 @@
                     <!-- Visibility Config -->
                     <section class="bg-white p-4 rounded-xl shadow-sm border border-slate-200 space-y-4">
                         <span class="text-[10px] font-bold text-slate-400 uppercase block mb-2">Visibility Settings (Preview)</span>
-                        
-                        <!-- Show Questions Toggle -->
                         <div class="bg-indigo-50 p-2 rounded-lg border border-indigo-100 mb-3">
                             <label class="flex items-center gap-2 cursor-pointer">
                                 <input type="checkbox" id="questions-show" checked onchange="updateVisibilityConfig()" class="w-4 h-4 accent-indigo-600"/>
                                 <span class="text-xs font-bold text-indigo-700">Show Question Paper</span>
                             </label>
                         </div>
-
                         <div class="grid grid-cols-2 gap-3">
                             <label class="flex items-center gap-2 cursor-pointer">
                                 <input type="checkbox" id="ans-show" checked onchange="updateVisibilityConfig()" class="w-4 h-4 accent-indigo-600"/>
@@ -397,7 +364,7 @@
                         </div>
                     </section>
 
-                    <!-- Page Config -->
+                    <!-- Page/Question/Watermark Config (Same) -->
                     <section class="bg-white p-4 rounded-xl shadow-sm border border-slate-200 space-y-4">
                         <span class="text-[10px] font-bold text-slate-400 uppercase block">Page Configuration</span>
                         <div class="space-y-2">
@@ -417,8 +384,6 @@
                             </div>
                         </div>
                     </section>
-
-                    <!-- Question Config -->
                     <section class="bg-white p-4 rounded-xl shadow-sm border border-slate-200 space-y-4">
                         <span class="text-[10px] font-bold text-slate-400 uppercase block">Question Configuration</span>
                         <div class="space-y-2">
@@ -438,8 +403,6 @@
                             </div>
                         </div>
                     </section>
-
-                    <!-- Watermark -->
                     <section class="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
                         <span class="text-[10px] font-bold text-slate-400 uppercase block mb-2">Watermark</span>
                         <div class="flex items-center gap-3 mb-3">
@@ -465,7 +428,7 @@
                     </section>
                 </div>
 
-                <!-- QUESTIONS TAB -->
+                <!-- QUESTIONS TAB (Same as before) -->
                 <div id="tab-content-questions" class="hidden animate-in slide-in-from-left-2 duration-300">
                     <div class="flex items-center justify-between mb-4 border-b border-slate-200 pb-2">
                         <div class="flex items-center gap-2 text-slate-800 font-bold">
@@ -518,7 +481,6 @@
 
                         <!-- Options -->
                         <div class="grid grid-cols-1 gap-3">
-                            <!-- Option Inputs - Explicitly written out to avoid template literal issues inside HTML -->
                             <div class="flex gap-2">
                                 <div class="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center font-black text-slate-500 text-xs flex-shrink-0">A</div>
                                 <div class="flex-1 space-y-1">
@@ -1084,7 +1046,6 @@
             if (state.visibility.showQuestions !== false) {
                 questionsHtml = `<div class="columns-container leading-snug text-black" style="font-size: ${state.questionConfig.fontSize}; column-gap: ${state.pageConfig.gap};">` +
                 state.questions.map((q, idx) => {
-                    // Logic for Option Layout
                     const plainA = q.options.A.replace(/<[^>]*>/g, '');
                     const plainB = q.options.B.replace(/<[^>]*>/g, '');
                     const plainC = q.options.C.replace(/<[^>]*>/g, '');
@@ -1096,25 +1057,20 @@
                     
                     let gridClass = 'grid-cols-1 gap-y-2'; 
                     
-                    // Case 1: 4 columns (All in one line)
                     if (!hasImages && maxLen < 12 && totalLen < 50) {
                         gridClass = 'grid-cols-4 gap-2'; 
                     } 
-                    // Case 2: 2 columns (2 per line)
                     else if (!hasImages && maxLen < 35) {
                         gridClass = 'grid-cols-2 gap-x-4 gap-y-2';
                     }
-                    // Case 3: 2 columns for small images (Optional logic, sticking to safest)
-                    // If images are present, usually 2x2 is better than 4x1 unless text is huge
                     else if (hasImages && maxLen < 30) {
                          gridClass = 'grid-cols-2 gap-x-4 gap-y-2';
                     }
-                    // Default: 1 column (Vertical stack) if text is long or large images
                     
                     return `
                     <div class="mcq-item" style="margin-bottom: ${state.questionConfig.gapY};">
                         <div class="flex gap-2 mb-2">
-                          <span class="whitespace-nowrap font-bold" style="font-size: inherit;">${idx + 1}.</span>
+                          <span class="whitespace-nowrap font-bold font-english" style="font-size: inherit;">${idx + 1}.</span>
                           <div class="flex-1">
                             <div class="mb-1 leading-relaxed rich-text-content question-text">${q.text}</div>
                             ${q.image ? `<img src="${q.image}" class="q-img" />` : ''}
@@ -1123,7 +1079,7 @@
                         <div class="grid ${gridClass} ml-5 mb-2">
                           ${['A', 'B', 'C', 'D'].map(opt => `
                             <div class="option-container">
-                              <span class="omr-option">${opt}.</span>
+                              <span class="omr-option font-english">${opt}.</span>
                               <div class="flex-1">
                                 <div class="rich-text-content inline-block">${q.options[opt]}</div>
                                 ${q.optionImages?.[opt] ? `<img src="${q.optionImages[opt]}" class="opt-img" />` : ''}
@@ -1134,7 +1090,7 @@
                         <div class="ml-5 space-y-2">
                           ${state.visibility.showAns ? `
                             <div>
-                                <span class="inline-block border border-black px-2 py-1 font-bold text-black" style="font-size: 0.85em;">সঠিক উত্তর: ${q.correctAnswer}</span>
+                                <span class="inline-block border border-black px-2 py-1 font-bold text-black" style="font-size: 0.85em;">সঠিক উত্তর: <span class="font-english">${q.correctAnswer}</span></span>
                             </div>
                           ` : ''}
                           ${state.visibility.showExp && (q.explanation || q.expImage) ? `
@@ -1155,8 +1111,8 @@
             if (state.visibility.showAnsTable && state.visibility.showExpBottom && state.questions.length > 0) {
                 let rows = state.questions.map((q, idx) => `
                     <tr>
-                        <td class="col-q-no">${idx + 1}</td>
-                        <td class="col-ans">${q.correctAnswer}</td>
+                        <td class="col-q-no font-english">${idx + 1}</td>
+                        <td class="col-ans font-english">${q.correctAnswer}</td>
                         <td class="col-exp">
                             <div class="rich-text-content">${q.explanation || ''}</div>
                             ${q.expImage ? `<img src="${q.expImage}" class="exp-img mt-1" />` : ''}
@@ -1191,8 +1147,8 @@
                     let dataRow = '';
                     chunk.forEach((q, cIdx) => {
                         const qNum = i + cIdx + 1;
-                        headerRow += `<td class="ans-table-header">${qNum}</td>`;
-                        dataRow += `<td class="ans-table-data">${q.correctAnswer}</td>`;
+                        headerRow += `<td class="ans-table-header font-english">${qNum}</td>`;
+                        dataRow += `<td class="ans-table-data font-english">${q.correctAnswer}</td>`;
                     });
                     tables.push(`
                         <table class="ans-table-grid">
@@ -1216,7 +1172,7 @@
                     if (!q.explanation && !q.expImage) return '';
                     return `
                         <div class="mb-3 break-inside-avoid">
-                            <span class="font-bold mr-1">${idx + 1}.</span>
+                            <span class="font-bold mr-1 font-english">${idx + 1}.</span>
                             <div class="inline rich-text-content">${q.explanation || ''}</div>
                             ${q.expImage ? `<img src="${q.expImage}" class="exp-img mt-1" />` : ''}
                         </div>
