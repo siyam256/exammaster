@@ -17,7 +17,7 @@
     <script src="https://unpkg.com/lucide@latest"></script>
     
     <style>
-        /* --- Font Setup: SutonnyMJ --- */
+        /* --- Font Setup --- */
         @font-face {
             font-family: 'SutonnyMJ';
             src: url('SutonnyMJ.ttf') format('truetype');
@@ -134,23 +134,19 @@
             transform-origin: top center;
             margin-bottom: 2rem;
             box-sizing: border-box;
-            font-family: 'SutonnyMJ', sans-serif !important; 
+            
+            /* CRITICAL FIX: English first to prevent Bangla characters in English words */
+            font-family: 'Times New Roman', 'SutonnyMJ', sans-serif !important; 
+            
             display: flex;
             flex-direction: column;
         }
 
+        /* Apply font to all children */
         .a4-page * {
-            font-family: 'SutonnyMJ', sans-serif !important;
+            font-family: 'Times New Roman', 'SutonnyMJ', sans-serif !important;
         }
 
-        /* --- FONT OVERRIDES FOR NUMBERS/ENGLISH --- */
-        .a4-page .font-english {
-            font-family: 'Times New Roman', Times, serif !important;
-        }
-        .a4-page .math-sqrt-symbol {
-            font-family: 'Times New Roman', serif !important; 
-        }
-        
         .border-frame {
             border: 1px solid #000;
             flex: 1;
@@ -167,16 +163,47 @@
             position: relative;
         }
 
-        /* --- STRICT INLINE FIX FOR QUESTION & OPTIONS --- */
-        /* Forces question text to flow inline, preventing drops */
-        .question-text, .question-text * {
-            display: inline !important;
+        /* --- STRICT INLINE & ALIGNMENT FIX --- */
+        
+        .question-header {
+            display: flex;
+            gap: 6px;
+            align-items: baseline; /* Aligns Number and Text Baseline */
+            line-height: 1.4; /* Consistent Line Height */
+        }
+
+        .question-number {
+            flex-shrink: 0;
+            font-weight: bold;
+            font-family: 'Times New Roman', serif;
+        }
+
+        .question-content {
+            flex: 1;
+            display: inline-block; /* Helps with inline flow */
+        }
+
+        /* Force question text to not have block margins */
+        .question-content p, .question-content div {
+            display: inline; /* Forces inline behavior */
             margin: 0 !important;
             padding: 0 !important;
-            line-height: inherit !important;
         }
         
-        /* Forces option text to flow inline */
+        .question-text {
+            font-weight: normal;
+            display: inline;
+        }
+        
+        /* Option Styling */
+        .option-container {
+            display: flex;
+            align-items: baseline; 
+            gap: 4px;
+            white-space: nowrap; 
+        }
+        
+        /* Force option text inline */
         .option-container .rich-text-content,
         .option-container .rich-text-content * {
             display: inline !important;
@@ -185,18 +212,12 @@
             white-space: normal; 
         }
         
-        .option-container {
-            display: flex;
-            align-items: baseline; 
-            gap: 4px;
-            white-space: nowrap; 
-        }
-        
         .omr-option {
             display: inline-block;
             font-weight: normal;
             flex-shrink: 0;
             margin-right: 2px;
+            font-family: 'Times New Roman', serif;
         }
 
         .q-img { max-height: 150px; width: auto; max-width: 100%; display: block; margin: 4px auto; border: 1px solid #e2e8f0; border-radius: 4px; padding: 2px; }
@@ -249,11 +270,14 @@
                 min-height: 297mm !important; 
                 page-break-after: always; 
                 background: white !important;
-                font-family: 'SutonnyMJ', sans-serif !important;
+                font-family: 'Times New Roman', 'SutonnyMJ', sans-serif !important;
             }
             
-            .a4-page * { color: #000 !important; font-family: 'SutonnyMJ', sans-serif !important; }
-            .a4-page .font-english { font-family: 'Times New Roman', Times, serif !important; }
+            .a4-page * { 
+                color: #000 !important; 
+                font-family: 'Times New Roman', 'SutonnyMJ', sans-serif !important;
+            }
+            
             .a4-page .math-sqrt-symbol { font-family: 'Times New Roman', serif !important; }
 
             .columns-container { column-fill: auto; orphans: 4; widows: 4; }
@@ -262,7 +286,7 @@
             .math-sqrt-content { border-color: #000 !important; margin-top: -5px !important; }
             
             /* Print fixes */
-            .question-text, .question-text * { display: inline !important; }
+            .question-content, .question-content * { display: inline !important; }
             .option-container .rich-text-content, .option-container .rich-text-content * { display: inline !important; }
         }
     </style>
@@ -288,9 +312,8 @@
         <!-- LEFT PANEL -->
         <div id="left-panel" class="w-full md:w-[450px] lg:w-[500px] flex-shrink-0 bg-white border-r border-slate-200 overflow-y-auto pb-20 md:pb-10 transition-all">
             <div class="p-4 md:p-6 space-y-6">
-                <!-- SETTINGS TAB (Content preserved) -->
+                <!-- SETTINGS TAB -->
                 <div id="tab-content-settings" class="hidden animate-in slide-in-from-left-2 duration-300">
-                    <!-- ... Settings ... -->
                     <div class="flex items-center gap-2 mb-4 text-slate-800 font-bold border-b border-slate-200 pb-2">
                         <i data-lucide="settings-2" class="w-5 h-5 text-indigo-600"></i>
                         <h2>Settings Configuration</h2>
@@ -377,7 +400,7 @@
                         </div>
                     </section>
 
-                    <!-- Page Config -->
+                    <!-- Page/Question/Watermark Config (Same) -->
                     <section class="bg-white p-4 rounded-xl shadow-sm border border-slate-200 space-y-4">
                         <span class="text-[10px] font-bold text-slate-400 uppercase block">Page Configuration</span>
                         <div class="space-y-2">
@@ -397,8 +420,6 @@
                             </div>
                         </div>
                     </section>
-
-                    <!-- Question Config -->
                     <section class="bg-white p-4 rounded-xl shadow-sm border border-slate-200 space-y-4">
                         <span class="text-[10px] font-bold text-slate-400 uppercase block">Question Configuration</span>
                         <div class="space-y-2">
@@ -418,8 +439,6 @@
                             </div>
                         </div>
                     </section>
-
-                    <!-- Watermark -->
                     <section class="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
                         <span class="text-[10px] font-bold text-slate-400 uppercase block mb-2">Watermark</span>
                         <div class="flex items-center gap-3 mb-3">
@@ -445,9 +464,8 @@
                     </section>
                 </div>
 
-                <!-- QUESTIONS TAB (Form preserved) -->
+                <!-- QUESTIONS TAB (Same as before) -->
                 <div id="tab-content-questions" class="hidden animate-in slide-in-from-left-2 duration-300">
-                    <!-- ... -->
                     <div class="flex items-center justify-between mb-4 border-b border-slate-200 pb-2">
                         <div class="flex items-center gap-2 text-slate-800 font-bold">
                             <i data-lucide="list-plus" class="w-5 h-5 text-indigo-600"></i>
@@ -1088,17 +1106,17 @@
                     
                     return `
                     <div class="mcq-item" style="margin-bottom: ${state.questionConfig.gapY};">
-                        <div class="flex gap-2 mb-2 items-start">
-                          <span class="whitespace-nowrap font-bold font-english pt-1" style="font-size: inherit;">${idx + 1}.</span>
-                          <div class="flex-1">
-                            <div class="mb-1 leading-relaxed rich-text-content question-text">${q.text}</div>
+                        <div class="question-header">
+                          <span class="question-number" style="font-size: inherit;">${idx + 1}.</span>
+                          <div class="question-content">
+                            <div class="question-text">${q.text}</div>
                             ${q.image ? `<img src="${q.image}" class="q-img" />` : ''}
                           </div>
                         </div>
-                        <div class="grid ${gridClass} ml-5 mb-2">
+                        <div class="grid ${gridClass} ml-5 mb-2 mt-1">
                           ${['A', 'B', 'C', 'D'].map(opt => `
                             <div class="option-container">
-                              <span class="omr-option font-english">${opt}.</span>
+                              <span class="omr-option">${opt}.</span>
                               <div class="flex-1">
                                 <div class="rich-text-content inline-block">${q.options[opt]}</div>
                                 ${q.optionImages?.[opt] ? `<img src="${q.optionImages[opt]}" class="opt-img" />` : ''}
@@ -1109,7 +1127,7 @@
                         <div class="ml-5 space-y-2">
                           ${state.visibility.showAns ? `
                             <div>
-                                <span class="inline-block border border-black px-2 py-1 font-bold text-black" style="font-size: 0.85em;">সঠিক উত্তর: <span class="font-english">${q.correctAnswer}</span></span>
+                                <span class="inline-block border border-black px-2 py-1 font-bold text-black" style="font-size: 0.85em;">সঠিক উত্তর: <span style="font-family: 'Times New Roman', serif;">${q.correctAnswer}</span></span>
                             </div>
                           ` : ''}
                           ${state.visibility.showExp && (q.explanation || q.expImage) ? `
@@ -1130,8 +1148,8 @@
             if (state.visibility.showAnsTable && state.visibility.showExpBottom && state.questions.length > 0) {
                 let rows = state.questions.map((q, idx) => `
                     <tr>
-                        <td class="col-q-no font-english">${idx + 1}</td>
-                        <td class="col-ans font-english">${q.correctAnswer}</td>
+                        <td class="col-q-no">${idx + 1}</td>
+                        <td class="col-ans">${q.correctAnswer}</td>
                         <td class="col-exp">
                             <div class="rich-text-content">${q.explanation || ''}</div>
                             ${q.expImage ? `<img src="${q.expImage}" class="exp-img mt-1" />` : ''}
@@ -1166,8 +1184,8 @@
                     let dataRow = '';
                     chunk.forEach((q, cIdx) => {
                         const qNum = i + cIdx + 1;
-                        headerRow += `<td class="ans-table-header font-english">${qNum}</td>`;
-                        dataRow += `<td class="ans-table-data font-english">${q.correctAnswer}</td>`;
+                        headerRow += `<td class="ans-table-header">${qNum}</td>`;
+                        dataRow += `<td class="ans-table-data">${q.correctAnswer}</td>`;
                     });
                     tables.push(`
                         <table class="ans-table-grid">
@@ -1191,7 +1209,7 @@
                     if (!q.explanation && !q.expImage) return '';
                     return `
                         <div class="mb-3 break-inside-avoid">
-                            <span class="font-bold mr-1 font-english">${idx + 1}.</span>
+                            <span class="font-bold mr-1" style="font-family: 'Times New Roman', serif;">${idx + 1}.</span>
                             <div class="inline rich-text-content">${q.explanation || ''}</div>
                             ${q.expImage ? `<img src="${q.expImage}" class="exp-img mt-1" />` : ''}
                         </div>
