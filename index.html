@@ -134,10 +134,8 @@
             transform-origin: top center;
             margin-bottom: 2rem;
             box-sizing: border-box;
-            
             /* CRITICAL FIX: English first to prevent Bangla characters in English words */
             font-family: 'Times New Roman', 'SutonnyMJ', sans-serif !important; 
-            
             display: flex;
             flex-direction: column;
         }
@@ -312,6 +310,7 @@
         <!-- LEFT PANEL -->
         <div id="left-panel" class="w-full md:w-[450px] lg:w-[500px] flex-shrink-0 bg-white border-r border-slate-200 overflow-y-auto pb-20 md:pb-10 transition-all">
             <div class="p-4 md:p-6 space-y-6">
+                
                 <!-- SETTINGS TAB -->
                 <div id="tab-content-settings" class="hidden animate-in slide-in-from-left-2 duration-300">
                     <div class="flex items-center gap-2 mb-4 text-slate-800 font-bold border-b border-slate-200 pb-2">
@@ -400,7 +399,7 @@
                         </div>
                     </section>
 
-                    <!-- Page/Question/Watermark Config (Same) -->
+                    <!-- Page Config -->
                     <section class="bg-white p-4 rounded-xl shadow-sm border border-slate-200 space-y-4">
                         <span class="text-[10px] font-bold text-slate-400 uppercase block">Page Configuration</span>
                         <div class="space-y-2">
@@ -420,6 +419,8 @@
                             </div>
                         </div>
                     </section>
+
+                    <!-- Question Config -->
                     <section class="bg-white p-4 rounded-xl shadow-sm border border-slate-200 space-y-4">
                         <span class="text-[10px] font-bold text-slate-400 uppercase block">Question Configuration</span>
                         <div class="space-y-2">
@@ -439,6 +440,8 @@
                             </div>
                         </div>
                     </section>
+
+                    <!-- Watermark -->
                     <section class="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
                         <span class="text-[10px] font-bold text-slate-400 uppercase block mb-2">Watermark</span>
                         <div class="flex items-center gap-3 mb-3">
@@ -464,16 +467,22 @@
                     </section>
                 </div>
 
-                <!-- QUESTIONS TAB (Same as before) -->
+                <!-- QUESTIONS TAB -->
                 <div id="tab-content-questions" class="hidden animate-in slide-in-from-left-2 duration-300">
                     <div class="flex items-center justify-between mb-4 border-b border-slate-200 pb-2">
                         <div class="flex items-center gap-2 text-slate-800 font-bold">
                             <i data-lucide="list-plus" class="w-5 h-5 text-indigo-600"></i>
                             <h2>Question Management</h2>
                         </div>
-                        <button onclick="resetAllData()" class="text-[10px] font-bold text-white bg-rose-500 hover:bg-rose-600 px-3 py-1.5 rounded-lg flex items-center gap-1 transition-colors shadow-sm">
-                            <i data-lucide="rotate-ccw" class="w-3 h-3"></i> Reset
-                        </button>
+                        <div class="flex gap-2">
+                            <label class="cursor-pointer bg-emerald-500 hover:bg-emerald-600 text-white px-3 py-1.5 rounded-lg flex items-center gap-1 transition-colors shadow-sm text-[10px] font-bold">
+                                <input type="file" accept=".csv" onchange="handleCSVUpload(this)" class="hidden" />
+                                <i data-lucide="file-spreadsheet" class="w-3 h-3"></i> Import CSV
+                            </label>
+                            <button onclick="resetAllData()" class="text-[10px] font-bold text-white bg-rose-500 hover:bg-rose-600 px-3 py-1.5 rounded-lg flex items-center gap-1 transition-colors shadow-sm">
+                                <i data-lucide="rotate-ccw" class="w-3 h-3"></i> Reset
+                            </button>
+                        </div>
                     </div>
 
                     <!-- WYSIWYG TOOLBAR -->
@@ -683,6 +692,86 @@
             editingQuestionId: null,
             listCollapsed: false
         };
+
+        // --- CSV Import Handling ---
+        function handleCSVUpload(input) {
+            const file = input.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const text = e.target.result;
+                const rows = csvToArray(text);
+                
+                // Skip header row if exists and looks like header (basic check)
+                let startIdx = 0;
+                if(rows.length > 0 && (rows[0][0] || '').toLowerCase().includes('question')) {
+                    startIdx = 1;
+                }
+
+                let newQuestions = [];
+                for (let i = startIdx; i < rows.length; i++) {
+                    const row = rows[i];
+                    // Columns: 0:question, 1:opt1, 2:opt2, 3:opt3, 4:opt4, 5:opt5(skip), 6:ans(1-4), 7:exp, 8:type(skip), 9:section(skip)
+                    if (row.length < 7) continue; // Minimum required fields
+
+                    const questionText = row[0] || '';
+                    if (!questionText.trim()) continue;
+
+                    const ansIndex = parseInt(row[6] || '0');
+                    let correctAns = 'A';
+                    if (ansIndex === 2) correctAns = 'B';
+                    if (ansIndex === 3) correctAns = 'C';
+                    if (ansIndex === 4) correctAns = 'D';
+
+                    const q = {
+                        id: Date.now().toString() + Math.random(),
+                        text: questionText,
+                        options: {
+                            A: row[1] || '',
+                            B: row[2] || '',
+                            C: row[3] || '',
+                            D: row[4] || ''
+                        },
+                        optionImages: { A: undefined, B: undefined, C: undefined, D: undefined },
+                        correctAnswer: correctAns,
+                        explanation: row[7] || '',
+                        image: undefined,
+                        expImage: undefined
+                    };
+                    newQuestions.push(q);
+                }
+
+                if (newQuestions.length > 0) {
+                    state.questions = [...state.questions, ...newQuestions];
+                    updateList();
+                    updatePreview();
+                    saveData();
+                    alert(`${newQuestions.length} questions imported successfully!`);
+                } else {
+                    alert("No valid questions found in CSV.");
+                }
+                input.value = ''; // Reset input
+            };
+            reader.readAsText(file);
+        }
+
+        // CSV Parser Helper to handle quoted strings containing commas
+        function csvToArray(text) {
+            let p = '', row = [''], ret = [row], i = 0, r = 0, s = !0, l;
+            for (l of text) {
+                if ('"' === l) {
+                    if (s && l === p) row[i] += l;
+                    s = !s;
+                } else if (',' === l && s) l = row[++i] = '';
+                else if ('\n' === l && s) {
+                    if ('\r' === p) row[i] = row[i].slice(0, -1);
+                    row = ret[++r] = ['']; i = 0;
+                } else row[i] += l;
+                p = l;
+            }
+            return ret;
+        }
 
         // --- Rich Text Logic ---
         let currentEditor = null;
@@ -1244,7 +1333,6 @@
         function downloadPDF() {
             const originalTitle = document.title;
             const headerText = state.header.text.split('\n')[0] || 'Question_Paper';
-            // Sanitize filename
             document.title = headerText.replace(/[^a-z0-9\u0980-\u09FF\s]/gi, '_').trim() || 'Exam_Paper';
             window.print();
             document.title = originalTitle;
