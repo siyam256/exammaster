@@ -134,8 +134,10 @@
             transform-origin: top center;
             margin-bottom: 2rem;
             box-sizing: border-box;
-            /* CRITICAL FIX: English first to prevent Bangla characters in English words */
+            
+            /* English first to prevent Bangla characters in English words */
             font-family: 'Times New Roman', 'SutonnyMJ', sans-serif !important; 
+            
             display: flex;
             flex-direction: column;
         }
@@ -144,6 +146,8 @@
         .a4-page * {
             font-family: 'Times New Roman', 'SutonnyMJ', sans-serif !important;
         }
+
+        .a4-page .math-sqrt-symbol { font-family: 'Times New Roman', serif !important; }
 
         .border-frame {
             border: 1px solid #000;
@@ -162,12 +166,11 @@
         }
 
         /* --- STRICT INLINE & ALIGNMENT FIX --- */
-        
         .question-header {
             display: flex;
             gap: 6px;
-            align-items: baseline; /* Aligns Number and Text Baseline */
-            line-height: 1.4; /* Consistent Line Height */
+            align-items: baseline; 
+            line-height: 1.4; 
         }
 
         .question-number {
@@ -178,12 +181,12 @@
 
         .question-content {
             flex: 1;
-            display: inline-block; /* Helps with inline flow */
+            display: inline-block; 
         }
 
         /* Force question text to not have block margins */
         .question-content p, .question-content div {
-            display: inline; /* Forces inline behavior */
+            display: inline; 
             margin: 0 !important;
             padding: 0 !important;
         }
@@ -236,6 +239,7 @@
 
         .watermark { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-45deg); opacity: 0.08; z-index: 0; pointer-events: none; max-width: 90%; }
         
+        /* Multi-column Layout */
         .columns-container { 
             column-count: 2; 
             column-gap: 12mm; 
@@ -250,9 +254,10 @@
         @media screen and (max-width: 768px) { .a4-page { transform: scale(0.45); margin-bottom: -160mm; } }
         @media screen and (max-width: 480px) { .a4-page { transform: scale(0.38); margin-bottom: -185mm; } }
 
+        /* --- PDF PRINT OPTIMIZATION --- */
         @media print {
             @page { size: A4; margin: 0; }
-            body, html { background: white !important; margin: 0 !important; padding: 0 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+            body, html { background: white !important; margin: 0 !important; padding: 0 !important; }
             body > header, nav, #left-panel, .no-print { display: none !important; }
             main { display: block !important; height: auto !important; overflow: visible !important; }
             #preview-panel-container { display: block !important; position: static !important; width: 100% !important; height: auto !important; margin: 0 !important; padding: 0 !important; background: white !important; overflow: visible !important; }
@@ -301,7 +306,7 @@
                 Exam<span class="text-indigo-600">Master</span>
             </h1>
         </div>
-        <button onclick="downloadPDF()" class="bg-indigo-700 hover:bg-indigo-800 text-white px-4 py-2 rounded-lg flex items-center gap-2 font-bold transition-all text-sm shadow-md active:scale-95">
+        <button id="download-btn" onclick="downloadPDF()" class="bg-indigo-700 hover:bg-indigo-800 text-white px-4 py-2 rounded-lg flex items-center gap-2 font-bold transition-all text-sm shadow-md active:scale-95">
             <i data-lucide="file-down" class="w-4 h-4"></i> <span class="hidden sm:inline">Save as PDF</span>
         </button>
     </header>
@@ -317,6 +322,7 @@
                         <i data-lucide="settings-2" class="w-5 h-5 text-indigo-600"></i>
                         <h2>Settings Configuration</h2>
                     </div>
+                    
                     <!-- Header Config -->
                     <section class="bg-white p-4 rounded-xl shadow-sm border border-slate-200 space-y-4">
                         <label class="flex items-center gap-3 cursor-pointer group w-fit">
@@ -713,7 +719,7 @@
                 for (let i = startIdx; i < rows.length; i++) {
                     const row = rows[i];
                     // Columns: 0:question, 1:opt1, 2:opt2, 3:opt3, 4:opt4, 5:opt5(skip), 6:ans(1-4), 7:exp, 8:type(skip), 9:section(skip)
-                    if (row.length < 7) continue; // Minimum required fields
+                    if (row.length < 7) continue; 
 
                     const questionText = row[0] || '';
                     if (!questionText.trim()) continue;
@@ -1237,8 +1243,8 @@
             if (state.visibility.showAnsTable && state.visibility.showExpBottom && state.questions.length > 0) {
                 let rows = state.questions.map((q, idx) => `
                     <tr>
-                        <td class="col-q-no">${idx + 1}</td>
-                        <td class="col-ans">${q.correctAnswer}</td>
+                        <td class="col-q-no font-english">${idx + 1}</td>
+                        <td class="col-ans font-english">${q.correctAnswer}</td>
                         <td class="col-exp">
                             <div class="rich-text-content">${q.explanation || ''}</div>
                             ${q.expImage ? `<img src="${q.expImage}" class="exp-img mt-1" />` : ''}
@@ -1273,8 +1279,8 @@
                     let dataRow = '';
                     chunk.forEach((q, cIdx) => {
                         const qNum = i + cIdx + 1;
-                        headerRow += `<td class="ans-table-header">${qNum}</td>`;
-                        dataRow += `<td class="ans-table-data">${q.correctAnswer}</td>`;
+                        headerRow += `<td class="ans-table-header font-english">${qNum}</td>`;
+                        dataRow += `<td class="ans-table-data font-english">${q.correctAnswer}</td>`;
                     });
                     tables.push(`
                         <table class="ans-table-grid">
@@ -1331,11 +1337,23 @@
 
         // Direct PDF Download
         function downloadPDF() {
-            const originalTitle = document.title;
-            const headerText = state.header.text.split('\n')[0] || 'Question_Paper';
-            document.title = headerText.replace(/[^a-z0-9\u0980-\u09FF\s]/gi, '_').trim() || 'Exam_Paper';
-            window.print();
-            document.title = originalTitle;
+            const btn = document.getElementById('download-btn');
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '<i data-lucide="loader-2" class="w-4 h-4 animate-spin"></i> Processing...';
+            lucide.createIcons();
+            
+            // Allow UI to update
+            setTimeout(() => {
+                const originalTitle = document.title;
+                const headerText = state.header.text.split('\n')[0] || 'Question_Paper';
+                document.title = headerText.replace(/[^a-z0-9\u0980-\u09FF\s]/gi, '_').trim() || 'Exam_Paper';
+                
+                window.print();
+                
+                document.title = originalTitle;
+                btn.innerHTML = originalText;
+                lucide.createIcons();
+            }, 100);
         }
 
         window.addEventListener('DOMContentLoaded', init);
