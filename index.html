@@ -26,7 +26,6 @@
         }
 
         body {
-            /* UI Font: Hind Siliguri for readable Bangla in inputs */
             font-family: 'Hind Siliguri', ui-sans-serif, system-ui, -apple-system, sans-serif;
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
@@ -69,46 +68,13 @@
         }
 
         /* --- MATH STYLES --- */
-        .math-fraction {
-            display: inline-block;
-            vertical-align: middle; 
-            text-align: center;
-            font-size: 0.9em;
-            margin: 0 2px;
-            line-height: 1; 
-        }
-        .math-fraction-top {
-            display: block;
-            border-bottom: 1.5px solid #000; 
-            padding: 1px 2px;
-        }
-        .math-fraction-bottom {
-            display: block;
-            padding: 1px 2px;
-        }
+        .math-fraction { display: inline-block; vertical-align: middle; text-align: center; font-size: 0.9em; margin: 0 2px; line-height: 1; }
+        .math-fraction-top { display: block; border-bottom: 1.5px solid #000; padding: 1px 2px; }
+        .math-fraction-bottom { display: block; padding: 1px 2px; }
 
-        .math-sqrt {
-            display: inline-flex; 
-            align-items: flex-start;
-            vertical-align: middle;
-            margin: 0 2px;
-        }
-        .math-sqrt-symbol {
-            font-size: 1.3em;
-            line-height: 0.8;
-            margin-right: 0px; 
-            font-family: 'Times New Roman', serif; 
-            position: relative;
-            top: 1px; 
-        }
-        .math-sqrt-content {
-            border-top: 1.5px solid #000; 
-            padding-top: 1px;
-            padding-left: 2px;
-            padding-right: 2px;
-            line-height: 1.2;
-            margin-top: -5px; 
-        }
+        .math-sqrt { display: inline-flex; align-items: flex-start; vertical-align: middle; margin: 0 2px; }
+        .math-sqrt-symbol { font-size: 1.3em; line-height: 0.8; margin-right: 0px; font-family: 'Times New Roman', serif; position: relative; top: 1px; }
+        .math-sqrt-content { border-top: 1.5px solid #000; padding-top: 1px; padding-left: 2px; padding-right: 2px; line-height: 1.2; margin-top: -5px; }
 
         /* Rich Text Internal Styles */
         .editor-box b, .editor-box strong { font-weight: 700; }
@@ -135,20 +101,17 @@
             margin-bottom: 2rem;
             box-sizing: border-box;
             
-            /* English first to prevent Bangla characters in English words */
+            /* English font first, then SutonnyMJ for Bangla */
             font-family: 'Times New Roman', 'SutonnyMJ', sans-serif !important; 
             
             display: flex;
             flex-direction: column;
         }
 
-        /* Apply font to all children */
-        .a4-page * {
-            font-family: 'Times New Roman', 'SutonnyMJ', sans-serif !important;
-        }
-
+        .a4-page * { font-family: 'Times New Roman', 'SutonnyMJ', sans-serif !important; }
         .a4-page .math-sqrt-symbol { font-family: 'Times New Roman', serif !important; }
 
+        /* Border Frame Logic */
         .border-frame {
             border: 1px solid #000;
             flex: 1;
@@ -156,72 +119,23 @@
             flex-direction: column;
             width: 100%;
             box-sizing: border-box;
+            /* Attempts to clone border on page break in supported browsers */
+            box-decoration-break: clone;
+            -webkit-box-decoration-break: clone;
         }
 
-        /* Question Layout */
-        .mcq-item {
-            break-inside: avoid; 
-            page-break-inside: avoid;
-            display: block; 
-            position: relative;
-            width: 100%; /* Ensure full width in column */
-        }
+        .mcq-item { break-inside: avoid; page-break-inside: avoid; display: block; position: relative; }
 
-        /* --- STRICT INLINE & ALIGNMENT FIX --- */
-        .question-header {
-            display: flex;
-            gap: 6px;
-            align-items: baseline; 
-            line-height: 1.4; 
-        }
-
-        .question-number {
-            flex-shrink: 0;
-            font-weight: bold;
-            font-family: 'Times New Roman', serif;
-        }
-
-        .question-content {
-            flex: 1;
-            display: inline-block; 
-        }
-
-        /* Force question text to not have block margins */
-        .question-content p, .question-content div {
-            display: inline; 
-            margin: 0 !important;
-            padding: 0 !important;
-        }
+        /* Strict Inline Fixes */
+        .question-header { display: flex; gap: 6px; align-items: baseline; line-height: 1.4; }
+        .question-number { flex-shrink: 0; font-weight: bold; font-family: 'Times New Roman', serif; }
+        .question-content { flex: 1; display: inline-block; }
+        .question-content p, .question-content div { display: inline; margin: 0 !important; padding: 0 !important; }
+        .question-text { font-weight: normal; display: inline; }
         
-        .question-text {
-            font-weight: normal;
-            display: inline;
-        }
-        
-        /* Option Styling */
-        .option-container {
-            display: flex;
-            align-items: baseline; 
-            gap: 4px;
-            white-space: nowrap; 
-        }
-        
-        /* Force option text inline */
-        .option-container .rich-text-content,
-        .option-container .rich-text-content * {
-            display: inline !important;
-            margin: 0 !important;
-            padding: 0 !important;
-            white-space: normal; 
-        }
-        
-        .omr-option {
-            display: inline-block;
-            font-weight: normal;
-            flex-shrink: 0;
-            margin-right: 2px;
-            font-family: 'Times New Roman', serif;
-        }
+        .option-container { display: flex; align-items: baseline; gap: 4px; white-space: nowrap; }
+        .option-container .rich-text-content, .option-container .rich-text-content * { display: inline !important; margin: 0 !important; padding: 0 !important; white-space: normal; }
+        .omr-option { display: inline-block; font-weight: normal; flex-shrink: 0; margin-right: 2px; font-family: 'Times New Roman', serif; }
 
         .q-img { max-height: 150px; width: auto; max-width: 100%; display: block; margin: 4px auto; border: 1px solid #e2e8f0; border-radius: 4px; padding: 2px; }
         .opt-img { max-height: 80px; width: auto; max-width: 100%; display: block; margin-top: 4px; border: 1px solid #e2e8f0; border-radius: 2px; }
@@ -241,7 +155,6 @@
 
         .watermark { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-45deg); opacity: 0.08; z-index: 0; pointer-events: none; max-width: 90%; }
         
-        /* Multi-column Layout - Enforced */
         .columns-container { 
             column-count: 2; 
             column-gap: 12mm; 
@@ -250,8 +163,8 @@
             z-index: 1; 
             height: auto; 
             column-fill: auto; 
-            widows: 2; 
             orphans: 2;
+            widows: 2;
         }
 
         .preview-scroll-wrapper { width: 100%; display: flex; justify-content: center; align-items: flex-start; padding: 2rem 1rem; overflow-x: auto; -webkit-overflow-scrolling: touch; }
@@ -280,14 +193,17 @@
                 font-family: 'Times New Roman', 'SutonnyMJ', sans-serif !important;
             }
             
+            /* Ensure Font Colors and Borders Print Correctly */
             .a4-page * { 
                 color: #000 !important; 
                 font-family: 'Times New Roman', 'SutonnyMJ', sans-serif !important;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
             }
             
             .a4-page .math-sqrt-symbol { font-family: 'Times New Roman', serif !important; }
 
-            .columns-container { column-count: 2 !important; column-fill: auto; orphans: 4; widows: 4; }
+            .columns-container { column-fill: auto; orphans: 4; widows: 4; }
             .break-inside-avoid { break-inside: avoid; page-break-inside: avoid; }
             .math-fraction-top { border-color: #000 !important; }
             .math-sqrt-content { border-color: #000 !important; margin-top: -5px !important; }
@@ -711,6 +627,7 @@
                 const text = e.target.result;
                 const rows = csvToArray(text);
                 
+                // Skip header row if exists and looks like header (basic check)
                 let startIdx = 0;
                 if(rows.length > 0 && (rows[0][0] || '').toLowerCase().includes('question')) {
                     startIdx = 1;
@@ -719,6 +636,7 @@
                 let newQuestions = [];
                 for (let i = startIdx; i < rows.length; i++) {
                     const row = rows[i];
+                    // Columns: 0:question, 1:opt1, 2:opt2, 3:opt3, 4:opt4, 5:opt5(skip), 6:ans(1-4), 7:exp, 8:type(skip), 9:section(skip)
                     if (row.length < 7) continue; 
 
                     const questionText = row[0] || '';
@@ -757,12 +675,12 @@
                 } else {
                     alert("No valid questions found in CSV.");
                 }
-                input.value = ''; 
+                input.value = ''; // Reset input
             };
             reader.readAsText(file);
         }
 
-        // CSV Parser
+        // CSV Parser Helper to handle quoted strings containing commas
         function csvToArray(text) {
             let p = '', row = [''], ret = [row], i = 0, r = 0, s = !0, l;
             for (l of text) {
@@ -1186,10 +1104,8 @@
                     const maxLen = Math.max(plainA.length, plainB.length, plainC.length, plainD.length);
                     const hasImages = q.optionImages.A || q.optionImages.B || q.optionImages.C || q.optionImages.D;
                     
-                    // DEFAULT 2 COLUMNS
                     let gridClass = 'grid-cols-2 gap-x-4 gap-y-2'; 
                     
-                    // Fallback to 1 column if VERY long options
                     if (!hasImages && maxLen > 55) { 
                         gridClass = 'grid-cols-1 gap-y-2';
                     }
@@ -1332,20 +1248,11 @@
 
         // Direct PDF Download
         function downloadPDF() {
-            const btn = document.getElementById('download-btn');
-            const originalText = btn.innerHTML;
-            btn.innerHTML = '<i data-lucide="loader-2" class="w-4 h-4 animate-spin"></i> Processing...';
-            lucide.createIcons();
-            
-            setTimeout(() => {
-                const originalTitle = document.title;
-                const headerText = state.header.text.split('\n')[0] || 'Question_Paper';
-                document.title = headerText.replace(/[^a-z0-9\u0980-\u09FF\s]/gi, '_').trim() || 'Exam_Paper';
-                window.print();
-                document.title = originalTitle;
-                btn.innerHTML = originalText;
-                lucide.createIcons();
-            }, 100);
+            const originalTitle = document.title;
+            const headerText = state.header.text.split('\n')[0] || 'Question_Paper';
+            document.title = headerText.replace(/[^a-z0-9\u0980-\u09FF\s]/gi, '_').trim() || 'Exam_Paper';
+            window.print();
+            document.title = originalTitle;
         }
 
         window.addEventListener('DOMContentLoaded', init);
